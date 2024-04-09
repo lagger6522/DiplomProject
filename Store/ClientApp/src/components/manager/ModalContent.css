@@ -1,0 +1,8 @@
+.product-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Добавьте дополнительные стили, если необходимо */

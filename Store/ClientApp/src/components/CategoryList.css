@@ -1,0 +1,46 @@
+.category-list {
+    width: 400px;
+}
+
+    .category-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .category-list li {
+        background-color: #FFAD4D;
+        border: none;
+        padding: 10px 10px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .category-list li:first-child {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .category-list li:last-child {
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+        .category-list li:hover {
+            background-color: #FF9519;
+            color: #ffffff;
+        }
+
+        .category-list li div {
+            /* Добавленные стили для блока подкатегории */
+            transition: background-color 0.3s, color 0.3s;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .category-list li:hover div {
+            /* Стили для блока подкатегории при наведении на родительский элемент */
+            background-color: #FF9519;
+            color: #ffffff;
+        }

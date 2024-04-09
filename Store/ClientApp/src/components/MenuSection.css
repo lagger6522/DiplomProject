@@ -1,0 +1,94 @@
+.menu-section {
+    display: flex;
+    align-items: center;
+    height: 120px;
+    padding: 5px 20px 5px 20px;
+}
+
+.menu-buttons {
+    display: flex;
+    height: 55%;
+    align-items: center;
+}
+
+.search-menu {
+    display: flex;
+    align-items: center;
+    border-radius: 0 15px 15px 0;
+    height: 55%;
+}
+
+    .search-menu input {
+        border-radius: 0px;
+        padding: 19px 70px 19.5px 10px;
+        outline: none;
+        border-color: #ffad4d;
+        text-align: left;
+        margin-top: 0px;
+    }
+
+    .search-menu button {
+        background-color: #FFAD4D;
+        border: none;
+        padding: 20px;
+        cursor: pointer;
+        border-radius: 0 15px 15px 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .search-menu button:hover {
+            background-color: #FF9519;
+            color: #ffffff;
+        }
+
+    .menu-buttons button {
+        background-color: #FFAD4D;
+        border: none;
+        padding: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        border-radius: 0px;
+    }
+
+    .menu-buttons button:hover {
+        background-color: #FF9519;
+        color: #ffffff;
+    }
+
+        .menu-buttons button:first-child {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+/* Добавляем стили для сообщения */
+.search-empty-message {
+    color: #FFAD4D;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Стили для результатов поиска */
+.search-results {
+    margin-top: 20px;
+}
+
+    .search-results h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .search-results ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .search-results li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }

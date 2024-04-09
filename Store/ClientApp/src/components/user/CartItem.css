@@ -1,0 +1,136 @@
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.no-line {
+    text-decoration: none;
+    color: black;
+}
+
+
+    .cart-item img {
+        width: 120px;
+        height: 120px;
+        margin-right: 10px;
+    }
+
+.item-details {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.cart-item p {
+    margin: 0;
+}
+
+.cart-page {
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.item-column1 {
+    width: 120px;
+}
+
+.item-column2 {
+    padding-left: 15px;
+    width: 250px;
+    font-size: 16px;
+}
+
+.item-column3 {
+    padding-left: 40px;
+    width: 250px;
+    font-size: 24px;
+}
+
+.item-column4 {
+    display: flex;
+    align-items: center;
+}
+
+    .item-column4 button {
+        background-color: #ffad4d;
+        border: 1px solid #ffad4d;
+        color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 8px;
+        width: 45px;
+        height: 45px;
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .item-column4 button:hover {
+            background-color: #ff9519; /* Оранжевый цвет кнопки при наведении */
+            color: #fff;
+        }
+
+    .item-column4 .cart-button {
+        margin-left: 10px; /* Отступ между кнопкой корзины и счетчиком */
+    }
+
+    .item-column4 input {
+        margin: 5px;
+        padding: 8px;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .item-column4 .cart-button {
+        background-color: #fff; /* Белый фон */
+        border: 1px solid #ffad4d; /* Оранжевая граница */
+        color: #ffad4d; /* Оранжевый цвет текста */
+        margin-left: 150px;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 8px; /* Скругление углов восемь градусов */
+        width: 125px; /* Задаем ширину кнопки */
+        height: 40px; /* Задаем высоту кнопки */
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .item-column4 .cart-button:hover {
+            background-color: #ffad4d; /* Оранжевый фон при наведении */
+            color: #fff; /* Белый цвет текста при наведении */
+        }
+
+.item-column5 {
+    padding-left: 90px;
+    width: 250px;
+    font-size: 24px;
+}
+
+.remove-button {
+    cursor: pointer;
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+    .remove-button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }

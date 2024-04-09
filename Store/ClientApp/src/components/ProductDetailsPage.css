@@ -1,0 +1,231 @@
+.product-details-page {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    color: black;
+    width: calc(33.33% - 20px);
+    margin: 0 10px 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    padding: 10px;
+}
+
+    .product-item img {
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+    }
+
+    .product-item:hover {
+        border-color: #ff9519;
+    }
+
+.product-details {
+    flex: 1;
+    margin-right: 10px;
+}
+
+    .product-details h5 {
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .product-details span {
+        margin-left: 10px;
+    }
+
+.cost {
+    margin-left: 10px;
+}
+
+.cart-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.counter-button {
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+}
+
+    .counter-button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }
+
+.cart-controls button {
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .cart-controls button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }
+
+.cart-controls .cart-button {
+    margin-left: 10px;
+}
+
+.cart-controls input {
+    margin: 5px;
+    padding: 8px;
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.cart-controls .cart-button {
+    background-color: #fff;
+    border: 1px solid #ffad4d;
+    color: #ffad4d;
+    margin-left: auto;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 125px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .cart-controls .cart-button:hover {
+        background-color: #ffad4d;
+        color: #fff;
+    }
+
+.product-description {    
+    width: 65%;
+    box-sizing: border-box;
+    border: 1px solid #ddd; /* Добавляем границу */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Добавляем тень */
+    border-radius: 8px; /* Добавляем скругленные углы */
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+    .product-description h2 {
+        margin-bottom: 10px;
+    }
+
+    .product-description p {
+        margin-bottom: 20px;
+    }
+
+    .product-reviews h4 {
+        margin-bottom: 10px;
+    }
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .star-rating label {
+        margin-right: 10px;
+    }
+
+.review-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.submit-review-button {
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+    .submit-review-button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }
+
+.product-reviews {
+    width: 99%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+    .product-reviews h4 {
+        margin-bottom: 10px;
+    }
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .star-rating label {
+        margin-right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #ddd; /* Цвет звезды по умолчанию */
+    }
+
+        .star-rating label:hover {
+            color: #ffad4d; /* Цвет звезд при наведении */
+        }
+
+            .star-rating label:hover ~ label {
+                color: #ddd; /* Цвет предыдущих звезд при наведении */
+            }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label:before {
+        content: '★';
+    }
+
+    .star-rating .filled {
+        color: #ffad4d; /* Цвет выбранных звезд */
+    }
+
+    .star-rating input:checked ~ label:before {
+        color: #ff9519; /* Цвет выбранной звезды */
+    }

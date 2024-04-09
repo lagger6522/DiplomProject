@@ -1,0 +1,35 @@
+.my-orders-page {
+    padding: 20px;
+}
+
+    .my-orders-page h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .my-orders-page ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .my-orders-page li {
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .my-orders-page li strong {
+            margin-right: 10px;
+        }
+
+    .my-orders-page p {
+        font-size: 16px;
+    }
+
+@media (max-width: 600px) {
+    .my-orders-page li {
+        padding: 10px;
+    }
+}

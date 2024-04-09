@@ -1,0 +1,45 @@
+﻿.user-profile-page {
+    padding-top: 150px;
+    display: flex;
+    justify-content: center; /* Центрируем блок по горизонтали */
+}
+
+.user-profile {
+    width: 380px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+    .user-profile h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .user-profile div {
+        margin-bottom: 10px;
+    }
+
+.user-menu {
+    padding-left: 200px;
+    display: flex;
+    flex-direction: column; /* Кнопки в столбик */
+    margin-left: 20px;
+}
+
+    .user-menu button {
+        background-color: #ffad4d;
+        border: 1px solid #ffad4d;
+        color: #fff;
+        padding: 8px 12px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+        .user-menu button:hover {
+            background-color: #ff9519;
+        }
+
+
