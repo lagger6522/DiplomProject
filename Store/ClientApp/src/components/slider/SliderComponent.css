@@ -1,4 +1,4 @@
-.image-slider {
+п»ї.image-slider {
     position: relative;
 }
 
@@ -13,23 +13,30 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
-    font-size: 24px; /* Размер шрифта */
-    color: #fff; /* Цвет стрелок */
-    background-color: rgba(0, 0, 0, 0.5); /* Цвет фона стрелок */
-    padding: 10px; /* Отступы внутри стрелок */
-    border-radius: 50%; /* Скругление углов для круглых стрелок */
+    font-size: 24px; /* Р Р°Р·РјРµСЂ С€СЂРёС„С‚Р° */
+    color: #fff; /* Р¦РІРµС‚ СЃС‚СЂРµР»РѕРє */
+    background-color: rgba(0, 0, 0, 0.5); /* Р¦РІРµС‚ С„РѕРЅР° СЃС‚СЂРµР»РѕРє */
+    padding: 10px; /* РћС‚СЃС‚СѓРїС‹ РІРЅСѓС‚СЂРё СЃС‚СЂРµР»РѕРє */
+    border-radius: 50%; /* РЎРєСЂСѓРіР»РµРЅРёРµ СѓРіР»РѕРІ РґР»СЏ РєСЂСѓРіР»С‹С… СЃС‚СЂРµР»РѕРє */
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+    transition: background-color 0.3s ease; /* РџР»Р°РІРЅРѕРµ РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚Р° С„РѕРЅР° РїСЂРё РЅР°РІРµРґРµРЅРёРё */
 }
 
     .slick-arrow:hover {
-        background-color: rgba(0, 0, 0, 0.8); /* Цвет фона при наведении */
+        background-color: rgba(0, 0, 0, 0.8); /* Р¦РІРµС‚ С„РѕРЅР° РїСЂРё РЅР°РІРµРґРµРЅРёРё */
     }
 
 .slick-prev {
-    left: 10px; /* Расположение левой стрелки */
+    left: 10px; /* Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ Р»РµРІРѕР№ СЃС‚СЂРµР»РєРё */
 }
+    .slick-prev:before {
+        content: '';
+    }
 
 .slick-next {
-    right: 10px; /* Расположение правой стрелки */
+    right: 10px; /* Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ РїСЂР°РІРѕР№ СЃС‚СЂРµР»РєРё */
 }
+
+    .slick-next:before {
+        content: '';
+    }
