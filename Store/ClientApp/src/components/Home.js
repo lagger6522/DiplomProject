@@ -13,7 +13,7 @@ export class Home extends Component {
 
         return (
             <div>
-            {/*    <SliderComponent/>*/}
+                <SliderComponent/>
             {/*    <BestSellers />*/}
             </div>
         );

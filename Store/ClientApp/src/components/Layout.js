@@ -43,8 +43,8 @@ export class Layout extends Component {
             });
     }
   render() {
-    return (
-      <div>        
+      return (
+      <div className="full-container">        
         <TopSection />            
             <div className="main-container">
                 <div className="base">

@@ -8,3 +8,7 @@
     flex: 1;
     width: 1300px;
 }
+
+.full-container {
+    padding: 0px 15px 0px 15px;
+}
