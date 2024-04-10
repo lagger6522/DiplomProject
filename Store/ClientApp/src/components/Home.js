@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import SliderComponent from './SliderComponent';
+import SliderComponent from '../components/slider/SliderComponent';
 import BestSellers from './BestSellers';
-import './Home.css';
-
+import './Home.css'; 
 export class Home extends Component {
     static displayName = Home.name;
 

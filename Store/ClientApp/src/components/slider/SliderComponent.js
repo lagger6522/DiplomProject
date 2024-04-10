@@ -1,8 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SliderComponent.css';
+import { PrevArrow, NextArrow } from './Arrows'; // Импортируем кастомные стрелки
 
 const SliderComponent = () => {
     const images = [
@@ -17,6 +18,8 @@ const SliderComponent = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
+        prevArrow: <PrevArrow />, // Используем кастомные стрелки
+        nextArrow: <NextArrow />, // Используем кастомные стрелки
     };
 
     return (
@@ -24,7 +27,7 @@ const SliderComponent = () => {
             <Slider {...sliderSettings}>
                 {images.map((image, index) => (
                     <div key={index}>
-                        <img src={image} alt={`Image ${index + 1}`} />
+                        <img src={image} alt="" />
                     </div>
                 ))}
             </Slider>
