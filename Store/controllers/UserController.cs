@@ -10,6 +10,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
+
 
 namespace Store.controllers
 {
@@ -162,9 +164,19 @@ namespace Store.controllers
 		}
 
 
-		private string HashPassword(string password)
+		public string HashPassword(string password)
 		{
-			return password;
+			using (SHA256 sha256Hash = SHA256.Create())
+			{
+				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+				StringBuilder builder = new StringBuilder();
+				for (int i = 0; i < bytes.Length; i++)
+				{
+					builder.Append(bytes[i].ToString("x2"));
+				}
+				return builder.ToString();
+			}
 		}
 
 		public async Task<IEnumerable<User>> GetUsersAsync()

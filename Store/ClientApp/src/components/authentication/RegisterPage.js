@@ -67,7 +67,7 @@ export class RegisterPage extends Component {
                     }
                 } else {
                     console.error('Произошла ошибка при входе:', error);
-                    this.setState({ errorMessage: 'Что-то пошло не так, возможно эта почто уже зарегистрированна.' });
+                    this.setState({ errorMessage: 'Что-то пошло не так, возможно эта почта уже зарегистрированна.' });
                 }
             });
             

@@ -42,7 +42,7 @@ export class LoginPage extends Component {
                     window.location.href = "/manager/ManagerPage"
                 }
         }).catch(error => {
-            this.setState({ errorMessage: error.message || "Произошла ошибка при входе. Пожалуйста, попробуйте снова." });
+            this.setState({ errorMessage: error.message || "Неправильный логин или пароль" });
         });
     }
 
