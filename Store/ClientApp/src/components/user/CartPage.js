@@ -13,7 +13,7 @@ const CartPage = () => {
 
     useEffect(() => {
         if (userId) {
-            sendRequest(`/api/Categories/GetCartItems`, 'GET', null, { userId })
+            sendRequest(`/api/Cart/GetCartItems`, 'GET', null, { userId })
                 .then(response => {
                     setCartItems(response);
                     setHasItems(response.length > 0);
@@ -31,7 +31,7 @@ const CartPage = () => {
                 return;
             }
 
-            await sendRequest(`/api/Categories/UpdateCartItemQuantity`, 'POST', {
+            await sendRequest(`/api/Cart/UpdateCartItemQuantity`, 'POST', {
                 userId: userId,
                 productId: productId,
                 quantity: newQuantity,
@@ -55,7 +55,7 @@ const CartPage = () => {
 
     const handleRemoveFromCart = async (productId) => {
         try {
-            await sendRequest(`/api/Categories/RemoveCartItem`, 'POST', {
+            await sendRequest(`/api/Cart/RemoveCartItem`, 'POST', {
                 userId: userId,
                 productId: productId,
             });

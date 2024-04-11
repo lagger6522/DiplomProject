@@ -42,11 +42,11 @@ const OrderFormPage = () => {
 
         try {
             // Логика отправки данных формы на сервер
-            const response = await sendRequest("/api/Categories/CreateOrder", "POST", formData, { userId: sessionStorage.getItem('userId') })
+            const response = await sendRequest("/api/Cart/CreateOrder", "POST", formData, { userId: sessionStorage.getItem('userId') })
                 .then(response => {
                     console.log(response);
                     if (response != "An error occurred while saving the entity changes. See the inner exception for details.") {
-                        sendRequest("/api/Categories/ClearCart", "POST", null, { userId: sessionStorage.getItem('userId') });
+                        sendRequest("/api/Cart/ClearCart", "POST", null, { userId: sessionStorage.getItem('userId') });
 
                     }
                     window.location.href = "/";

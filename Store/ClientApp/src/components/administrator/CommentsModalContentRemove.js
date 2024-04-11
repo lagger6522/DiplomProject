@@ -6,7 +6,7 @@ const CommentsModalContentRemove = () => {
     const [comments, setComments] = useState([]);
 
     useEffect(() => {
-        sendRequest('/api/Categories/GetAllComments', 'GET')
+        sendRequest('/api/Comments/GetAllComments', 'GET')
             .then(response => {
                 setComments(response);
             })
@@ -16,7 +16,7 @@ const CommentsModalContentRemove = () => {
     }, []);
 
     const handleToggleVisibility = (reviewId, isVisible) => {
-        sendRequest('/api/Categories/ToggleCommentVisibility', 'POST', null, {
+        sendRequest('/api/Comments/ToggleCommentVisibility', 'POST', null, {
             reviewId,
             isVisible,
         })

@@ -75,7 +75,7 @@ const ProductPage = () => {
             setError('Для добавления товара в корзину необходимо войти в систему.');
             return;
         }
-        sendRequest('/api/Categories/AddToCart', 'POST', {
+        sendRequest('/api/Cart/AddToCart', 'POST', {
             productId,
             userId,
             quantity,

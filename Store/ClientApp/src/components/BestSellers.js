@@ -41,7 +41,7 @@ const BestSellers = () => {
             return;
         }
 
-        sendRequest('/api/Categories/AddToCart', 'POST', {
+        sendRequest('/api/Cart/AddToCart', 'POST', {
             productId,
             userId,
             quantity,
