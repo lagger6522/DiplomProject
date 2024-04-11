@@ -2,41 +2,49 @@
     position: relative;
 }
 
-.image-slider img {
-    width: 80vw;
-    height: 500px;
-    object-fit:cover;
-}
+    .image-slider img {
+        width: 80vw;
+        height: 25vw;
+        object-fit: cover;
+    }
 
 .slick-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     z-index: 1;
-    font-size: 24px; /* Размер шрифта */
-    color: #fff; /* Цвет стрелок */
-    background-color: rgba(0, 0, 0, 0.5); /* Цвет фона стрелок */
-    padding: 10px; /* Отступы внутри стрелок */
-    border-radius: 50%; /* Скругление углов для круглых стрелок */
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease;
 }
 
     .slick-arrow:hover {
-        background-color: rgba(0, 0, 0, 0.8); /* Цвет фона при наведении */
+        background-color: rgba(0, 0, 0, 0.5); /* Цвет фона при наведении */
+    }
+
+.slick-prev,
+.slick-next {
+    /* Styles for both prev and next arrows */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7vw; /* Adjust width as needed */
+    height: 100%; /* Set height to match slider */
+    background-color: rgba(0, 0, 0, 0.2); /* Optional background for better visibility */
+    z-index: 1; /* Ensure arrows are above slider content */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .slick-prev:hover,
+    .slick-next:hover {
+        background-color: rgba(0, 0, 0, 0.5); /* Optional hover effect */
     }
 
 .slick-prev {
-    left: 10px; /* Расположение левой стрелки */
+    left: 0vw;
+    top: 49.32%;
+    height: 25vw;
 }
-    .slick-prev:before {
-        content: '';
-    }
 
 .slick-next {
-    right: 10px; /* Расположение правой стрелки */
+    top: 49.32%;
+    height: 25vw;
+    right: 0vw;
 }
-
-    .slick-next:before {
-        content: '';
-    }
