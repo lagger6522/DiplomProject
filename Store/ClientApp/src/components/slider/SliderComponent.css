@@ -30,6 +30,9 @@
     z-index: 1; /* Ensure arrows are above slider content */
     cursor: pointer;
     transition: all 0.3s ease;
+    border-radius: 0px;
+    top: 49.32%;
+    height: 25vw;
 }
 
     .slick-prev:hover,
@@ -39,12 +42,8 @@
 
 .slick-prev {
     left: 0vw;
-    top: 49.32%;
-    height: 25vw;
 }
 
 .slick-next {
-    top: 49.32%;
-    height: 25vw;
     right: 0vw;
 }
