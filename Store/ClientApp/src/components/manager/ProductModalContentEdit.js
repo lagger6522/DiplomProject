@@ -14,7 +14,7 @@ const ProductModalContentEdit = ({ onClose }) => {
 
     useEffect(() => {
         // Загрузка списка подкатегорий при монтировании компонента
-        sendRequest('/api/Categories/GetSubcategories', 'GET')
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
@@ -27,7 +27,7 @@ const ProductModalContentEdit = ({ onClose }) => {
         setSelectedSubcategoryId(selectedSubcategoryId);
 
         // Загрузка товаров выбранной подкатегории
-        sendRequest(`/api/Categories/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
+        sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
             .then(response => {
                 setProducts(response);
                 setSelectedProductId(''); // Сброс выбранного товара
@@ -67,7 +67,7 @@ const ProductModalContentEdit = ({ onClose }) => {
         }
 
         // Отправка запроса на сервер для обновления товара
-        sendRequest(`/api/Categories/EditProduct`, 'PUT', {
+        sendRequest(`/api/Products/EditProduct`, 'PUT', {
             productName,
             description,
             image,
@@ -77,7 +77,7 @@ const ProductModalContentEdit = ({ onClose }) => {
             .then(response => {
                 // Обработка успешного ответа от сервера
                 console.log('Товар успешно обновлен:', response);
-                sendRequest(`/api/Categories/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
+                sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
                     .then(response => {
                         setProducts(response);
                     })

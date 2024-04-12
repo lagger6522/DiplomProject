@@ -6,7 +6,7 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        sendRequest('/api/Categories/GetAllOrders', 'GET', null, null)
+        sendRequest('/api/Orders/GetAllOrders', 'GET', null, null)
             .then(orders => {
                 setOrders(orders)
             })
@@ -15,9 +15,9 @@ const OrderHistory = () => {
 
     const handleStatusChange = async (orderId, newStatus) => {
         try {
-            await sendRequest('/api/Categories/UpdateOrderStatus', 'POST', { orderId, status: newStatus });
+            await sendRequest('/api/Orders/UpdateOrderStatus', 'POST', { orderId, status: newStatus });
             // Обновите локальный state или запросите данные заново для обновления интерфейса
-            sendRequest('/api/Categories/GetAllOrders', 'GET', null, null)
+            sendRequest('/api/Orders/GetAllOrders', 'GET', null, null)
                 .then(orders => {
                     setOrders(orders)
                 })

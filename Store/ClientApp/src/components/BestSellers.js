@@ -9,7 +9,7 @@ const BestSellers = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        sendRequest('/api/Categories/GetBestSellers', 'GET', null, null)
+        sendRequest('/api/Products/GetBestSellers', 'GET', null, null)
             .then(data => {
                 setBestSellersData(data);
                 initializeQuantities(data);

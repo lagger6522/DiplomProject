@@ -13,7 +13,7 @@ const ProductModalContentAdd = ({ onClose }) => {
 
     useEffect(() => {
         // Загрузка списка подкатегорий при монтировании компонента
-        sendRequest('/api/Categories/GetSubcategories', 'GET')
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
@@ -39,7 +39,7 @@ const ProductModalContentAdd = ({ onClose }) => {
             form.append("image", selectedImage);
             form.append("price", price);
             form.append("subcategoryId", selectedSubcategoryId);
-            sendRequest("/api/Categories/CreateProduct", "POST", form, null)
+            sendRequest("/api/Products/CreateProduct", "POST", form, null)
                 .then(response => {
                     console.log('Товар успешно создан:', response);
                 })

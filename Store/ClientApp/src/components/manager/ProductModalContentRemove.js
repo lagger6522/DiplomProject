@@ -12,7 +12,7 @@ const ProductModalContentRemove = ({ onClose }) => {
 
     useEffect(() => {
         // Загрузка списка подкатегорий при монтировании компонента
-        sendRequest('/api/Categories/GetSubcategories', 'GET')
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
@@ -25,7 +25,7 @@ const ProductModalContentRemove = ({ onClose }) => {
         setSelectedSubcategoryId(selectedSubcategoryId);
 
         // Загрузка товаров выбранной подкатегории
-        sendRequest(`/api/Categories/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
+        sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
             .then(response => {
                 setProducts(response);
                 setSelectedProductId(''); // Сброс выбранного товара
@@ -48,11 +48,11 @@ const ProductModalContentRemove = ({ onClose }) => {
         }
 
         // Отправка запроса на сервер для удаления товара
-        sendRequest(`/api/Categories/RemoveProduct`, 'DELETE', null, { productId: selectedProductId })
+        sendRequest(`/api/Products/RemoveProduct`, 'DELETE', null, { productId: selectedProductId })
             .then(response => {
                 // Обработка успешного ответа от сервера
                 console.log('Товар успешно удален:', response); 
-                sendRequest(`/api/Categories/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
+                sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
                     .then(response => {
                         setProducts(response);
                         setSelectedProductId(''); // Сброс выбранного товара

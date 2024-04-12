@@ -83,6 +83,7 @@ namespace Store.controllers
 			return Problem("Пользователь не авторизован.");
 
 		}
+
 		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> singOut()
@@ -162,7 +163,6 @@ namespace Store.controllers
 
 			return Json(new { message = "Регистрация успешна." });
 		}
-
 
 		public string HashPassword(string password)
 		{

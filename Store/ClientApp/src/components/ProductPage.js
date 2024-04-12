@@ -17,7 +17,7 @@ const ProductPage = () => {
             const subcategory = location.state.subcategory;
             setSelectedSubcategory(subcategory);
 
-            sendRequest(`/api/Categories/GetProductsBySubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
+            sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
                 .then(response => {
                     applySorting(response); // Применяем сортировку сразу после загрузки товаров
                     initializeQuantities(response);

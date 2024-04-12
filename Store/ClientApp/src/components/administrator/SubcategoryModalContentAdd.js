@@ -23,7 +23,7 @@ const SubcategoryModalContentAdd = () => {
             return;
         }
 
-        sendRequest('/api/Categories/CreateSubcategory', 'POST', {
+        sendRequest('/api/Subcategories/CreateSubcategory', 'POST', {
             subcategoryName,
             parentCategoryId,
         })

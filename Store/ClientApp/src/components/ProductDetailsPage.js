@@ -13,7 +13,7 @@ const ProductDetailsPage = () => {
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        sendRequest(`/api/Categories/GetProductDetails`, 'GET', null, { productId })
+        sendRequest(`/api/Products/GetProductDetails`, 'GET', null, { productId })
             .then((response) => {
                 setProduct(response);
             })
@@ -21,7 +21,7 @@ const ProductDetailsPage = () => {
                 console.error('Ошибка при загрузке деталей товара:', error);
             });
 
-        sendRequest(`/api/Categories/GetProductReviews`, 'GET', null, { productId })
+        sendRequest(`/api/Comments/GetProductReviews`, 'GET', null, { productId })
             .then((response) => {
                 setReviews(response?.reviews);
             })
@@ -55,7 +55,7 @@ const ProductDetailsPage = () => {
             return;
         }
 
-        sendRequest('/api/Categories/AddReview', 'POST', null, {
+        sendRequest('/api/Comments/AddReview', 'POST', null, {
             productId,
             userId,
             rating,
@@ -66,7 +66,7 @@ const ProductDetailsPage = () => {
             setReviewText('');
             setError('');
 
-            sendRequest(`/api/Categories/GetProductReviews`, 'GET', null, { productId })
+            sendRequest(`/api/Comments/GetProductReviews`, 'GET', null, { productId })
                 .then((response) => {
                     setReviews(response?.reviews);
                 })
@@ -88,7 +88,7 @@ const ProductDetailsPage = () => {
             return;
         }
 
-        sendRequest('/api/Categories/AddToCart', 'POST', {
+        sendRequest('/api/Cart/AddToCart', 'POST', {
             productId,
             userId,
             quantity

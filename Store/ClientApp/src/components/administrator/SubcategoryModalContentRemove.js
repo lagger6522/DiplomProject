@@ -10,7 +10,7 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
 
     useEffect(() => {
         // Загрузка списка подкатегорий при открытии модального окна
-        sendRequest('/api/Categories/GetSubcategories', 'GET', null, null)
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
             .then(response => {
                 setSubcategories(response);
             })
@@ -32,7 +32,7 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
     const handleConfirmRemove = () => {
         if (selectedSubcategory) {
             // Отправка запроса на сервер для удаления подкатегории и связанных товаров
-            sendRequest(`/api/Categories/RemoveSubcategory`, 'DELETE', null, { subcategoryId: selectedSubcategory.subcategoryId })
+            sendRequest(`/api/Subcategories/RemoveSubcategory`, 'DELETE', null, { subcategoryId: selectedSubcategory.subcategoryId })
                 .then(response => {
                     // Обработка успешного ответа от сервера
                     console.log('Подкатегория и связанные товары успешно удалены:', response);

@@ -9,7 +9,7 @@ const SubcategoryModalContentEdit = ({ onClose }) => {
     const [subcategories, setSubcategories] = useState([]);
 
     useEffect(() => {
-        sendRequest('/api/Categories/GetSubcategories', 'GET', null, null)
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
             .then(response => {
                 setSubcategories(response);
             })
@@ -26,11 +26,11 @@ const SubcategoryModalContentEdit = ({ onClose }) => {
 
     const handleSave = () => {
         if (selectedSubcategory) {
-            sendRequest(`/api/Categories/EditSubcategory`, 'PUT', { subcategoryName }, { subcategoryId: selectedSubcategory.subcategoryId } )
+            sendRequest(`/api/Subcategories/EditSubcategory`, 'PUT', { subcategoryName }, { subcategoryId: selectedSubcategory.subcategoryId } )
                 .then(response => {
                     console.log('Подкатегория успешно обновлена:', response);
 
-                    sendRequest('/api/Categories/GetSubcategories', 'GET', null, null)
+                    sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
                         .then(updatedSubcategories => {
                             setSubcategories(updatedSubcategories);
                         })

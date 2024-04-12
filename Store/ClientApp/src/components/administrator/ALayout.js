@@ -49,7 +49,7 @@ export class ALayout extends Component {
     }
 
     getSubcategories() {
-        sendRequest('/api/Categories/GetSubcategories', 'GET', null, null)
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
             .then((subcategories) => {
                 console.log(subcategories);
                 this.setState({ subcategories });
