@@ -31,9 +31,7 @@ export class LoginPage extends Component {
                 sessionStorage.setItem("role", data.role);
                 sessionStorage.setItem("isAuthenticated", true);
 
-                //await и перенаправление данных корзины    
 
-                // Проверка роли и перенаправление
                 if (data.role === 'User') {
                     window.location.href = "/"                  
                 } else if (data.role === 'Admin') {
@@ -42,7 +40,7 @@ export class LoginPage extends Component {
                     window.location.href = "/manager/ManagerPage"
                 }
         }).catch(error => {
-            this.setState({ errorMessage: error.message || "Неправильный логин или пароль" });
+            this.setState({ errorMessage: error.message });
         });
     }
 

@@ -64,11 +64,12 @@ function sendRequest(endPoint, method, bodyObj = null, ...params){
             if (!response.ok) return response.json().then(n => { throw n; })
                 //throw Error(response.statusText);
             return response.json();
-        }).then(function (result) {
-            return result;
-        }).catch(function (error) {
-            console.log(error);
-        });
+        })
+        //.then(function (result) {
+        //    return result;
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
 }
 
 export default sendRequest;

@@ -143,18 +143,9 @@ namespace Store.controllers
 
 		private bool VerifyPassword(string enteredPassword, string hashedPassword)
 		{
-			using (var hmac = new System.Security.Cryptography.HMACSHA512())
-			{
-				var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(enteredPassword));
-				for (int i = 0; i < computedHash.Length; i++)
-				{
-					if (computedHash[i] != hashedPassword[i])
-					{
-						return false;
-					}
-				}
-				return true;
-			}
+			string enteredPasswordHash = HashPassword(enteredPassword);
+
+			return hashedPassword.Equals(enteredPasswordHash);
 		}
 
 		[HttpPost]

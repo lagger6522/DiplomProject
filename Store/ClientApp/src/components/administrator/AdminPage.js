@@ -23,7 +23,8 @@ const AdminPage = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setMode(null);
+        setMode(null)
+
     };
 
     const renderAdminButtons = () => {
