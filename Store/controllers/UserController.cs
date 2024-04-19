@@ -25,12 +25,60 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpPost]
+		public IActionResult UnbanUser(int userId)
+		{
+			try
+			{
+				var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+				if (user == null)
+				{
+					return NotFound(new { message = "Пользователь не найден." });
+				}
+
+				user.IsBanned = false;
+
+				_context.SaveChanges();
+
+				return Ok(new { message = $"Пользователь {user.Username} успешно разблокирован." });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = $"Ошибка при разблокировке пользователя: {ex.Message}" });
+			}
+		}
+
+
+		[HttpPost]
+		public IActionResult BanUser(int userId)
+		{
+			try
+			{
+				var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+				if (user == null)
+				{
+					return NotFound(new { message = "Пользователь не найден." });
+				}
+
+				user.IsBanned = true;
+
+				_context.SaveChanges();
+
+				return Ok(new { message = $"Пользователь {user.Username} успешно заблокирован." });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = $"Ошибка при блокировке пользователя: {ex.Message}" });
+			}
+		}
+
 		[HttpGet]
 		public IActionResult GetOrdersByUserId(int userId)
 		{
 			try
 			{
-				// Получите заказы для указанного userId
 				var orders = _context.Orders
 					.Where(o => o.UserId == userId)
 					.ToList();
@@ -93,19 +141,48 @@ namespace Store.controllers
 			return Ok();
 		}
 
+		private bool VerifyPassword(string enteredPassword, string hashedPassword)
+		{
+			using (var hmac = new System.Security.Cryptography.HMACSHA512())
+			{
+				var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(enteredPassword));
+				for (int i = 0; i < computedHash.Length; i++)
+				{
+					if (computedHash[i] != hashedPassword[i])
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> LoginAsync([FromBody] LoginModel model)
 		{
-			
-			var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == HashPassword(model.Password));
+			var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
 
+			// Проверяем, существует ли пользователь с данным email
 			if (user == null)
 			{
-				return Unauthorized(new { message = "Неправильные email или пароль." });
+				return Unauthorized(new { message = "Данный E-main не зарегистрирован." });
 			}
 
+			// Проверяем, заблокирован ли пользователь
+			if (user.IsBanned)
+			{
+				return Unauthorized(new { message = "Ваш аккаунт заблокирован." });
+			}
+
+			// Проверяем, совпадает ли введенный пароль с хэшированным паролем в базе данных
+			if (!VerifyPassword(model.Password, user.Password))
+			{
+				return Unauthorized(new { message = "Неправильный пароль." });
+			}
+
+			// В случае успешной аутентификации генерируем токен и создаем аутентификационные куки
 			var token = GenerateToken(user);
-			
+
 			ClaimsIdentity identity = new ClaimsIdentity(new Claim[]
 			{
 				new Claim("ClaimTypes.UserId", user.UserId.ToString()),
@@ -117,6 +194,7 @@ namespace Store.controllers
 			  CookieAuthenticationDefaults.AuthenticationScheme, principal);
 			return Ok(new { token, role = user.Role, number = user.Number, email = user.Email, userName = user.Username, userId = user.UserId });
 		}
+
 
 		private string GenerateToken(User user)
 		{
@@ -155,8 +233,11 @@ namespace Store.controllers
 				Username = model.Name,
 				Email = model.Email,
 				Number = model.Phone,
-				Password = HashPassword(model.Password)
+				Password = HashPassword(model.Password),
+				Role = "User",
+				IsBanned = false
 			};
+
 
 			_context.Users.Add(user);
 			await _context.SaveChangesAsync();

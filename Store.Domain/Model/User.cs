@@ -17,6 +17,8 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
+    public bool IsBanned { get; set; }
+
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();

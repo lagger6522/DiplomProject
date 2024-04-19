@@ -17,5 +17,11 @@ namespace Store.Domain.Model
 		[Required(ErrorMessage = "Пароль обязателен.")]
 		[MinLength(8, ErrorMessage = "Пароль должен содержать минимум 6 символов.")]
 		public string Password { get; set; }
+
+		[Required(ErrorMessage = "Роль пользователя обязательна.")]
+		public string Role { get; set; }
+
+		[Required(ErrorMessage = "Статус бана обязателен.")]
+		public bool IsBanned { get; set; }
 	}
 }

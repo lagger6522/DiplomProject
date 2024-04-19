@@ -75,10 +75,9 @@ namespace Store.controllers
 		public IActionResult GetAllComments()
 		{
 			try
-			{
-				// Получаем все комментарии из базы данных, включая информацию о пользователе
+			{				
 				var comments = _context.ProductReviews
-					.Include(pr => pr.User) // Загружаем связанную информацию о пользователе
+					.Include(pr => pr.User) 
 					.Select(pr => new
 					{
 						pr.ReviewId,
@@ -88,7 +87,8 @@ namespace Store.controllers
 						pr.Comment,
 						pr.ReviewDate,
 						pr.IsDeleted,
-						UserName = pr.User.Username // Добавляем информацию о пользователе
+						UserName = pr.User.Username,
+						UserEmail = pr.User.Email
 					})
 					.ToList();
 
@@ -99,6 +99,7 @@ namespace Store.controllers
 				return StatusCode(500, new { message = $"Ошибка при получении комментариев: {ex.Message}" });
 			}
 		}
+
 
 		[HttpPost]
 		public IActionResult ToggleCommentVisibility(int reviewId, bool isVisible)

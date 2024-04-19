@@ -22,7 +22,6 @@ const CommentsModalContentRemove = () => {
         })
             .then(response => {
                 console.log(response.message);
-                // Обновление состояния comments после успешного запроса
                 setComments(prevComments =>
                     prevComments.map(comment =>
                         comment.reviewId === reviewId ? { ...comment, isDeleted: isVisible } : comment
@@ -34,12 +33,49 @@ const CommentsModalContentRemove = () => {
             });
     };
 
+    const handleBanUser = (userId) => {
+        sendRequest(`/api/User/BanUser`, 'POST', null, { userId })
+            .then(response => {
+                console.log(response.message);
+                setComments(prevComments =>
+                    prevComments.map(comment =>
+                        comment.userId === userId ? { ...comment, isBanned: true } : comment
+                    )
+                );
+            })
+            .catch(error => {
+                console.error('Ошибка при блокировке пользователя:', error);
+            });
+    };
+
+    const handleUnbanUser = (userId) => {
+        sendRequest(`/api/User/UnbanUser`, 'POST', null, { userId })
+            .then(response => {
+                console.log(response.message);
+                setComments(prevComments =>
+                    prevComments.map(comment =>
+                        comment.userId === userId ? { ...comment, isBanned: false } : comment
+                    )
+                );
+            })
+            .catch(error => {
+                console.error('Ошибка при разблокировке пользователя:', error);
+            });
+    };
+
+
     return (
         <div className="comments-modal-content-remove">
             <h2>Все комментарии</h2>
             <ul>
                 {comments.map(comment => (
                     <li key={comment.reviewId}>
+                        <div>
+                            <strong>Пользователь ID:</strong> {comment.userId}
+                        </div>
+                        <div>
+                            <strong>Email:</strong> {comment.userEmail}
+                        </div>
                         <div>
                             <strong>Пользователь:</strong> {comment.userName}
                         </div>
@@ -61,10 +97,18 @@ const CommentsModalContentRemove = () => {
                                 Скрыть комментарий
                             </button>
                         )}
+                        <div>
+                            {comment.isBanned ? (
+                                <button onClick={() => handleUnbanUser(comment.userId)}>Разблокировать пользователя</button>
+                            ) : (
+                                <button onClick={() => handleBanUser(comment.userId)}>Заблокировать пользователя</button>
+                            )}
+                        </div>
                     </li>
                 ))}
             </ul>
         </div>
+
     );
 };
 
