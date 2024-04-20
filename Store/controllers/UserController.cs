@@ -26,6 +26,53 @@ namespace Store.controllers
 		}
 
 		[HttpPost]
+		public IActionResult MakeManager(int userId)
+		{
+			try
+			{
+				var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+				if (user != null)
+				{
+					user.Role = "Manager";
+					_context.SaveChanges();
+					return Ok(new { message = $"Пользователь с ID {userId} назначен менеджером." });
+				}
+				else
+				{
+					return NotFound(new { message = $"Пользователь с ID {userId} не найден." });
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = $"Ошибка при назначении пользователя менеджером: {ex.Message}" });
+			}
+		}
+
+		[HttpPost]
+		public IActionResult RemoveManager(int userId)
+		{
+			try
+			{
+				var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+				if (user != null)
+				{
+					user.Role = "User";
+					_context.SaveChanges();
+					return Ok(new { message = $"Пользователь с ID {userId} больше не является менеджером." });
+				}
+				else
+				{
+					return NotFound(new { message = $"Пользователь с ID {userId} не найден." });
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = $"Ошибка при снятии пользователя с роли менеджера: {ex.Message}" });
+			}
+		}
+
+
+		[HttpPost]
 		public IActionResult UnbanUser(int userId)
 		{
 			try

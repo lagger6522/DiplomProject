@@ -39,6 +39,9 @@ class TopSection extends React.Component {
 
     singOut() {
         sendRequest("/api/User/singOut", "Post", null)
+            .catch(function (error) {
+                console.log(error);
+            })
             .then(n => {
                 this.setState({
                     user: null,
@@ -49,7 +52,7 @@ class TopSection extends React.Component {
                 sessionStorage.removeItem("userName");
                 sessionStorage.removeItem("role");
                 sessionStorage.removeItem("isAuthenticated");
-            }).catch(e => console.error(e))
+            })
     }
 
     render() {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './AdminPage.css';
 import Modal from './Modal';
-import CommentsModalContentRemove from './CommentsModalContentRemove';
+import CommentsModalContent from './CommentsModalContent';
+import UsersListPage from './UsersListPage';
 import CloseModal from './CloseModal';
 
 const AdminPage = () => {
@@ -26,7 +27,13 @@ const AdminPage = () => {
             case 'comments':
                 return (
                     <>
-                        <button onClick={() => openModal(<CommentsModalContentRemove />, 'add')}>Управление комментариями</button>
+                        <button onClick={() => openModal(<CommentsModalContent />, 'add')}>Управление комментариями</button>
+                    </>
+                );
+            case 'users':
+                return (
+                    <>
+                        <button onClick={() => openModal(<UsersListPage />, 'add')}>Управление пользователями</button>
                     </>
                 );
             default:
@@ -40,6 +47,7 @@ const AdminPage = () => {
                 <h2>Панель администратора</h2>
                 <div className="admin-menu-button">
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'comments')}>Комментарии</button>}
+                    {!mode && <button onClick={() => openModal(<CloseModal />, 'users')}>Пользователи</button>}
                     {renderAdminButtons()}
                 </div>
             </div>
