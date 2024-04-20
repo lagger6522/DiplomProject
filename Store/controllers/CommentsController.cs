@@ -88,7 +88,8 @@ namespace Store.controllers
 						pr.ReviewDate,
 						pr.IsDeleted,
 						UserName = pr.User.Username,
-						UserEmail = pr.User.Email
+						UserEmail = pr.User.Email,
+						IsBanned = pr.User.IsBanned
 					})
 					.ToList();
 

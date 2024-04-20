@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import './AdminPage.css';
 import Modal from './Modal';
 import CommentsModalContentRemove from './CommentsModalContentRemove';
-import CategoryModalContentAdd from './CategoryModalContentAdd';
-import CategoryModalContentRemove from './CategoryModalContentRemove';
-import CategoryModalContentEdit from './CategoryModalContentEdit';
-import SubcategoryModalContentAdd from './SubcategoryModalContentAdd';
-import SubcategoryModalContentEdit from './SubcategoryModalContentEdit';
-import SubcategoryModalContentRemove from './SubcategoryModalContentRemove';
 import CloseModal from './CloseModal';
 
 const AdminPage = () => {
@@ -28,23 +22,7 @@ const AdminPage = () => {
     };
 
     const renderAdminButtons = () => {
-        switch (mode) {
-            case 'category':
-                return (
-                    <>
-                        <button onClick={() => openModal(<CategoryModalContentAdd />, 'add')}>Добавить</button>
-                        <button onClick={() => openModal(<CategoryModalContentEdit />, 'edit')}>Редактировать</button>
-                        <button onClick={() => openModal(<CategoryModalContentRemove />, 'delete')}>Удалить</button>
-                    </>
-                );
-            case 'subcategory':
-                return (
-                    <>
-                        <button onClick={() => openModal(<SubcategoryModalContentAdd />, 'add')}>Добавить</button>
-                        <button onClick={() => openModal(<SubcategoryModalContentEdit />, 'edit')}>Редактировать</button>
-                        <button onClick={() => openModal(<SubcategoryModalContentRemove />, 'delete')}>Удалить</button>
-                    </>
-                );           
+        switch (mode) {          
             case 'comments':
                 return (
                     <>
@@ -62,8 +40,6 @@ const AdminPage = () => {
                 <h2>Панель администратора</h2>
                 <div className="admin-menu-button">
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'comments')}>Комментарии</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'category')}>Категории</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'subcategory')}>Подкатегории</button>}
                     {renderAdminButtons()}
                 </div>
             </div>

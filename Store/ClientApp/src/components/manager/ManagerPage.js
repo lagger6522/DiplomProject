@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import './AdminPage.css';
 import Modal from './Modal';
+import CategoryModalContentAdd from './CategoryModalContentAdd';
+import CategoryModalContentRemove from './CategoryModalContentRemove';
+import CategoryModalContentEdit from './CategoryModalContentEdit';
+import SubcategoryModalContentAdd from './SubcategoryModalContentAdd';
+import SubcategoryModalContentEdit from './SubcategoryModalContentEdit';
+import SubcategoryModalContentRemove from './SubcategoryModalContentRemove';
 import ProductModalContentAdd from './ProductModalContentAdd';
 import ProductModalContentEdit from './ProductModalContentEdit';
 import ProductModalContentRemove from './ProductModalContentRemove';
@@ -24,7 +30,23 @@ const ManagerPage = () => {
     };
 
     const renderAdminButtons = () => {
-        switch (mode) {            
+        switch (mode) {     
+            case 'category':
+                return (
+                    <>
+                        <button onClick={() => openModal(<CategoryModalContentAdd />, 'add')}>Добавить</button>
+                        <button onClick={() => openModal(<CategoryModalContentEdit />, 'edit')}>Редактировать</button>
+                        <button onClick={() => openModal(<CategoryModalContentRemove />, 'delete')}>Удалить</button>
+                    </>
+                );
+            case 'subcategory':
+                return (
+                    <>
+                        <button onClick={() => openModal(<SubcategoryModalContentAdd />, 'add')}>Добавить</button>
+                        <button onClick={() => openModal(<SubcategoryModalContentEdit />, 'edit')}>Редактировать</button>
+                        <button onClick={() => openModal(<SubcategoryModalContentRemove />, 'delete')}>Удалить</button>
+                    </>
+                );   
             case 'products':
                 return (
                     <>
@@ -38,7 +60,7 @@ const ManagerPage = () => {
                     <>
                         <button onClick={() => openModal(<OrderHistory />, 'add')}>Список заказов</button>
                     </>
-                );              
+                );       
             default:
                 return null;
         }
@@ -49,6 +71,8 @@ const ManagerPage = () => {
             <div className="admin-menu">
                 <h2>Панель менеджера</h2>
                 <div className="admin-menu-button">
+                    {!mode && <button onClick={() => openModal(<CloseModal />, 'category')}>Категории</button>}
+                    {!mode && <button onClick={() => openModal(<CloseModal />, 'subcategory')}>Подкатегории</button>}
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'products')}>Товары</button>}
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'orders')}>Заказы</button>}
                     {renderAdminButtons()}

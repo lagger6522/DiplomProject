@@ -64,6 +64,7 @@ const CommentsModalContentRemove = () => {
     };
 
 
+
     return (
         <div className="comments-modal-content-remove">
             <h2>Все комментарии</h2>

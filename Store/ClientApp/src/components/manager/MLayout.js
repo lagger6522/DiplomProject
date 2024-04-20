@@ -17,6 +17,9 @@ export class MLayout extends Component {
     }
     singOut() {
         sendRequest("/api/User/singOut", "Post", null)
+            .catch(function (error) {
+                console.log(error);
+            })
             .then(n => {
                 this.setState({
                     user: null,
@@ -28,7 +31,7 @@ export class MLayout extends Component {
                 sessionStorage.removeItem("role");
                 sessionStorage.removeItem("isAuthenticated");
                 window.location.href = "/";
-            }).catch(e => console.error(e))
+            })
     }
 
     componentDidMount() {
