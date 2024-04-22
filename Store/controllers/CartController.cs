@@ -24,23 +24,19 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверяем, существует ли уже запись в корзине для данного товара и пользователя
 				var existingCartItem = await _context.UserCarts
 					.Where(ci => ci.ProductId == cartItem.ProductId && ci.UserId == cartItem.UserId)
 					.FirstOrDefaultAsync();
 
 				if (existingCartItem != null)
 				{
-					// Если запись уже существует, обновляем количество
 					existingCartItem.Quantity += cartItem.Quantity;
 				}
 				else
 				{
-					// Если записи нет, добавляем новую запись в корзину
 					_context.UserCarts.Add(cartItem);
 				}
 
-				// Сохраняем изменения в базе данных
 				await _context.SaveChangesAsync();
 
 				return Ok("Товар успешно добавлен в корзину.");

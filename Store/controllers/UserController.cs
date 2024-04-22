@@ -200,25 +200,21 @@ namespace Store.controllers
 		{
 			var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
 
-			// Проверяем, существует ли пользователь с данным email
 			if (user == null)
 			{
 				return Unauthorized(new { message = "Данный E-main не зарегистрирован." });
 			}
 
-			// Проверяем, заблокирован ли пользователь
 			if (user.IsBanned)
 			{
 				return Unauthorized(new { message = "Ваш аккаунт заблокирован." });
 			}
 
-			// Проверяем, совпадает ли введенный пароль с хэшированным паролем в базе данных
 			if (!VerifyPassword(model.Password, user.Password))
 			{
 				return Unauthorized(new { message = "Неправильный пароль." });
 			}
 
-			// В случае успешной аутентификации генерируем токен и создаем аутентификационные куки
 			var token = GenerateToken(user);
 
 			ClaimsIdentity identity = new ClaimsIdentity(new Claim[]
@@ -245,7 +241,7 @@ namespace Store.controllers
 				new Claim("ClaimTypes.UserId", user.UserId.ToString()),
 					new Claim(ClaimTypes.Role, user.Role),
 				}),
-				Expires = DateTime.UtcNow.AddDays(1), // Время жизни токена
+				Expires = DateTime.UtcNow.AddDays(1),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 			var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -255,17 +251,14 @@ namespace Store.controllers
 		[HttpPost]
 		public async Task<IActionResult> Register([FromBody] RegisterModel model)
 		{
-			// Проверка, не существует ли уже пользователь с таким email
 			if (_context.Users.Any(u => u.Email == model.Email))
 			{
-				// Добавьте отладочный вывод, чтобы увидеть, какие email уже существуют
 				Console.WriteLine($"Пользователь с email '{model.Email}' уже существует.");
 
 				ModelState.AddModelError("Email", "Пользователь с таким email уже существует.");
 				return Problem("Пользователь с таким email уже существует.");
 			}
 
-			// Создание нового пользователя
 			var user = new User
 			{
 				Username = model.Name,
