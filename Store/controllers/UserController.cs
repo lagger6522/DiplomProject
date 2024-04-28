@@ -176,9 +176,8 @@ namespace Store.controllers
 				return Ok(new { role = user.Role, number = user.Number, email = user.Email, userName = user.Username, userId = user.UserId });
 			}
 			return Problem("Пользователь не авторизован.");
-
 		}
-
+			
 		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> singOut()
