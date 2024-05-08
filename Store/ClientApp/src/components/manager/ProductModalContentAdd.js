@@ -12,7 +12,6 @@ const ProductModalContentAdd = ({ onClose }) => {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
 
     useEffect(() => {
-        // Загрузка списка подкатегорий при монтировании компонента
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);

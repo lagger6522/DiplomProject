@@ -115,7 +115,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return Problem($"Ошибка при создании товара: {ex.Message}");
 			}
 		}

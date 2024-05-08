@@ -5,13 +5,15 @@ namespace Store.Model;
 
 public partial class ProductAttribute
 {
-    public int AttributeId { get; set; }
+    public int ProductAttributeId { get; set; }
 
     public int ProductId { get; set; }
 
-    public string AttributeName { get; set; } = null!;
+    public int AttributeId { get; set; }
 
-    public string AttributeValue { get; set; } = null!;
+    public string Value { get; set; } = null!;
+
+    public virtual Attribute Attribute { get; set; } = null!;
 
     public virtual Product Product { get; set; } = null!;
 }

@@ -15,6 +15,8 @@ namespace Store.DAL
 			// создается бд если не была создана
 			//DataBase.EnsureCreated();
 		}
+		public virtual DbSet<Model.Attribute> Attributes { get; set; }
+
 		public virtual DbSet<Order> Orders { get; set; }
 
 		public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -39,9 +41,17 @@ namespace Store.DAL
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			modelBuilder.Entity<Model.Attribute>(entity =>
+			{
+				entity.HasKey(e => e.AttributeId).HasName("PK__Attribut__C189298AF4CF3CB3");
+
+				entity.Property(e => e.AttributeId).HasColumnName("AttributeID");
+				entity.Property(e => e.AttributeName).HasMaxLength(100);
+			});
+
 			modelBuilder.Entity<Order>(entity =>
 			{
-				entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF3055FAAC");
+				entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF8730F705");
 
 				entity.Property(e => e.OrderId).HasColumnName("OrderID");
 				entity.Property(e => e.DeliveryAddress).HasMaxLength(255);
@@ -53,12 +63,12 @@ namespace Store.DAL
 
 				entity.HasOne(d => d.User).WithMany(p => p.Orders)
 					.HasForeignKey(d => d.UserId)
-					.HasConstraintName("FK__Orders__UserID__5F7E2DAC");
+					.HasConstraintName("FK__Orders__UserID__0E04126B");
 			});
 
 			modelBuilder.Entity<OrderDetail>(entity =>
 			{
-				entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D30C1242A3B1");
+				entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D30CF266E97E");
 
 				entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 				entity.Property(e => e.OrderId).HasColumnName("OrderID");
@@ -66,16 +76,16 @@ namespace Store.DAL
 
 				entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
 					.HasForeignKey(d => d.OrderId)
-					.HasConstraintName("FK__OrderDeta__Order__625A9A57");
+					.HasConstraintName("FK__OrderDeta__Order__10E07F16");
 
 				entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
 					.HasForeignKey(d => d.ProductId)
-					.HasConstraintName("FK__OrderDeta__Produ__634EBE90");
+					.HasConstraintName("FK__OrderDeta__Produ__11D4A34F");
 			});
 
 			modelBuilder.Entity<Product>(entity =>
 			{
-				entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6EDA585EC80");
+				entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6EDF9BCF052");
 
 				entity.Property(e => e.ProductId).HasColumnName("ProductID");
 				entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
@@ -85,26 +95,31 @@ namespace Store.DAL
 				entity.HasOne(d => d.Subcategory).WithMany(p => p.Products)
 					.HasForeignKey(d => d.SubcategoryId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__Products__Subcat__57DD0BE4");
+					.HasConstraintName("FK__Products__Subcat__038683F8");
 			});
 
 			modelBuilder.Entity<ProductAttribute>(entity =>
 			{
-				entity.HasKey(e => e.AttributeId).HasName("PK__ProductA__C189298A61106B1C");
+				entity.HasKey(e => e.ProductAttributeId).HasName("PK__ProductA__00CE67279140936D");
 
+				entity.Property(e => e.ProductAttributeId).HasColumnName("ProductAttributeID");
 				entity.Property(e => e.AttributeId).HasColumnName("AttributeID");
-				entity.Property(e => e.AttributeName).HasMaxLength(100);
 				entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+				entity.HasOne(d => d.Attribute).WithMany(p => p.ProductAttributes)
+					.HasForeignKey(d => d.AttributeId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK__ProductAt__Attri__093F5D4E");
 
 				entity.HasOne(d => d.Product).WithMany(p => p.ProductAttributes)
 					.HasForeignKey(d => d.ProductId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__ProductAt__Produ__5AB9788F");
+					.HasConstraintName("FK__ProductAt__Produ__084B3915");
 			});
 
 			modelBuilder.Entity<ProductCategory>(entity =>
 			{
-				entity.HasKey(e => e.CategoryId).HasName("PK__ProductC__19093A2B5FF5A86C");
+				entity.HasKey(e => e.CategoryId).HasName("PK__ProductC__19093A2B14CE5B96");
 
 				entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 				entity.Property(e => e.CategoryName).HasMaxLength(100);
@@ -112,7 +127,7 @@ namespace Store.DAL
 
 			modelBuilder.Entity<ProductReview>(entity =>
 			{
-				entity.HasKey(e => e.ReviewId).HasName("PK__ProductR__74BC79AE5C3F2E03");
+				entity.HasKey(e => e.ReviewId).HasName("PK__ProductR__74BC79AE900523C9");
 
 				entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
 				entity.Property(e => e.ProductId).HasColumnName("ProductID");
@@ -122,17 +137,17 @@ namespace Store.DAL
 				entity.HasOne(d => d.Product).WithMany(p => p.ProductReviews)
 					.HasForeignKey(d => d.ProductId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__ProductRe__Produ__681373AD");
+					.HasConstraintName("FK__ProductRe__Produ__1699586C");
 
 				entity.HasOne(d => d.User).WithMany(p => p.ProductReviews)
 					.HasForeignKey(d => d.UserId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__ProductRe__UserI__690797E6");
+					.HasConstraintName("FK__ProductRe__UserI__178D7CA5");
 			});
 
 			modelBuilder.Entity<Subcategory>(entity =>
 			{
-				entity.HasKey(e => e.SubcategoryId).HasName("PK__Subcateg__9C4E707D0A8D7139");
+				entity.HasKey(e => e.SubcategoryId).HasName("PK__Subcateg__9C4E707D6A4F83A6");
 
 				entity.Property(e => e.SubcategoryId).HasColumnName("SubcategoryID");
 				entity.Property(e => e.ParentCategoryId).HasColumnName("ParentCategoryID");
@@ -141,12 +156,12 @@ namespace Store.DAL
 				entity.HasOne(d => d.ParentCategory).WithMany(p => p.Subcategories)
 					.HasForeignKey(d => d.ParentCategoryId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__Subcatego__Paren__55009F39");
+					.HasConstraintName("FK__Subcatego__Paren__00AA174D");
 			});
 
 			modelBuilder.Entity<User>(entity =>
 			{
-				entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC5AB673BB");
+				entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACEB6AC0DF");
 
 				entity.Property(e => e.UserId).HasColumnName("UserID");
 				entity.Property(e => e.Email).HasMaxLength(100);
@@ -158,7 +173,7 @@ namespace Store.DAL
 
 			modelBuilder.Entity<UserCart>(entity =>
 			{
-				entity.HasKey(e => e.CartId).HasName("PK__UserCart__51BCD7971AC9764C");
+				entity.HasKey(e => e.CartId).HasName("PK__UserCart__51BCD797C0643D7E");
 
 				entity.ToTable("UserCart");
 
@@ -169,12 +184,12 @@ namespace Store.DAL
 				entity.HasOne(d => d.Product).WithMany(p => p.UserCarts)
 					.HasForeignKey(d => d.ProductId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__UserCart__Produc__6CD828CA");
+					.HasConstraintName("FK__UserCart__Produc__1B5E0D89");
 
 				entity.HasOne(d => d.User).WithMany(p => p.UserCarts)
 					.HasForeignKey(d => d.UserId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK__UserCart__UserID__6BE40491");
+					.HasConstraintName("FK__UserCart__UserID__1A69E950");
 			});
 
 			OnModelCreatingPartial(modelBuilder);
