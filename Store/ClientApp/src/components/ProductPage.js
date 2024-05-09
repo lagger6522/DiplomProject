@@ -19,7 +19,7 @@ const ProductPage = () => {
 
             sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
                 .then(response => {
-                    applySorting(response); // Применяем сортировку сразу после загрузки товаров
+                    applySorting(response);
                     initializeQuantities(response);
                 })
                 .catch(error => {
@@ -98,7 +98,8 @@ const ProductPage = () => {
 
     return (
         <div className="product-page">
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className="error-message">{error}</div>}            
+            <h2>{selectedSubcategory ? `${selectedSubcategory.subcategoryName}` : 'Выберите подкатегорию'}</h2>
             <div>
                 <label>Сортировка по:</label>
                 <select value={sortOption} onChange={handleSortChange}>
@@ -112,7 +113,6 @@ const ProductPage = () => {
                     <option value="desc">По убыванию</option>
                 </select>
             </div>
-            <h2>{selectedSubcategory ? `${selectedSubcategory.subcategoryName}` : 'Выберите подкатегорию'}</h2>
             <div className="product-list">
                 {products.map((product) => (
                     <div key={product.productId} className="product-item">
