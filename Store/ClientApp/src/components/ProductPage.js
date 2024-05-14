@@ -9,7 +9,7 @@ const ProductPage = () => {
     const [products, setProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [error, setError] = useState('');
-    const [sortOption, setSortOption] = useState('name');
+    const [sortOption, setSortOption] = useState('price');
     const [sortDirection, setSortDirection] = useState('asc');
 
     useEffect(() => {
@@ -40,9 +40,6 @@ const ProductPage = () => {
         let sortedResults = [...results];
 
         switch (sortOption) {
-            case 'name':
-                sortedResults.sort((a, b) => a.productName.localeCompare(b.productName));
-                break;
             case 'price':
                 sortedResults.sort((a, b) => a.price - b.price);
                 break;
@@ -98,12 +95,11 @@ const ProductPage = () => {
 
     return (
         <div className="product-page">
-            {error && <div className="error-message">{error}</div>}            
+            {error && <div className="error-message">{error}</div>}
             <h2>{selectedSubcategory ? `${selectedSubcategory.subcategoryName}` : 'Выберите подкатегорию'}</h2>
             <div>
                 <label>Сортировка по:</label>
                 <select value={sortOption} onChange={handleSortChange}>
-                    <option value="name">Имени</option>
                     <option value="price">Цене</option>
                     <option value="rating">Рейтингу</option>
                 </select>
