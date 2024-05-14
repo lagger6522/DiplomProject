@@ -69,6 +69,7 @@ namespace Store.controllers
 			try
 			{
 				var products = await _context.Products
+					.Include(p => p.ProductAttributes)
 					.Where(p => p.SubcategoryId == subcategoryId)
 					.Select(p => new
 					{
@@ -78,6 +79,7 @@ namespace Store.controllers
 						p.Price,
 						AverageRating = p.ProductReviews.Any(pr => !pr.IsDeleted) ? p.ProductReviews.Where(pr => !pr.IsDeleted).Average(pr => pr.Rating) : 0,
 						ReviewCount = p.ProductReviews.Count(pr => !pr.IsDeleted),
+						p.ProductAttributes,
 						p.Image
 					})
 					.ToListAsync();
@@ -87,6 +89,37 @@ namespace Store.controllers
 			catch (Exception ex)
 			{
 				return StatusCode(500, new { message = $"Error getting products by subcategory: {ex.Message}" });
+			}
+		}
+
+		[HttpGet]
+		public IActionResult GetAttributesForSubcategory(int subcategoryId)
+		{
+			try
+			{
+				var attributes = _context.ProductAttributes
+					.Include(pa => pa.Attribute)
+					.Where(pa => pa.Product.SubcategoryId == subcategoryId)
+					.Select(pa => pa.Attribute)
+					.Distinct()
+					.ToList();
+
+				var attributeModels = attributes.Select(attribute => new
+				{
+					attributeId = attribute.AttributeId,
+					attributeName = attribute.AttributeName,
+					values = _context.ProductAttributes
+						.Where(pa => pa.AttributeId == attribute.AttributeId && pa.Product.SubcategoryId == subcategoryId)
+						.Select(pa => pa.Value)
+						.Distinct()
+						.ToList()
+				}).ToList();
+
+				return Ok(attributeModels);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Произошла ошибка: {ex.Message}");
 			}
 		}
 
