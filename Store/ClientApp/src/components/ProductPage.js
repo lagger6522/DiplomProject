@@ -9,6 +9,8 @@ const ProductPage = () => {
     const [products, setProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [error, setError] = useState('');
+    const [sortOption, setSortOption] = useState('price');
+    const [sortDirection, setSortDirection] = useState('desc');
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -18,29 +20,22 @@ const ProductPage = () => {
             const subcategory = location.state.subcategory;
             setSelectedSubcategory(subcategory);
 
-            sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
-                .then(response => {
-                    setProducts(response);
-                    setFilteredProducts(response);
-                    initializeQuantities(response);
-                })
-                .catch(error => {
-                    console.error('Ошибка при загрузке товаров по подкатегории:', error);
-                });
-
-            sendRequest(`/api/Products/GetAttributesForSubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
-                .then(response => {
-                    setAttributes(response);
-                })
-                .catch(error => {
-                    console.error('Ошибка при загрузке атрибутов для подкатегории:', error);
-                });
+            Promise.all([
+                sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId }),
+                sendRequest(`/api/Products/GetAttributesForSubcategory`, 'GET', null, { subcategoryId: subcategory.subcategoryId })
+            ]).then(([productsResponse, attributesResponse]) => {
+                setProducts(productsResponse);
+                initializeQuantities(productsResponse);
+                setAttributes(attributesResponse);
+            }).catch(error => {
+                console.error('Ошибка при загрузке товаров и атрибутов:', error);
+            });
         }
     }, [location.state]);
 
     useEffect(() => {
         applyFilters();
-    }, [selectedAttributes]);
+    }, [selectedAttributes, sortOption, sortDirection, products]);
 
     const initializeQuantities = (products) => {
         const initialQuantities = {};
@@ -48,6 +43,44 @@ const ProductPage = () => {
             initialQuantities[product.productId] = 1;
         });
         setQuantities(initialQuantities);
+    };
+
+    const applySorting = (results) => {
+        let sortedResults = [...results];
+
+        switch (sortOption) {
+            case 'price':
+                sortedResults.sort((a, b) => a.price - b.price);
+                break;
+            case 'rating':
+                sortedResults.sort((a, b) => b.averageRating - a.averageRating);
+                break;
+            default:
+                break;
+        }
+
+        if (sortDirection === 'asc') {
+            sortedResults.reverse();
+        }
+
+        return sortedResults;
+    };
+
+    const applyFilters = () => {
+        let filteredProducts = [...products];
+
+        // Apply attribute filters
+        filteredProducts = filteredProducts.filter(product => {
+            return Object.entries(selectedAttributes).every(([attributeId, selectedValue]) => {
+                const matchingAttribute = product.productAttributes.find(attr => attr.attributeId === parseInt(attributeId) && (attr.value === selectedValue || selectedValue === ""));
+                return matchingAttribute !== undefined;
+            });
+        });
+
+        // Apply sorting
+        filteredProducts = applySorting(filteredProducts);
+
+        setFilteredProducts(filteredProducts);
     };
 
     const handleQuantityChange = (productId, amount) => {
@@ -78,6 +111,14 @@ const ProductPage = () => {
             });
     };
 
+    const handleSortChange = (e) => {
+        setSortOption(e.target.value);
+    };
+
+    const handleDirectionChange = (e) => {
+        setSortDirection(e.target.value);
+    };
+
     const handleAttributeChange = (attributeId, value) => {
         setSelectedAttributes(prevState => ({
             ...prevState,
@@ -85,26 +126,22 @@ const ProductPage = () => {
         }));
     };
 
-    const applyFilters = () => {
-        console.log("Selected attributes:", selectedAttributes);
-
-        if (Object.keys(selectedAttributes).length === 0) {
-            setFilteredProducts(products);
-        } else {
-            const filteredProducts = products.filter(product => {
-                return Object.entries(selectedAttributes).every(([attributeId, selectedValue]) => {
-                    const matchingAttribute = product.productAttributes.find(attr => attr.attributeId === parseInt(attributeId) && (attr.value === selectedValue || selectedValue === ""));
-                    return matchingAttribute !== undefined;
-                });
-            });
-            setFilteredProducts(filteredProducts);
-        }
-    };
-
     return (
         <div className="product-page">
             {error && <div className="error-message">{error}</div>}
             <h2>{selectedSubcategory ? `${selectedSubcategory.subcategoryName}` : 'Выберите подкатегорию'}</h2>
+            <div>
+                <label>Сортировка по:</label>
+                <select value={sortOption} onChange={handleSortChange}>
+                    <option value="price">Цене</option>
+                    <option value="rating">Рейтингу</option>
+                </select>
+                <label>Направление:</label>
+                <select value={sortDirection} onChange={handleDirectionChange}>
+                    <option value="asc">По возрастанию</option>
+                    <option value="desc">По убыванию</option>
+                </select>
+            </div>
             <div>
                 <h3>Фильтрация по атрибутам:</h3>
                 {attributes.map(attribute => (
