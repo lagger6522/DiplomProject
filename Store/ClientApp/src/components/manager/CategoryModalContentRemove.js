@@ -9,7 +9,6 @@ const CategoryModalContentRemove = ({ onClose }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
-        // Загрузка списка категорий при открытии модального окна
         sendRequest('/api/Categories/GetCategories', 'GET', null, null)
             .then(response => {
                 setCategories(response);
@@ -22,36 +21,32 @@ const CategoryModalContentRemove = ({ onClose }) => {
     const handleCategoryChange = (selectedCategoryId) => {
         const category = categories.find(category => category.categoryId === parseInt(selectedCategoryId, 10));
         setSelectedCategory(category);
-        setShowConfirmation(false); // Сбрасываем состояние подтверждения при смене категории
+        setShowConfirmation(false);
     };
 
     const handleRemove = () => {
-        setShowConfirmation(true); // Показываем окно подтверждения
+        setShowConfirmation(true);
     };
 
     const handleConfirmRemove = () => {
         if (selectedCategory) {
-            // Отправка запроса на сервер для удаления категории и связанных элементов
             sendRequest(`/api/Categories/RemoveCategory`, 'DELETE', null, { categoryId: selectedCategory.categoryId })
                 .then(response => {
-                    // Обработка успешного ответа от сервера
                     console.log('Категория и связанные элементы успешно удалены:', response);
-                    // Обновление списка категорий после удаления
                     setCategories(prevCategories => prevCategories.filter(category => category.categoryId !== selectedCategory.categoryId));
-                    setShowConfirmation(false); // Закрываем окно подтверждения
-                    setSelectedCategory(null); // Сбрасываем выбранную категорию
+                    setShowConfirmation(false);
+                    setSelectedCategory(null);
                     onClose();
                 })
                 .catch(error => {
-                    // Обработка ошибки при удалении
                     console.error('Ошибка при удалении категории и связанных элементов:', error);
-                    setShowConfirmation(false); // Закрываем окно подтверждения в случае ошибки
+                    setShowConfirmation(false);
                 });
         }
     };
 
     const handleCancelRemove = () => {
-        setShowConfirmation(false); // Закрываем окно подтверждения
+        setShowConfirmation(false);
     };
 
     return (
@@ -70,7 +65,6 @@ const CategoryModalContentRemove = ({ onClose }) => {
             </select>
             <button onClick={handleRemove}>Удалить</button>
 
-            {/* Модальное окно для подтверждения */}
             {showConfirmation && (
                 <div className="confirmation-modal">
                     <p>Вы уверены, что хотите удалить категорию и связанные элементы?</p>

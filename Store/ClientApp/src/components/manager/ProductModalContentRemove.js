@@ -11,7 +11,6 @@ const ProductModalContentRemove = ({ onClose }) => {
     const [selectedProductId, setSelectedProductId] = useState('');
 
     useEffect(() => {
-        // Загрузка списка подкатегорий при монтировании компонента
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
@@ -24,11 +23,10 @@ const ProductModalContentRemove = ({ onClose }) => {
     const handleSubcategoryChange = (selectedSubcategoryId) => {
         setSelectedSubcategoryId(selectedSubcategoryId);
 
-        // Загрузка товаров выбранной подкатегории
         sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
             .then(response => {
                 setProducts(response);
-                setSelectedProductId(''); // Сброс выбранного товара
+                setSelectedProductId('');
             })
             .catch(error => {
                 console.error('Ошибка при загрузке товаров по подкатегории:', error);
@@ -36,33 +34,28 @@ const ProductModalContentRemove = ({ onClose }) => {
     };
 
     const handleProductChange = (selectedProductId) => {
-        // При выборе товара обновляем выбранный товар
         setSelectedProductId(selectedProductId);
     };
 
     const handleRemove = () => {
-        // Проверка, что товар выбран
         if (!selectedProductId) {
             console.error('Не выбран товар.');
             return;
         }
 
-        // Отправка запроса на сервер для удаления товара
         sendRequest(`/api/Products/RemoveProduct`, 'DELETE', null, { productId: selectedProductId })
             .then(response => {
-                // Обработка успешного ответа от сервера
                 console.log('Товар успешно удален:', response); 
                 sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
                     .then(response => {
                         setProducts(response);
-                        setSelectedProductId(''); // Сброс выбранного товара
+                        setSelectedProductId('');
                     })
                     .catch(error => {
                         console.error('Ошибка при загрузке товаров по подкатегории:', error);
                     });
             })
             .catch(error => {
-                // Обработка ошибки при удалении товара
                 console.error('Ошибка при удалении товара:', error);
             });
     };

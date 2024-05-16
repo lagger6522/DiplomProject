@@ -4,7 +4,6 @@ import './CloseModal.css';
 
 const ProductModalContent = ({ onClose }) => {
     
-
     return (
         <div className="product-modal-content">
             

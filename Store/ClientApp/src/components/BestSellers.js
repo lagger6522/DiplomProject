@@ -48,10 +48,9 @@ const BestSellers = () => {
         })
             .then(response => {
                 console.log('Товар успешно добавлен в корзину:', response);
-                // Обновляем состояние корзины, если требуется
                 setCartQuantities(prevQuantities => ({
                     ...prevQuantities,
-                    [productId]: 1, // Можно сбросить счетчик до 1 после добавления в корзину
+                    [productId]: 1,
                 }));
             })
             .catch(error => {

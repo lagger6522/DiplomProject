@@ -15,7 +15,6 @@ const CategoryList = ({ categories, subcategories }) => {
     };
 
     const handleSubcategoryClick = (subcategory) => {
-        // Переход на страницу ProductPage с передачей данных о подкатегории
         navigate('/components/ProductPage', { state: { subcategory } });
     };
 

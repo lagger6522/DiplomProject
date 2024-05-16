@@ -13,7 +13,6 @@ const ProductModalContentEdit = ({ onClose }) => {
     const [price, setPrice] = useState('');
 
     useEffect(() => {
-        // Загрузка списка подкатегорий при монтировании компонента
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
@@ -26,11 +25,10 @@ const ProductModalContentEdit = ({ onClose }) => {
     const handleSubcategoryChange = (selectedSubcategoryId) => {
         setSelectedSubcategoryId(selectedSubcategoryId);
 
-        // Загрузка товаров выбранной подкатегории
         sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
             .then(response => {
                 setProducts(response);
-                setSelectedProductId(''); // Сброс выбранного товара
+                setSelectedProductId('');
             })
             .catch(error => {
                 console.error('Ошибка при загрузке товаров по подкатегории:', error);
@@ -40,7 +38,6 @@ const ProductModalContentEdit = ({ onClose }) => {
     const handleProductChange = (selectedProductId) => {
         setSelectedProductId(selectedProductId);
 
-        // Загрузка данных выбранного товара
         const selectedProduct = products.find(product => product.productId === parseInt(selectedProductId, 10));
         if (selectedProduct) {
             setProductName(selectedProduct.productName || '');
@@ -60,13 +57,11 @@ const ProductModalContentEdit = ({ onClose }) => {
     };
 
     const handleSave = () => {
-        // Проверка, что подкатегория и товар выбраны
         if (!selectedSubcategoryId || !selectedProductId) {
             console.error('Не выбрана подкатегория или товар.');
             return;
         }
 
-        // Отправка запроса на сервер для обновления товара
         sendRequest(`/api/Products/EditProduct`, 'PUT', {
             productName,
             description,
@@ -75,7 +70,6 @@ const ProductModalContentEdit = ({ onClose }) => {
         },
             { productId: selectedProductId })
             .then(response => {
-                // Обработка успешного ответа от сервера
                 console.log('Товар успешно обновлен:', response);
                 sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
                     .then(response => {
@@ -87,7 +81,6 @@ const ProductModalContentEdit = ({ onClose }) => {
 
             })
             .catch(error => {
-                // Обработка ошибки при обновлении товара
                 console.error('Ошибка при обновлении товара:', error);
             });
     };

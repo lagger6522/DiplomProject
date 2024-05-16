@@ -19,7 +19,7 @@
     }
 
     .best-sellers:hover {
-        border-color: #ff9519; /* Оранжевая граница при наведении */
+        border-color: #ff9519;
     }
 
 .product-list {
@@ -28,13 +28,13 @@
 }
 
 .product-item {
-    width: calc(33.33% - 20px); /* Ширина для вывода по 3 элемента в строку с отступами */
-    margin: 0 10px 20px 0; /* Отступы между товарами */
+    width: calc(33.33% - 20px);
+    margin: 0 10px 20px 0;
     box-sizing: border-box;
-    border: 1px solid #ddd; /* Серая граница толщиной в миллиметр */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Тень снизу и слева */
-    border-radius: 8px; /* Скругление углов восемь градусов */
-    padding: 10px; /* Отступ для всех сторон */
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
 }
 
 
@@ -45,7 +45,7 @@
     }
 
     .product-item:hover {
-        border-color: #ff9519; /* Оранжевая граница при наведении */
+        border-color: #ff9519;
     }
 
 .product-details {
@@ -61,7 +61,7 @@
     }
 
     .cart-button:hover {
-        background-color: #ff9519; /* Оранжевый цвет при наведении */
+        background-color: #ff9519;
         color: #fff;
     }
 
@@ -72,20 +72,20 @@
 }
 
 .counter-button {
-    background-color: #ffad4d; /* Оранжевый цвет */
+    background-color: #ffad4d;
     border: 1px solid #ffad4d;
     color: #fff;
     margin: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    border-radius: 8px; /* Скругление углов восемь градусов */
-    width: 30px; /* Задаем ширину кнопки */
-    height: 30px; /* Задаем высоту кнопки */
-    font-size: 16px; /* Размер текста */
+    border-radius: 8px;
+    width: 30px;
+    height: 30px; 
+    font-size: 16px;
 }
 
     .counter-button:hover {
-        background-color: #ff9519; /* Оранжевый цвет при наведении */
+        background-color: #ff9519;
         color: #fff;
     }
 
@@ -100,9 +100,9 @@
         color: #fff;
         padding: 8px 12px;
         cursor: pointer;
-        border-radius: 8px; /* Скругление углов восемь градусов */
-        width: 40px; /* Задаем ширину кнопки */
-        height: 40px; /* Задаем высоту кнопки */
+        border-radius: 8px; 
+        width: 40px; 
+        height: 40px; 
         font-size: 20px;
         display: flex;
         align-items: center;
@@ -110,12 +110,12 @@
     }
 
         .cart-controls button:hover {
-            background-color: #ff9519; /* Оранжевый цвет кнопки при наведении */
+            background-color: #ff9519; 
             color: #fff;
         }
 
     .cart-controls .cart-button {
-        margin-left: 10px; /* Отступ между кнопкой корзины и счетчиком */
+        margin-left: 10px; 
     }
 
     .cart-controls input {
@@ -123,21 +123,21 @@
         padding: 8px;
         width: 40px;
         text-align: center;
-        border: 1px solid #ddd; /* Серая граница для поля ввода */
-        border-radius: 8px; /* Скругление углов восемь градусов */
-        font-size: 16px; /* Размер текста */
+        border: 1px solid #ddd; 
+        border-radius: 8px;
+        font-size: 16px; 
     }
 
     .cart-controls .cart-button {
-        background-color: #fff; /* Белый фон */
-        border: 1px solid #ffad4d; /* Оранжевая граница */
-        color: #ffad4d; /* Оранжевый цвет текста */
+        background-color: #fff; 
+        border: 1px solid #ffad4d;
+        color: #ffad4d; 
         margin-left: 150px;
         padding: 8px 12px;
         cursor: pointer;
-        border-radius: 8px; /* Скругление углов восемь градусов */
-        width: 125px; /* Задаем ширину кнопки */
-        height: 40px; /* Задаем высоту кнопки */
+        border-radius: 8px; 
+        width: 125px; 
+        height: 40px; 
         font-size: 20px;
         display: flex;
         align-items: center;
@@ -145,6 +145,6 @@
     }
 
         .cart-controls .cart-button:hover {
-            background-color: #ffad4d; /* Оранжевый фон при наведении */
-            color: #fff; /* Белый цвет текста при наведении */
+            background-color: #ffad4d; 
+            color: #fff; 
         }

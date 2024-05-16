@@ -33,14 +33,12 @@
         }
 
         .category-list li div {
-            /* Добавленные стили для блока подкатегории */
             transition: background-color 0.3s, color 0.3s;
             padding: 5px;
             border-radius: 8px;
         }
 
         .category-list li:hover div {
-            /* Стили для блока подкатегории при наведении на родительский элемент */
             background-color: #FF9519;
             color: #ffffff;
         }

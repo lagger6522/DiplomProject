@@ -21,7 +21,7 @@
 
 .admin-menu-button {
     display: flex;
-    flex-direction: column; /*  нопки располагаютс€ вертикально */
+    flex-direction: column;
 }
 
     .admin-menu-button button {

@@ -6,17 +6,13 @@ const CategoryModalContentAdd = ({ onClose }) => {
     const [categoryName, setCategoryName] = useState('');
 
     const handleSave = () => {
-        // Отправка запроса на сервер для сохранения категории
         sendRequest('/api/Categories/CreateCategory', 'POST', { categoryName })
             .then(response => {
-                // Обработка успешного ответа от сервера
                 console.log('Категория успешно создана:', response);
 
-                // Закрытие модального окна
                 onClose();
             })
             .catch(error => {
-                // Обработка ошибки при сохранении категории
                 console.error('Ошибка при создании категории:', error);
             });
     };

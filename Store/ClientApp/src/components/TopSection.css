@@ -16,14 +16,14 @@
 }
 
 .cart-button-on-top-section {
-    background-color: #fff; /* Белый фон */
-    border: 1px solid #ffad4d; /* Оранжевая граница */
-    color: #ffad4d; /* Оранжевый цвет текста */
+    background-color: #fff;
+    border: 1px solid #ffad4d;
+    color: #ffad4d;
     padding: 8px 12px;
     cursor: pointer;
-    border-radius: 8px; /* Скругление углов восемь градусов */
-    width: 220px; /* Задаем ширину кнопки */
-    height: 75px; /* Задаем высоту кнопки */
+    border-radius: 8px;
+    width: 220px;
+    height: 75px;
     font-size: 32px;
     display: flex;
     align-items: center;
@@ -31,8 +31,8 @@
 }
 
 .cart-button-on-top-section:hover {
-    background-color: #ffad4d; /* Оранжевый фон при наведении */
-    color: #fff; /* Белый цвет текста при наведении */
+    background-color: #ffad4d;
+    color: #fff;
 }
 
 .auth-buttons {
@@ -47,7 +47,7 @@
     }
 
     .auth-buttons button {
-        background-color: #ffad4d; /* Оранжевый цвет кнопки */
+        background-color: #ffad4d;
         border: 1px solid #ffad4d;
         color: #fff;
         padding: 8px 16px;
@@ -57,5 +57,5 @@
     }
 
         .auth-buttons button:hover {
-            background-color: #ff9519; /* Оранжевый цвет кнопки при наведении */
+            background-color: #ff9519;
         }

@@ -11,7 +11,6 @@ const UsersListPage = () => {
     useEffect(() => {
         sendRequest('/api/User/GetUsers', 'GET')
             .then(response => {
-                // Исключаем администраторов из списка пользователей
                 const filteredUsers = response.filter(user => user.role !== 'Admin');
                 setUsers(filteredUsers);
             })
@@ -91,7 +90,6 @@ const UsersListPage = () => {
                         <option value="">Все</option>
                         <option value="User">Пользователь</option>
                         <option value="Manager">Менеджер</option>
-                        {/* Не включаем опцию для администратора */}
                     </select>
                 </label>
             </div>

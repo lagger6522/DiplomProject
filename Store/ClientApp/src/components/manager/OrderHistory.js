@@ -16,7 +16,6 @@ const OrderHistory = () => {
     const handleStatusChange = async (orderId, newStatus) => {
         try {
             await sendRequest('/api/Orders/UpdateOrderStatus', 'POST', { orderId, status: newStatus });
-            // Обновите локальный state или запросите данные заново для обновления интерфейса
             sendRequest('/api/Orders/GetAllOrders', 'GET', null, null)
                 .then(orders => {
                     setOrders(orders)

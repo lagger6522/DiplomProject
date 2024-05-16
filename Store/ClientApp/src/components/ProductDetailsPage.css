@@ -125,9 +125,9 @@
 .product-attributes {
     width: 65%;
     box-sizing: border-box;
-    border: 1px solid #ddd; /* Добавляем границу */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Добавляем тень */
-    border-radius: 8px; /* Добавляем скругленные углы */
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
     margin-left: 20px;
@@ -153,9 +153,9 @@
 .product-description {
     width: 99%;
     box-sizing: border-box;
-    border: 1px solid #ddd; /* Добавляем границу */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Добавляем тень */
-    border-radius: 8px; /* Добавляем скругленные углы */
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
 }
@@ -230,15 +230,15 @@
         margin-right: 10px;
         font-size: 24px;
         cursor: pointer;
-        color: #ddd; /* Цвет звезды по умолчанию */
+        color: #ddd;
     }
 
         .star-rating label:hover {
-            color: #ffad4d; /* Цвет звезд при наведении */
+            color: #ffad4d;
         }
 
             .star-rating label:hover ~ label {
-                color: #ddd; /* Цвет предыдущих звезд при наведении */
+                color: #ddd;
             }
 
     .star-rating input {
@@ -250,9 +250,9 @@
     }
 
     .star-rating .filled {
-        color: #ffad4d; /* Цвет выбранных звезд */
+        color: #ffad4d;
     }
 
     .star-rating input:checked ~ label:before {
-        color: #ff9519; /* Цвет выбранной звезды */
+        color: #ff9519;
     }

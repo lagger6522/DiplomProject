@@ -9,7 +9,6 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
-        // Загрузка списка подкатегорий при открытии модального окна
         sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
             .then(response => {
                 setSubcategories(response);
@@ -22,36 +21,32 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
     const handleSubcategoryChange = (selectedSubcategoryId) => {
         const subcategory = subcategories.find(subcategory => subcategory.subcategoryId === parseInt(selectedSubcategoryId, 10));
         setSelectedSubcategory(subcategory);
-        setShowConfirmation(false); // Сбрасываем состояние подтверждения при смене подкатегории
+        setShowConfirmation(false);
     };
 
     const handleRemove = () => {
-        setShowConfirmation(true); // Показываем окно подтверждения
+        setShowConfirmation(true);
     };
 
     const handleConfirmRemove = () => {
         if (selectedSubcategory) {
-            // Отправка запроса на сервер для удаления подкатегории и связанных товаров
             sendRequest(`/api/Subcategories/RemoveSubcategory`, 'DELETE', null, { subcategoryId: selectedSubcategory.subcategoryId })
                 .then(response => {
-                    // Обработка успешного ответа от сервера
                     console.log('Подкатегория и связанные товары успешно удалены:', response);
-                    // Обновление списка подкатегорий после удаления
                     setSubcategories(prevSubcategories => prevSubcategories.filter(subcategory => subcategory.subcategoryId !== selectedSubcategory.subcategoryId));
-                    setShowConfirmation(false); // Закрываем окно подтверждения
-                    setSelectedSubcategory(null); // Сбрасываем выбранную подкатегорию
+                    setShowConfirmation(false);
+                    setSelectedSubcategory(null);
                     onClose();
                 })
                 .catch(error => {
-                    // Обработка ошибки при удалении
                     console.error('Ошибка при удалении подкатегории и связанных товаров:', error);
-                    setShowConfirmation(false); // Закрываем окно подтверждения в случае ошибки
+                    setShowConfirmation(false);
                 });
         }
     };
 
     const handleCancelRemove = () => {
-        setShowConfirmation(false); // Закрываем окно подтверждения
+        setShowConfirmation(false);
     };
 
     return (
@@ -69,8 +64,6 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
                 ))}
             </select>
             <button onClick={handleRemove}>Удалить</button>
-
-            {/* Модальное окно для подтверждения */}
             {showConfirmation && (
                 <div className="confirmation-modal">
                     <p>Вы уверены, что хотите удалить подкатегорию и связанные товары?</p>
