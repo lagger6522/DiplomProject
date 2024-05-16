@@ -69,7 +69,6 @@ const ProductPage = () => {
     const applyFilters = () => {
         let filteredProducts = [...products];
 
-        // Apply attribute filters
         filteredProducts = filteredProducts.filter(product => {
             return Object.entries(selectedAttributes).every(([attributeId, selectedValue]) => {
                 const matchingAttribute = product.productAttributes.find(attr => attr.attributeId === parseInt(attributeId) && (attr.value === selectedValue || selectedValue === ""));
@@ -77,9 +76,7 @@ const ProductPage = () => {
             });
         });
 
-        // Apply sorting
         filteredProducts = applySorting(filteredProducts);
-
         setFilteredProducts(filteredProducts);
     };
 
@@ -143,18 +140,19 @@ const ProductPage = () => {
                 </select>
             </div>
             <div>
-                <h3>Фильтрация по атрибутам:</h3>
-                {attributes.map(attribute => (
-                    <div key={attribute.attributeId}>
-                        <label>{attribute.attributeName}:</label>
-                        <select onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}>
-                            <option value="">Все</option>
-                            {attribute.values.map(value => (
-                                <option key={value} value={value}>{value}</option>
-                            ))}
-                        </select>
-                    </div>
-                ))}
+                    <div className="filter-row">
+                    {attributes.map(attribute => (
+                        <div key={attribute.attributeId} className="filter-item">
+                            <label>{attribute.attributeName}:</label>
+                            <select onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}>
+                                <option value="">Все</option>
+                                {attribute.values.map(value => (
+                                    <option key={value} value={value}>{value}</option>
+                                ))}
+                            </select>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className="product-list">
                 {filteredProducts.map((product) => (
@@ -182,6 +180,7 @@ const ProductPage = () => {
                 ))}
             </div>
         </div>
+
     );
 };
 
