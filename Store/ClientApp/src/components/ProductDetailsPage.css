@@ -133,6 +133,11 @@
     margin-left: 20px;
 }
 
+    .product-attributes li {
+        border: none;
+        padding: 10px;
+    }
+    
     .product-attributes h3 {
         margin-bottom: 10px;
     }
