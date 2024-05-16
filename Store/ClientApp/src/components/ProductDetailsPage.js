@@ -140,8 +140,6 @@ const ProductDetailsPage = () => {
                 </div>
             </div>
 
-
-
             <div className="product-description">
                 <h2>Описание товара</h2>
                 <p>{product?.description}</p>
