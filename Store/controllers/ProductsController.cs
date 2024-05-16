@@ -167,7 +167,12 @@ namespace Store.controllers
 						p.Price,
 						AverageRating = p.ProductReviews.Where(pr => !pr.IsDeleted).Average(pr => (double?)pr.Rating) ?? 0,
 						ReviewCount = p.ProductReviews.Count(pr => !pr.IsDeleted),
-						p.Image
+						p.Image,
+						Attributes = p.ProductAttributes.Select(pa => new
+						{
+							pa.Attribute.AttributeName,
+							pa.Value
+						}).ToList()
 					})
 					.FirstOrDefaultAsync();
 
@@ -183,6 +188,7 @@ namespace Store.controllers
 				return StatusCode(500, new { message = $"Error getting product details: {ex.Message}" });
 			}
 		}
+
 
 		[HttpDelete]
 		public IActionResult RemoveProduct(int productId)

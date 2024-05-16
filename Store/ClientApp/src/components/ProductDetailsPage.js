@@ -11,11 +11,14 @@ const ProductDetailsPage = () => {
     const [reviewText, setReviewText] = useState('');
     const [error, setError] = useState('');
     const [reviews, setReviews] = useState([]);
+    const [attributes, setAttributes] = useState([]);
+
 
     useEffect(() => {
         sendRequest(`/api/Products/GetProductDetails`, 'GET', null, { productId })
             .then((response) => {
                 setProduct(response);
+                setAttributes(response.attributes);
             })
             .catch((error) => {
                 console.error('Ошибка при загрузке деталей товара:', error);
@@ -29,7 +32,6 @@ const ProductDetailsPage = () => {
                 console.error('Ошибка при загрузке отзывов о товаре:', error);
             });
     }, [productId]);
-
 
     if (!product) {
         return <div>Loading...</div>;
@@ -140,10 +142,23 @@ const ProductDetailsPage = () => {
                 </div>
             </div>
 
+            <div className="product-attributes">
+                <h3>Характеристики товара</h3>
+                <ul>
+                    {attributes.map(attribute => (
+                        <li key={attribute.attributeId}>
+                            <strong>{attribute.attributeName}:</strong> {attribute.value}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
             <div className="product-description">
-                <h2>Описание товара</h2>
+                <h3>Описание товара</h3>
                 <p>{product?.description}</p>
             </div>
+
+            
 
             <div className="product-reviews">
                 <h4>Написать отзыв</h4>
