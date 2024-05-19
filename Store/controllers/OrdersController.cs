@@ -25,23 +25,23 @@ namespace Store.controllers
 		}
 
 		[HttpPost]
-		public IActionResult UpdateOrderStatus([FromBody] OrderStatusUpdateRequest request)
+		public async Task<IActionResult> UpdateOrderStatus([FromBody] OrderStatusUpdateRequest request)
 		{
 			if (request == null || string.IsNullOrWhiteSpace(request.Status))
 			{
-				return BadRequest("Invalid request.");
+				return BadRequest(new { message = "Invalid request." });
 			}
 
-			var order = _context.Orders.FirstOrDefault(o => o.OrderId == request.OrderId);
+			var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
 
 			if (order != null)
 			{
 				order.Status = request.Status;
-				_context.SaveChanges();
-				return Ok();
+				await _context.SaveChangesAsync();
+				return Ok(new { message = "Order status updated successfully" });
 			}
 
-			return NotFound("Order not found");
+			return NotFound(new { message = "Order not found" });
 		}
 	}
 }

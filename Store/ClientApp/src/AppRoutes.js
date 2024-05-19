@@ -6,7 +6,6 @@ import { LoginPage } from "./components/authentication/LoginPage";
 import AdminPage from "./components/administrator/AdminPage";
 import ManagerPage from "./components/manager/ManagerPage";
 import ProductPage from "./components/ProductPage";
-import SubcategoryPage from "./components/SubcategoryPage";
 import CartItem from "./components/user/CartItem";
 import OrderButton from "./components/user/OrderButton";
 
@@ -51,10 +50,6 @@ const AppRoutes = [
   {
   path: '/components/ProductPage',
   element: <ProductPage />
-  },
-  {
-  path: '/components/SubcategoryPage',
-  element: <SubcategoryPage />
   },
 ];
 

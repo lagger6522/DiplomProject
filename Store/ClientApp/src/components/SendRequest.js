@@ -30,7 +30,8 @@
         .replaceAll("}", "%7D")
         .replaceAll("~", "%7E");
 }
-function sendRequest(endPoint, method, bodyObj = null, ...params){
+
+async function sendRequest(endPoint, method, bodyObj = null, ...params) {
     if (params.length > 0 && params[0] != null) {
         endPoint += "?";
         for (let param of params) {
@@ -42,34 +43,38 @@ function sendRequest(endPoint, method, bodyObj = null, ...params){
             }
         }
     }
+
     let payload = {
         method: method,
         headers: {
-            "access-control-allow-origin": "*",
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-    }
+    };
+
     if (bodyObj) {
         if (bodyObj instanceof FormData) {
             payload = {
                 method: method,
-                body: bodyObj
-            }
-        } else
+                body: bodyObj,
+            };
+        } else {
             payload["body"] = JSON.stringify(bodyObj);
+        }
     }
-    return fetch(endPoint, payload)
-        .then(function (response) {
-            if (!response.ok) return response.json().then(n => { throw n; })
-                //throw Error(response.statusText);
-            return response.json();
-        })
-        //.then(function (result) {
-        //    return result;
-        //}).catch(function (error) {
-        //    console.log(error);
-        //});
+
+    try {
+        const response = await fetch(endPoint, payload);
+        if (!response.ok) {
+            const errorResponse = await response.text();
+            throw new Error(errorResponse || 'Unknown error');
+        }
+        const text = await response.text();
+        return text ? JSON.parse(text) : {};
+    } catch (error) {
+        console.error('Request failed', error);
+        throw error;
+    }
 }
 
 export default sendRequest;

@@ -6,21 +6,26 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        sendRequest('/api/Orders/GetAllOrders', 'GET', null, null)
-            .then(orders => {
-                setOrders(orders)
-            })
-            .catch(error => console.error('Error fetching orders:', error));
+        fetchOrders();
     }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const orders = await sendRequest('/api/Orders/GetAllOrders', 'GET');
+            setOrders(orders);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
 
     const handleStatusChange = async (orderId, newStatus) => {
         try {
             await sendRequest('/api/Orders/UpdateOrderStatus', 'POST', { orderId, status: newStatus });
-            sendRequest('/api/Orders/GetAllOrders', 'GET', null, null)
-                .then(orders => {
-                    setOrders(orders)
-                })
-                .catch(error => console.error('Error fetching orders:', error));
+            setOrders(prevOrders =>
+                prevOrders.map(order =>
+                    order.orderId === orderId ? { ...order, status: newStatus } : order
+                )
+            );
             console.log(`Changed status of order ${orderId} to ${newStatus}`);
         } catch (error) {
             console.error('Error updating order status:', error);
