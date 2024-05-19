@@ -74,12 +74,12 @@
     }
 
         .item-column4 button:hover {
-            background-color: #ff9519; /* Оранжевый цвет кнопки при наведении */
+            background-color: #ff9519;
             color: #fff;
         }
 
     .item-column4 .cart-button {
-        margin-left: 10px; /* Отступ между кнопкой корзины и счетчиком */
+        margin-left: 10px;
     }
 
     .item-column4 input {
@@ -94,15 +94,15 @@
     }
 
     .item-column4 .cart-button {
-        background-color: #fff; /* Белый фон */
-        border: 1px solid #ffad4d; /* Оранжевая граница */
-        color: #ffad4d; /* Оранжевый цвет текста */
+        background-color: #fff;
+        border: 1px solid #ffad4d;
+        color: #ffad4d;
         margin-left: 150px;
         padding: 8px 12px;
         cursor: pointer;
-        border-radius: 8px; /* Скругление углов восемь градусов */
-        width: 125px; /* Задаем ширину кнопки */
-        height: 40px; /* Задаем высоту кнопки */
+        border-radius: 8px;
+        width: 125px;
+        height: 40px;
         font-size: 20px;
         display: flex;
         align-items: center;
@@ -110,8 +110,8 @@
     }
 
         .item-column4 .cart-button:hover {
-            background-color: #ffad4d; /* Оранжевый фон при наведении */
-            color: #fff; /* Белый цвет текста при наведении */
+            background-color: #ffad4d;
+            color: #fff;
         }
 
 .item-column5 {

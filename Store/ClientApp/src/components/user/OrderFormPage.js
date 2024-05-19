@@ -21,12 +21,10 @@ const OrderFormPage = () => {
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
 
-        // Обрабатываем чекбокс отдельно
         if (type === 'checkbox') {
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: checked,
-                // Сбрасываем значения, если выбрана опция "Частный дом"
                 ...(name === 'isPrivateHouse' && checked && { entrance: '', apartment: '' }),
             }));
         } else {
@@ -41,7 +39,6 @@ const OrderFormPage = () => {
         e.preventDefault();
 
         try {
-            // Логика отправки данных формы на сервер
             const response = await sendRequest("/api/Cart/CreateOrder", "POST", formData, { userId: sessionStorage.getItem('userId') })
                 .then(response => {
                     console.log(response);

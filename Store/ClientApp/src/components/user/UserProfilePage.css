@@ -1,7 +1,7 @@
 ﻿.user-profile-page {
     padding-top: 150px;
     display: flex;
-    justify-content: center; /* Центрируем блок по горизонтали */
+    justify-content: center;
 }
 
 .user-profile {
@@ -24,7 +24,7 @@
 .user-menu {
     padding-left: 200px;
     display: flex;
-    flex-direction: column; /* Кнопки в столбик */
+    flex-direction: column;
     margin-left: 20px;
 }
 
