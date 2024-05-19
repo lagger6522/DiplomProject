@@ -12,8 +12,6 @@ namespace Store.DAL
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 		{
 
-			// создается бд если не была создана
-			//DataBase.EnsureCreated();
 		}
 		public virtual DbSet<Model.Attribute> Attributes { get; set; }
 

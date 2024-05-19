@@ -12,19 +12,30 @@ const OrderHistory = () => {
     const fetchOrders = async () => {
         try {
             const orders = await sendRequest('/api/Orders/GetAllOrders', 'GET');
-            setOrders(orders);
+            const sortedOrders = sortOrders(orders);
+            setOrders(sortedOrders);
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
+    };
+
+    const sortOrders = (orders) => {
+        const statusOrder = {
+            'Заказ обрабатывается': 1,
+            'Заказ готов к отправке': 2,
+            'Заказ доставлен': 3,
+        };
+
+        return orders.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
     };
 
     const handleStatusChange = async (orderId, newStatus) => {
         try {
             await sendRequest('/api/Orders/UpdateOrderStatus', 'POST', { orderId, status: newStatus });
             setOrders(prevOrders =>
-                prevOrders.map(order =>
+                sortOrders(prevOrders.map(order =>
                     order.orderId === orderId ? { ...order, status: newStatus } : order
-                )
+                ))
             );
             console.log(`Changed status of order ${orderId} to ${newStatus}`);
         } catch (error) {

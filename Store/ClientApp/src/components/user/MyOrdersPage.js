@@ -11,13 +11,24 @@ const MyOrdersPage = () => {
         if (userId) {
             sendRequest(`/api/User/GetOrdersByUserId?userId=${userId}`)
                 .then((orders) => {
-                    setUserOrders(orders || []);
+                    const sortedOrders = sortOrders(orders || []);
+                    setUserOrders(sortedOrders);
                 })
                 .catch((error) => {
                     console.error('Ошибка при загрузке заказов:', error);
                 });
         }
     }, []);
+
+    const sortOrders = (orders) => {
+        const statusOrder = {
+            'Заказ обрабатывается': 1,
+            'Заказ готов к отправке': 2,
+            'Заказ доставлен': 3,
+        };
+
+        return orders.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+    };
 
     const formatReviewDate = (dateString) => {
         const date = new Date(dateString);
