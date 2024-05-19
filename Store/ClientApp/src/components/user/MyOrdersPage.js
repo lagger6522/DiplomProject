@@ -4,8 +4,8 @@ import './MyOrdersPage.css';
 
 const MyOrdersPage = () => {
     const [userOrders, setUserOrders] = useState([]);
+    const [orderDetails, setOrderDetails] = useState({});
     const [confirmDeleteOrderId, setConfirmDeleteOrderId] = useState(null);
-    const [expandedOrderId, setExpandedOrderId] = useState(null);
 
     useEffect(() => {
         const userId = sessionStorage.getItem('userId');
@@ -61,8 +61,26 @@ const MyOrdersPage = () => {
         setConfirmDeleteOrderId(null);
     };
 
+    const fetchOrderDetails = (orderId) => {
+        sendRequest(`/api/Orders/GetOrderDetails?orderId=${orderId}`)
+            .then((details) => {
+                setOrderDetails(prevDetails => ({ ...prevDetails, [orderId]: details }));
+            })
+            .catch((error) => {
+                console.error('Ошибка при загрузке деталей заказа:', error);
+            });
+    };
+
     const toggleOrderDetails = (orderId) => {
-        setExpandedOrderId((prevOrderId) => (prevOrderId === orderId ? null : orderId));
+        if (orderDetails[orderId]) {
+            setOrderDetails(prevDetails => {
+                const newDetails = { ...prevDetails };
+                delete newDetails[orderId];
+                return newDetails;
+            });
+        } else {
+            fetchOrderDetails(orderId);
+        }
     };
 
     return (
@@ -71,8 +89,8 @@ const MyOrdersPage = () => {
             {userOrders && userOrders.length > 0 ? (
                 <ul>
                     {userOrders.map((order) => (
-                        <li key={order.orderId}>
-                            <div onClick={() => toggleOrderDetails(order.orderId)}>
+                        <li key={order.orderId} onClick={() => toggleOrderDetails(order.orderId)}>
+                            <div>
                                 <strong>Номер заказа:</strong> {order.orderId}
                             </div>
                             <div>
@@ -85,7 +103,10 @@ const MyOrdersPage = () => {
                                 <React.Fragment>
                                     <button
                                         className="delete-order-button"
-                                        onClick={(e) => { e.stopPropagation(); handleDeleteOrder(order.orderId); }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteOrder(order.orderId);
+                                        }}
                                     >
                                         Удалить заказ
                                     </button>
@@ -98,8 +119,32 @@ const MyOrdersPage = () => {
                                     )}
                                 </React.Fragment>
                             )}
-                            {expandedOrderId === order.orderId && (
-                                <OrderDetails orderId={order.orderId} />
+                            {orderDetails[order.orderId] && (
+                                <div className="order-details">
+                                    <h4>Детали заказа</h4>
+                                    <div>
+                                        <strong>Дата заказа:</strong> {formatReviewDate(orderDetails[order.orderId].orderDate)}
+                                    </div>
+                                    <div>
+                                        <strong>Статус:</strong> {orderDetails[order.orderId].status}
+                                    </div>
+                                    <div>
+                                        <strong>Адрес доставки:</strong> {orderDetails[order.orderId].deliveryAddress}
+                                    </div>
+                                    <h5>Товары:</h5>
+                                    <ul>
+                                        {orderDetails[order.orderId].orderItems.map(item => (
+                                            <li key={item.productId}>
+                                                <div><strong>Продукт:</strong> {item.productName}</div>
+                                                <div><strong>Количество:</strong> {item.quantity}</div>
+                                                <div><strong>Цена:</strong> {item.price}</div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <div className="order-total">
+                                        <strong>Итоговая стоимость:</strong> {orderDetails[order.orderId].totalOrderPrice}
+                                    </div>
+                                </div>
                             )}
                         </li>
                     ))}
@@ -107,44 +152,6 @@ const MyOrdersPage = () => {
             ) : (
                 <p>У вас пока нет заказов.</p>
             )}
-        </div>
-    );
-};
-
-const OrderDetails = ({ orderId }) => {
-    const [orderDetails, setOrderDetails] = useState(null);
-
-    useEffect(() => {
-        sendRequest(`/api/Orders/GetOrderDetails`, 'GET', null, { orderId })
-            .then((details) => {
-                setOrderDetails(details);
-            })
-            .catch((error) => {
-                console.error('Ошибка при загрузке деталей заказа:', error);
-            });
-    }, [orderId]);
-
-    if (!orderDetails) {
-        return <p>Загрузка...</p>;
-    }
-
-    const totalCost = orderDetails.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    return (
-        <div className="order-details">
-            <h4>Детали заказа</h4>
-            <ul>
-                {orderDetails.map((item) => (
-                    <li key={item.productId}>
-                        <div>{item.productName}</div>
-                        <div>Количество: {item.quantity}</div>
-                        <div>Цена: {item.price} руб.</div>
-                    </li>
-                ))}
-            </ul>
-            <div className="order-total">
-                <strong>Итоговая стоимость:</strong> {totalCost} руб.
-            </div>
         </div>
     );
 };

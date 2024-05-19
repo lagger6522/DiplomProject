@@ -18,6 +18,39 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> GetOrderDetails(int orderId)
+		{
+			var order = await _context.Orders
+				.Include(o => o.OrderDetails)
+				.ThenInclude(od => od.Product)
+				.FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+			if (order == null)
+			{
+				return NotFound(new { Message = "Order not found" });
+			}
+
+			var orderDetails = order.OrderDetails.Select(od => new
+			{
+				od.Product.ProductName,
+				od.Quantity,
+				od.Product.Price,
+				TotalPrice = od.Quantity * od.Product.Price
+			}).ToList();
+
+			var response = new
+			{
+				order.OrderId,
+				order.OrderDate,
+				order.Status,
+				TotalOrderPrice = orderDetails.Sum(od => od.TotalPrice),
+				OrderItems = orderDetails
+			};
+
+			return Ok(response);
+		}
+
 		[HttpPost]
 		public ActionResult DeleteOrder(int orderId)
 		{

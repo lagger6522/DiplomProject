@@ -19,6 +19,8 @@
         border-radius: 8px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         position: relative;
+        display: flex;
+        flex-direction: column;
         cursor: pointer;
     }
 
@@ -40,9 +42,8 @@
         font-size: 14px;
         position: absolute;
         right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        top: 2.6vw;
+        transition: background-color 0.3s, box-shadow 0.3s;
     }
 
         .my-orders-page .delete-order-button:hover {
@@ -117,5 +118,11 @@
 
     .order-details {
         padding: 10px;
+    }
+
+    .my-orders-page .delete-order-button {
+        right: 10px;
+        top: 10px;
+        transform: none;
     }
 }
