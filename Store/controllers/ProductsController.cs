@@ -195,7 +195,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Находим товар по ID
 				var product = _context.Products.Find(productId);
 
 				if (product == null)
@@ -203,7 +202,6 @@ namespace Store.controllers
 					return NotFound(new { message = "Товар не найден." });
 				}
 
-				// Удаление товара
 				_context.Products.Remove(product);
 				_context.SaveChanges();
 
@@ -211,7 +209,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при удалении товара: {ex.Message}" });
 			}
 		}
@@ -221,7 +218,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Поиск товара по ID
 				var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
 
 				if (product == null)
@@ -229,19 +225,16 @@ namespace Store.controllers
 					return NotFound(new { message = "Товар не найден." });
 				}
 
-				// Обновление данных товара
 				product.ProductName = model.ProductName;
 				product.Description = model.Description;
 				product.Image = model.Image;
 				product.Price = model.Price;
-				// Сохранение изменений в базе данных
 				_context.SaveChanges();
 
 				return Ok(new { message = "Товар успешно обновлен." });
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при обновлении товара: {ex.Message}" });
 			}
 		}

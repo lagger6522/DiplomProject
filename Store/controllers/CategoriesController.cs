@@ -23,7 +23,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Находите категорию по ID
 				var category = _context.ProductCategories.Include(c => c.Subcategories).ThenInclude(s => s.Products)
 									 .FirstOrDefault(c => c.CategoryId == categoryId);
 
@@ -32,16 +31,13 @@ namespace Store.controllers
 					return NotFound(new { message = "Категория не найдена." });
 				}
 
-				// Удаление всех товаров, связанных с подкатегориями
 				foreach (var subcategory in category.Subcategories)
 				{
 					_context.Products.RemoveRange(subcategory.Products);
 				}
 
-				// Удаление подкатегорий
 				_context.Subcategories.RemoveRange(category.Subcategories);
 
-				// Удаление категории
 				_context.ProductCategories.Remove(category);
 
 				_context.SaveChanges();
@@ -50,7 +46,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при удалении категории: {ex.Message}" });
 			}
 		}
@@ -60,7 +55,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Находим категорию по ID
 				var existingCategory = await _context.ProductCategories
 					.FirstOrDefaultAsync(c => c.CategoryId == categoryId);
 
@@ -69,17 +63,14 @@ namespace Store.controllers
 					return NotFound(new { message = "Категория не найдена." });
 				}
 
-				// Обновляем данные категории
 				existingCategory.CategoryName = CategoryName.CategoryName;
 
-				// Сохраняем изменения
 				await _context.SaveChangesAsync();
 
 				return Ok(new { message = "Категория успешно обновлена." });
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при обновлении категории: {ex.Message}" });
 			}
 		}
@@ -89,17 +80,14 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверка наличия категории с таким же названием в базе данных
 				var existingCategory = await _context.ProductCategories
 					.FirstOrDefaultAsync(c => c.CategoryName == category.CategoryName);
 
 				if (existingCategory != null)
 				{
-					// Категория с таким названием уже существует
 					return BadRequest(new { message = "Категория с таким названием уже существует." });
 				}
 
-				// Добавление новой категории
 				_context.ProductCategories.Add(category);
 				await _context.SaveChangesAsync();
 
@@ -107,7 +95,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = "Внутренняя ошибка сервера." });
 			}
 		}

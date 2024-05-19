@@ -24,10 +24,8 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Задаем дату отзыва
 				review.ReviewDate = DateTime.Now;
 
-				// Добавляем отзыв в базу данных
 				_context.ProductReviews.Add(review);
 				await _context.SaveChangesAsync();
 
@@ -35,7 +33,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок, если необходимо
 				return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
 			}
 		}

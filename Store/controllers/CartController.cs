@@ -52,7 +52,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Получаем товары в корзине для указанного пользователя
 				var cartItems = await _context.UserCarts
 					.Where(ci => ci.UserId == userId)
 					.Include(ci => ci.Product)
@@ -86,13 +85,11 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверяем, что запрос содержит все необходимые данные
 				if (request == null || request.UserId <= 0 || request.ProductId <= 0 || request.Quantity < 0)
 				{
 					return BadRequest("Некорректный запрос");
 				}
 
-				// Находим товар в корзине для указанного пользователя
 				var cartItem = await _context.UserCarts
 					.FirstOrDefaultAsync(ci => ci.UserId == request.UserId && ci.ProductId == request.ProductId);
 
@@ -101,7 +98,6 @@ namespace Store.controllers
 					return NotFound("Товар не найден в корзине");
 				}
 
-				// Обновляем количество товара
 				cartItem.Quantity = request.Quantity;
 				await _context.SaveChangesAsync();
 
@@ -118,13 +114,11 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверяем, что запрос содержит все необходимые данные
 				if (request == null || request.UserId <= 0 || request.ProductId <= 0)
 				{
 					return BadRequest("Некорректный запрос");
 				}
 
-				// Находим товар в корзине для указанного пользователя
 				var cartItem = await _context.UserCarts
 					.FirstOrDefaultAsync(ci => ci.UserId == request.UserId && ci.ProductId == request.ProductId);
 
@@ -133,7 +127,6 @@ namespace Store.controllers
 					return NotFound("Товар не найден в корзине");
 				}
 
-				// Удаляем товар из корзины
 				_context.UserCarts.Remove(cartItem);
 				await _context.SaveChangesAsync();
 

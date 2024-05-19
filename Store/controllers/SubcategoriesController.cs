@@ -29,17 +29,14 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверка наличия подкатегории с таким же названием в базе данных
 				var existingSubcategory = await _context.Subcategories
 					.FirstOrDefaultAsync(s => s.SubcategoryName == subcategory.SubcategoryName && s.ParentCategoryId == subcategory.ParentCategoryId);
 
 				if (existingSubcategory != null)
 				{
-					// Подкатегория с таким названием уже существует для данной категории
 					return BadRequest(new { message = "Подкатегория с таким названием уже существует для данной категории." });
 				}
 
-				// Добавление новой подкатегории
 				_context.Subcategories.Add(subcategory);
 				await _context.SaveChangesAsync();
 
@@ -47,7 +44,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = "Внутренняя ошибка сервера." });
 			}
 		}
@@ -57,7 +53,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Находим подкатегорию по ID
 				var subcategory = _context.Subcategories.Include(s => s.Products)
 									 .FirstOrDefault(s => s.SubcategoryId == subcategoryId);
 
@@ -66,10 +61,8 @@ namespace Store.controllers
 					return NotFound(new { message = "Подкатегория не найдена." });
 				}
 
-				// Удаление всех товаров, связанных с подкатегорией
 				_context.Products.RemoveRange(subcategory.Products);
 
-				// Удаление подкатегории
 				_context.Subcategories.Remove(subcategory);
 
 				_context.SaveChanges();
@@ -78,7 +71,6 @@ namespace Store.controllers
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при удалении подкатегории: {ex.Message}" });
 			}
 		}
@@ -96,17 +88,14 @@ namespace Store.controllers
 					return NotFound(new { message = "Подкатегория не найдена." });
 				}
 
-				// Обновляем данные категории
 				existingSubcategory.SubcategoryName = SubcategoryName.SubcategoryName;
 
-				// Сохраняем изменения
 				await _context.SaveChangesAsync();
 
 				return Ok(new { message = "Подкатегория успешно обновлена." });
 			}
 			catch (Exception ex)
 			{
-				// Обработка ошибок
 				return StatusCode(500, new { message = $"Ошибка при обновлении подкатегории: {ex.Message}" });
 			}
 		}
