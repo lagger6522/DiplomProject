@@ -18,6 +18,24 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpPost]
+		public ActionResult DeleteOrder(int orderId)
+		{
+			var order = _context.Orders.FirstOrDefault(o => o.OrderId == orderId);
+			if (order == null)
+			{
+				return NotFound("Order not found.");
+			}
+
+			var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).ToList();
+			_context.OrderDetails.RemoveRange(orderDetails);
+
+			_context.Orders.Remove(order);
+			_context.SaveChanges();
+
+			return Ok("Order deleted successfully.");
+		}
+
 		[HttpGet]
 		public async Task<IEnumerable<Order>> GetAllOrders()
 		{

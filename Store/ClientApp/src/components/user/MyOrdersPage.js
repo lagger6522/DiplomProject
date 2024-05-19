@@ -41,6 +41,15 @@ const MyOrdersPage = () => {
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
+    const handleDeleteOrder = async (orderId) => {
+        try {
+            await sendRequest(`/api/Orders/DeleteOrder`, 'POST', null, { orderId });
+            setUserOrders((prevOrders) => prevOrders.filter((order) => order.orderId !== orderId));
+        } catch (error) {
+            console.error('Ошибка при удалении заказа:', error);
+        }
+    };
+
     return (
         <div className="my-orders-page">
             <h2>Мои заказы</h2>
@@ -57,6 +66,14 @@ const MyOrdersPage = () => {
                             <div>
                                 <strong>Статус заказа:</strong> {order.status}
                             </div>
+                            {order.status === 'Заказ обрабатывается' && (
+                                <button
+                                    className="delete-order-button"
+                                    onClick={() => handleDeleteOrder(order.orderId)}
+                                >
+                                    Удалить заказ
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>
