@@ -5,3 +5,94 @@
     justify-content: flex-start;
     gap: 10px;
 }
+
+.my-orders-page {
+    padding: 20px;
+}
+
+    .my-orders-page h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .my-orders-page ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .my-orders-page li {
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+        .my-orders-page li strong {
+            margin-right: 10px;
+        }
+
+    .my-orders-page p {
+        font-size: 16px;
+    }
+
+    .my-orders-page .delete-order-button {
+        background-color: #e74c3c;
+        border: none;
+        color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+
+        .my-orders-page .delete-order-button:hover {
+            background-color: #d62c1a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+.confirmation-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+    .confirmation-modal p {
+        margin-bottom: 10px;
+    }
+
+    .confirmation-modal button {
+        background-color: #e74c3c;
+        border: none;
+        color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-right: 10px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+        .confirmation-modal button:hover {
+            background-color: #d62c1a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+@media (max-width: 600px) {
+    .my-orders-page li {
+        padding: 10px;
+    }
+}

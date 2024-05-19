@@ -19,6 +19,7 @@
         border-radius: 8px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         position: relative;
+        cursor: pointer;
     }
 
         .my-orders-page li strong {
@@ -49,8 +50,72 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+    .my-orders-page .confirm-delete-menu {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+        .my-orders-page .confirm-delete-menu p {
+            margin-bottom: 10px;
+        }
+
+        .my-orders-page .confirm-delete-menu button {
+            background-color: #e74c3c;
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+            .my-orders-page .confirm-delete-menu button:hover {
+                background-color: #d62c1a;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
+.order-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .order-details h4 {
+        margin-bottom: 15px;
+    }
+
+    .order-details ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .order-details li {
+        margin-bottom: 10px;
+    }
+
+.order-total {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
 @media (max-width: 600px) {
     .my-orders-page li {
+        padding: 10px;
+    }
+
+    .order-details {
         padding: 10px;
     }
 }

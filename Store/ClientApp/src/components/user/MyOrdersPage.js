@@ -4,6 +4,8 @@ import './MyOrdersPage.css';
 
 const MyOrdersPage = () => {
     const [userOrders, setUserOrders] = useState([]);
+    const [confirmDeleteOrderId, setConfirmDeleteOrderId] = useState(null);
+    const [expandedOrderId, setExpandedOrderId] = useState(null);
 
     useEffect(() => {
         const userId = sessionStorage.getItem('userId');
@@ -41,13 +43,26 @@ const MyOrdersPage = () => {
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
-    const handleDeleteOrder = async (orderId) => {
+    const handleDeleteOrder = (orderId) => {
+        setConfirmDeleteOrderId(orderId);
+    };
+
+    const confirmDeleteOrder = async () => {
         try {
-            await sendRequest(`/api/Orders/DeleteOrder`, 'POST', null, { orderId });
-            setUserOrders((prevOrders) => prevOrders.filter((order) => order.orderId !== orderId));
+            await sendRequest(`/api/Orders/DeleteOrder`, 'POST', null, { orderId: confirmDeleteOrderId });
+            setUserOrders((prevOrders) => prevOrders.filter((order) => order.orderId !== confirmDeleteOrderId));
+            setConfirmDeleteOrderId(null);
         } catch (error) {
             console.error('Ошибка при удалении заказа:', error);
         }
+    };
+
+    const cancelDeleteOrder = () => {
+        setConfirmDeleteOrderId(null);
+    };
+
+    const toggleOrderDetails = (orderId) => {
+        setExpandedOrderId((prevOrderId) => (prevOrderId === orderId ? null : orderId));
     };
 
     return (
@@ -57,7 +72,7 @@ const MyOrdersPage = () => {
                 <ul>
                     {userOrders.map((order) => (
                         <li key={order.orderId}>
-                            <div>
+                            <div onClick={() => toggleOrderDetails(order.orderId)}>
                                 <strong>Номер заказа:</strong> {order.orderId}
                             </div>
                             <div>
@@ -67,12 +82,24 @@ const MyOrdersPage = () => {
                                 <strong>Статус заказа:</strong> {order.status}
                             </div>
                             {order.status === 'Заказ обрабатывается' && (
-                                <button
-                                    className="delete-order-button"
-                                    onClick={() => handleDeleteOrder(order.orderId)}
-                                >
-                                    Удалить заказ
-                                </button>
+                                <React.Fragment>
+                                    <button
+                                        className="delete-order-button"
+                                        onClick={(e) => { e.stopPropagation(); handleDeleteOrder(order.orderId); }}
+                                    >
+                                        Удалить заказ
+                                    </button>
+                                    {confirmDeleteOrderId === order.orderId && (
+                                        <div className="confirm-delete-menu">
+                                            <p>Вы уверены, что хотите удалить заказ?</p>
+                                            <button onClick={confirmDeleteOrder}>Да</button>
+                                            <button onClick={cancelDeleteOrder}>Отмена</button>
+                                        </div>
+                                    )}
+                                </React.Fragment>
+                            )}
+                            {expandedOrderId === order.orderId && (
+                                <OrderDetails orderId={order.orderId} />
                             )}
                         </li>
                     ))}
@@ -80,6 +107,44 @@ const MyOrdersPage = () => {
             ) : (
                 <p>У вас пока нет заказов.</p>
             )}
+        </div>
+    );
+};
+
+const OrderDetails = ({ orderId }) => {
+    const [orderDetails, setOrderDetails] = useState(null);
+
+    useEffect(() => {
+        sendRequest(`/api/Orders/GetOrderDetails`, 'GET', null, { orderId })
+            .then((details) => {
+                setOrderDetails(details);
+            })
+            .catch((error) => {
+                console.error('Ошибка при загрузке деталей заказа:', error);
+            });
+    }, [orderId]);
+
+    if (!orderDetails) {
+        return <p>Загрузка...</p>;
+    }
+
+    const totalCost = orderDetails.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    return (
+        <div className="order-details">
+            <h4>Детали заказа</h4>
+            <ul>
+                {orderDetails.map((item) => (
+                    <li key={item.productId}>
+                        <div>{item.productName}</div>
+                        <div>Количество: {item.quantity}</div>
+                        <div>Цена: {item.price} руб.</div>
+                    </li>
+                ))}
+            </ul>
+            <div className="order-total">
+                <strong>Итоговая стоимость:</strong> {totalCost} руб.
+            </div>
         </div>
     );
 };
