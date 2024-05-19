@@ -145,17 +145,11 @@ namespace Store.controllers
 			}
 		}
 
-		private string BuildDeliveryAddress(OrderFormModel orderForm)
-		{
-			return $"{orderForm.City}, {orderForm.Street}, {orderForm.House}, {orderForm.Entrance}, {orderForm.Apartment}";
-		}
-
 		[HttpPost]
 		public async Task<IActionResult> CreateOrder([FromBody] OrderFormModel orderForm, int userId)
 		{
 			try
 			{
-				// Преобразуйте данные из orderForm в модель заказа
 				var order = new Order
 				{
 					UserId = userId,
@@ -164,14 +158,11 @@ namespace Store.controllers
 					DeliveryAddress = BuildDeliveryAddress(orderForm),
 				};
 
-				// Сохраните заказ в базе данных
 				_context.Orders.Add(order);
 				await _context.SaveChangesAsync();
 
-				// Получите OrderID после сохранения заказа
 				var orderId = order.OrderId;
 
-				// Проход по товарам в корзине и добавление их в OrderDetails
 				foreach (var cartItem in _context.UserCarts.Where(c => c.UserId == order.UserId))
 				{
 					var orderDetail = new OrderDetail
@@ -196,6 +187,23 @@ namespace Store.controllers
 			{
 				return StatusCode(500, new { message = ex.Message });
 			}
+		}
+
+		private string BuildDeliveryAddress(OrderFormModel orderForm)
+		{
+			var address = $"{orderForm.City}, {orderForm.Street}, {orderForm.House}";
+			if (!orderForm.IsPrivateHouse)
+			{
+				if (!string.IsNullOrEmpty(orderForm.Entrance))
+				{
+					address += $", Подъезд: {orderForm.Entrance}";
+				}
+				if (!string.IsNullOrEmpty(orderForm.Apartment))
+				{
+					address += $", Квартира: {orderForm.Apartment}";
+				}
+			}
+			return address;
 		}
 
 		[HttpPost]

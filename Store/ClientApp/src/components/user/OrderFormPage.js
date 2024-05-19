@@ -38,27 +38,29 @@ const OrderFormPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const cleanFormData = { ...formData };
+        if (cleanFormData.isPrivateHouse) {
+            delete cleanFormData.entrance;
+            delete cleanFormData.apartment;
+        }
+
         try {
-            const response = await sendRequest("/api/Cart/CreateOrder", "POST", formData, { userId: sessionStorage.getItem('userId') })
+            const response = await sendRequest("/api/Cart/CreateOrder", "POST", cleanFormData, { userId: sessionStorage.getItem('userId') })
                 .then(response => {
                     console.log(response);
-                    if (response != "An error occurred while saving the entity changes. See the inner exception for details.") {
+                    if (response !== "An error occurred while saving the entity changes. See the inner exception for details.") {
                         sendRequest("/api/Cart/ClearCart", "POST", null, { userId: sessionStorage.getItem('userId') });
-
                     }
-                    window.location.href = "/";
+                    navigate("/");
                 })
                 .catch(error => {
                     console.log(error);
                 });
-           
-             
 
         } catch (error) {
             console.error('Произошла ошибка при оформлении заказа:', error);
         }
     };
-
 
     return (
         <div className="order-form-page">
@@ -85,7 +87,6 @@ const OrderFormPage = () => {
                     <input type="text" name="house" value={formData.house} onChange={handleChange} required />
                 </label>
                 <label className="isPrivateHouse-label">
-
                     Частный дом
                     <input className="isPrivateHouse"
                         type="checkbox"
