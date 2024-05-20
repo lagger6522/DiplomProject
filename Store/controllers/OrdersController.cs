@@ -44,12 +44,14 @@ namespace Store.controllers
 				order.OrderId,
 				order.OrderDate,
 				order.Status,
+				order.DeliveryAddress,
 				TotalOrderPrice = orderDetails.Sum(od => od.TotalPrice),
 				OrderItems = orderDetails
 			};
 
 			return Ok(response);
 		}
+
 
 		[HttpPost]
 		public ActionResult DeleteOrder(int orderId)

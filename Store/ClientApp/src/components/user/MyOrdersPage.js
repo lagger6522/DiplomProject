@@ -99,6 +99,9 @@ const MyOrdersPage = () => {
                             <div>
                                 <strong>Статус заказа:</strong> {order.status}
                             </div>
+                            <div>
+                                <strong>Адрес доставки:</strong> {order.deliveryAddress}
+                            </div>
                             {order.status === 'Заказ обрабатывается' && (
                                 <React.Fragment>
                                     <button
@@ -122,16 +125,6 @@ const MyOrdersPage = () => {
                             {orderDetails[order.orderId] && (
                                 <div className="order-details">
                                     <h4>Детали заказа</h4>
-                                    <div>
-                                        <strong>Дата заказа:</strong> {formatReviewDate(orderDetails[order.orderId].orderDate)}
-                                    </div>
-                                    <div>
-                                        <strong>Статус:</strong> {orderDetails[order.orderId].status}
-                                    </div>
-                                    <div>
-                                        <strong>Адрес доставки:</strong> {orderDetails[order.orderId].deliveryAddress}
-                                    </div>
-                                    <h5>Товары:</h5>
                                     <ul>
                                         {orderDetails[order.orderId].orderItems.map(item => (
                                             <li key={item.productId}>
