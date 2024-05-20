@@ -142,6 +142,11 @@ const ProductDetailsPage = () => {
                 </div>
             </div>
 
+            <div className="product-description">
+                <h3>Описание товара</h3>
+                <p>{product?.description}</p>
+            </div>
+
             <div className="product-attributes">
                 <h3>Характеристики товара</h3>
                 <ul>
@@ -153,10 +158,7 @@ const ProductDetailsPage = () => {
                 </ul>
             </div>
 
-            <div className="product-description">
-                <h3>Описание товара</h3>
-                <p>{product?.description}</p>
-            </div>
+            
 
             
 

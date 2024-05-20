@@ -123,14 +123,13 @@
     }
 
 .product-attributes {
-    width: 65%;
+    width: 99%;
     box-sizing: border-box;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
-    margin-left: 20px;
 }
 
     .product-attributes li {
@@ -151,13 +150,14 @@
     }
 
 .product-description {
-    width: 99%;
+    width: 65%;
     box-sizing: border-box;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
+    margin-left: 20px;
 }
 
     .product-description h3 {
