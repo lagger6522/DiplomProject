@@ -87,74 +87,94 @@ const ProductModalContentAdd = ({ onClose }) => {
     return (
         <div className="product-modal-content">
             <h3>Добавить товар</h3>
-            <label htmlFor="productName">Название товара:</label>
-            <input
-                type="text"
-                id="productName"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-            />
-            <label htmlFor="description">Описание:</label>
-            <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
-            <label htmlFor="image">Изображение:</label>
-            <input
-                type="file"
-                id="image"
-                onChange={handleImageChange}
-                accept="image/*"
-            />
-            {image && (
-                <div>
-                    <p>Выбранное изображение:</p>
-                    <img src={image} alt="Selected" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-                </div>
-            )}
-            <label htmlFor="price">Цена:</label>
-            <input
-                type="text"
-                id="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-            />
-            <label htmlFor="subcategory">Подкатегория:</label>
-            <select
-                id="subcategory"
-                value={selectedSubcategoryId}
-                onChange={(e) => setSelectedSubcategoryId(e.target.value)}
-            >
-                <option value="">Выберите подкатегорию</option>
-                {subcategories.map(subcategory => (
-                    <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>
-                        {subcategory.subcategoryName}
-                    </option>
+            <div className="form-group">
+                <label htmlFor="productName">Название товара:</label>
+                <input
+                    type="text"
+                    id="productName"
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="description">Описание:</label>
+                <textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="image">Изображение:</label>
+                <input
+                    type="file"
+                    id="image"
+                    onChange={handleImageChange}
+                    accept="image/*"
+                    className="form-control-file"
+                />
+                {image && (
+                    <div className="image-preview">
+                        <p>Выбранное изображение:</p>
+                        <img src={image} alt="Selected" />
+                    </div>
+                )}
+            </div>
+            <div className="form-group">
+                <label htmlFor="price">Цена:</label>
+                <input
+                    type="text"
+                    id="price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="subcategory">Подкатегория:</label>
+                <select
+                    id="subcategory"
+                    value={selectedSubcategoryId}
+                    onChange={(e) => setSelectedSubcategoryId(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="">Выберите подкатегорию</option>
+                    {subcategories.map(subcategory => (
+                        <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>
+                            {subcategory.subcategoryName}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <label>Характеристики:</label>
+                {attributes.map(attribute => (
+                    <div key={attribute.attributeId} className="attribute-group">
+                        <label htmlFor={`attribute-${attribute.attributeId}`}>{attribute.attributeName}:</label>
+                        <input
+                            type="text"
+                            id={`attribute-${attribute.attributeId}`}
+                            value={selectedAttributes[attribute.attributeId] || ''}
+                            onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
                 ))}
-            </select>
-            {attributes.map(attribute => (
-                <div key={attribute.attributeId}>
-                    <label htmlFor={`attribute-${attribute.attributeId}`}>{attribute.attributeName}:</label>
-                    <input
-                        type="text"
-                        id={`attribute-${attribute.attributeId}`}
-                        value={selectedAttributes[attribute.attributeId] || ''}
-                        onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}
-                    />
-                </div>
-            ))}
-            <div>
+            </div>
+            <div className="form-group">
                 <label htmlFor="newAttributeName">Новый атрибут:</label>
                 <input
                     type="text"
                     id="newAttributeName"
                     value={newAttributeName}
                     onChange={(e) => setNewAttributeName(e.target.value)}
+                    className="form-control"
                 />
-                <button onClick={handleCreateAttribute}>Создать атрибут</button>
+                <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
             </div>
-            <button onClick={uploadImage}>Сохранить</button>
+            <button onClick={uploadImage} className="btn btn-primary">Сохранить</button>
         </div>
     );
 };
