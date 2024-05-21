@@ -18,6 +18,34 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> CreateAttribute([FromBody] Model.Attribute attribute)
+		{
+			try
+			{
+				_context.Attributes.Add(attribute);
+				await _context.SaveChangesAsync();
+				return Ok(attribute);
+			}
+			catch (Exception ex)
+			{
+				return Problem($"Ошибка при создании атрибута: {ex.Message}");
+			}
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetAttributes()
+		{
+			try
+			{
+				var attributes = await _context.Attributes.ToListAsync();
+				return Ok(attributes);
+			}
+			catch (Exception ex)
+			{
+				return Problem($"Ошибка при получении атрибутов: {ex.Message}");
+			}
+		}
 
 		[HttpGet]
 		public IActionResult GetBestSellers()
@@ -125,24 +153,45 @@ namespace Store.controllers
 
 		[HttpPost]
 		public async Task<IActionResult> CreateProduct(
-			[FromForm] string productName, [FromForm] string description, [FromForm] decimal price, [FromForm] int subcategoryId, [FromForm] IFormFile? image)
+	[FromForm] string productName, [FromForm] string description, [FromForm] decimal price, [FromForm] int subcategoryId, [FromForm] IFormFile? image, [FromForm] Dictionary<int, string> attributes)
 		{
 			try
 			{
-
-				Product product = new Product();
-				product.ProductName = productName;
-				product.Description = description;
-				product.Price = price;
-				product.SubcategoryId = subcategoryId;
-				product.Image = $"/images/{image.FileName}";
-				using (Stream fileStream = new FileStream("ClientApp/public" + product.Image, FileMode.Create))
+				Product product = new Product
 				{
-					await image.CopyToAsync(fileStream);
+					ProductName = productName,
+					Description = description,
+					Price = price,
+					SubcategoryId = subcategoryId,
+					Image = $"/images/{image?.FileName}"
+				};
+
+				if (image != null)
+				{
+					using (Stream fileStream = new FileStream("ClientApp/public" + product.Image, FileMode.Create))
+					{
+						await image.CopyToAsync(fileStream);
+					}
 				}
+
 				_context.Products.Add(product);
 				await _context.SaveChangesAsync();
 
+				foreach (var attribute in attributes)
+				{
+					if (!string.IsNullOrEmpty(attribute.Value))
+					{
+						var productAttribute = new ProductAttribute
+						{
+							ProductId = product.ProductId,
+							AttributeId = attribute.Key,
+							Value = attribute.Value
+						};
+						_context.ProductAttributes.Add(productAttribute);
+					}
+				}
+
+				await _context.SaveChangesAsync();
 
 				return Ok(new { message = "Товар успешно создан." });
 			}
@@ -151,6 +200,9 @@ namespace Store.controllers
 				return Problem($"Ошибка при создании товара: {ex.Message}");
 			}
 		}
+
+
+
 
 		[HttpGet]
 		public async Task<IActionResult> GetProductDetails(int productId)
