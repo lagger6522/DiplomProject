@@ -15,6 +15,7 @@ const ProductModalContentEdit = ({ onClose }) => {
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [newAttributeName, setNewAttributeName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -81,15 +82,20 @@ const ProductModalContentEdit = ({ onClose }) => {
         });
     };
 
-    const handleCreateAttribute = async () => {
+    const handleCreateAttribute = () => {
         if (newAttributeName.trim()) {
-            try {
-                const response = await sendRequest('/api/Products/CreateAttribute', 'POST', { attributeName: newAttributeName });
-                setAttributes([...attributes, response]);
-                setNewAttributeName('');
-            } catch (error) {
-                console.error('Ошибка при создании нового атрибута:', error);
-            }
+            sendRequest('/api/Products/CreateAttribute', 'POST', { attributeName: newAttributeName })
+                .then(response => {
+                    setAttributes([...attributes, response]);
+                    setNewAttributeName('');
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 409) {
+                        setErrorMessage(error.response.data);
+                    } else {
+                        setErrorMessage(error.message);
+                    }
+                });
         }
     };
 
@@ -225,29 +231,22 @@ const ProductModalContentEdit = ({ onClose }) => {
                                 />
                             </div>
                         ))}
-                        <div className="create-attribute">
+                        <div className="form-group">
+                            <label htmlFor="newAttributeName">Новый атрибут:</label>
                             <input
                                 type="text"
-                                placeholder="Название новой характеристики"
+                                id="newAttributeName"
                                 value={newAttributeName}
                                 onChange={(e) => setNewAttributeName(e.target.value)}
                                 className="form-control"
                             />
-                            <button
-                                type="button"
-                                onClick={handleCreateAttribute}
-                                className="btn btn-primary"
-                            >
-                                Добавить характеристику
-                            </button>
+                            <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
                         </div>
                     </div>
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
-                    </button>
-                    <button type="button" onClick={onClose} className="btn btn-secondary">
-                        Закрыть
-                    </button>
+                    </button>                    
                 </div>
             )}
         </div>

@@ -23,6 +23,13 @@ namespace Store.controllers
 		{
 			try
 			{
+				// Проверяем, существует ли атрибут с таким же именем
+				var existingAttribute = await _context.Attributes.FirstOrDefaultAsync(a => a.AttributeName == attribute.AttributeName);
+				if (existingAttribute != null)
+				{
+					return Conflict($"Атрибут с именем '{attribute.AttributeName}' уже существует.");
+				}
+
 				_context.Attributes.Add(attribute);
 				await _context.SaveChangesAsync();
 				return Ok(attribute);
@@ -32,6 +39,7 @@ namespace Store.controllers
 				return Problem($"Ошибка при создании атрибута: {ex.Message}");
 			}
 		}
+
 
 		[HttpGet]
 		public async Task<IActionResult> GetAttributes()

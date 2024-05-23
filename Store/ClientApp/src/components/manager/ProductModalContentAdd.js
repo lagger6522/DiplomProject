@@ -13,6 +13,7 @@ const ProductModalContentAdd = ({ onClose }) => {
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [newAttributeName, setNewAttributeName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
@@ -20,7 +21,7 @@ const ProductModalContentAdd = ({ onClose }) => {
                 setSubcategories(response);
             })
             .catch(error => {
-                console.error('Ошибка при загрузке подкатегорий:', error);
+                setErrorMessage('Ошибка при загрузке подкатегорий:' + error.message);
             });
 
         sendRequest('/api/Products/GetAttributes', 'GET')
@@ -28,7 +29,7 @@ const ProductModalContentAdd = ({ onClose }) => {
                 setAttributes(response);
             })
             .catch(error => {
-                console.error('Ошибка при загрузке характеристик:', error);
+                setErrorMessage('Ошибка при загрузке характеристик:' + error.message);
             });
     }, []);
 
@@ -56,7 +57,11 @@ const ProductModalContentAdd = ({ onClose }) => {
                     setNewAttributeName('');
                 })
                 .catch(error => {
-                    console.error('Ошибка при создании нового атрибута:', error);
+                    if (error.response && error.response.status === 409) {
+                        setErrorMessage(error.response.data);
+                    } else {
+                        setErrorMessage(error.message);
+                    }
                 });
         }
     };
@@ -80,7 +85,9 @@ const ProductModalContentAdd = ({ onClose }) => {
                 .then(response => {
                     console.log('Товар успешно создан:', response);
                 })
-                .catch(e => console.log(e));
+                .catch(error => {
+                    setErrorMessage('Ошибка при загрузке товара:' + error.message);
+                });
         }
     };
 
@@ -174,6 +181,7 @@ const ProductModalContentAdd = ({ onClose }) => {
                 />
                 <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
             </div>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <button onClick={uploadImage} className="btn btn-primary">Сохранить</button>
         </div>
     );
