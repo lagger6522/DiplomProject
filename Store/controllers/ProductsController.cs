@@ -222,6 +222,7 @@ namespace Store.controllers
 						p.Image,
 						Attributes = p.ProductAttributes.Select(pa => new
 						{
+							pa.AttributeId,
 							pa.Attribute.AttributeName,
 							pa.Value
 						}).ToList()
@@ -266,29 +267,72 @@ namespace Store.controllers
 		}
 
 		[HttpPut]
-		public IActionResult EditProduct(int productId, [FromBody] Product model)
+		public async Task<IActionResult> EditProduct(
+	int productId,
+	[FromForm] string productName,
+	[FromForm] string description,
+	[FromForm] decimal price,
+	[FromForm] IFormFile? image,
+	[FromForm] Dictionary<int, string> attributes)
 		{
 			try
 			{
-				var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+				if (productId == 0 || string.IsNullOrEmpty(productName) || string.IsNullOrEmpty(description))
+				{
+					return BadRequest(new { message = "Invalid input parameters." });
+				}
+
+				var product = await _context.Products
+					.Include(p => p.ProductAttributes)
+					.FirstOrDefaultAsync(p => p.ProductId == productId);
 
 				if (product == null)
 				{
 					return NotFound(new { message = "Товар не найден." });
 				}
 
-				product.ProductName = model.ProductName;
-				product.Description = model.Description;
-				product.Image = model.Image;
-				product.Price = model.Price;
-				_context.SaveChanges();
+				product.ProductName = productName;
+				product.Description = description;
+				product.Price = price;
+
+				if (image != null)
+				{
+					product.Image = $"/images/{image.FileName}";
+					using (Stream fileStream = new FileStream("ClientApp/public" + product.Image, FileMode.Create))
+					{
+						await image.CopyToAsync(fileStream);
+					}
+				}
+
+				var existingAttributes = product.ProductAttributes.ToDictionary(pa => pa.AttributeId);
+				foreach (var attribute in attributes)
+				{
+					if (existingAttributes.ContainsKey(attribute.Key))
+					{
+						existingAttributes[attribute.Key].Value = attribute.Value;
+					}
+					else
+					{
+						var newAttribute = new ProductAttribute
+						{
+							ProductId = product.ProductId,
+							AttributeId = attribute.Key,
+							Value = attribute.Value
+						};
+						_context.ProductAttributes.Add(newAttribute);
+					}
+				}
+
+				await _context.SaveChangesAsync();
 
 				return Ok(new { message = "Товар успешно обновлен." });
 			}
 			catch (Exception ex)
 			{
+				Console.WriteLine($"Error: {ex.Message}");
 				return StatusCode(500, new { message = $"Ошибка при обновлении товара: {ex.Message}" });
 			}
 		}
+
 	}
 }
