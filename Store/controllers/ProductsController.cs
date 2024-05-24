@@ -93,9 +93,11 @@ namespace Store.controllers
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<Product>> GetProducts()
+		public async Task<IEnumerable<Product>> GetVisibleProducts()
 		{
-			return await _context.Products.ToListAsync();
+			return await _context.Products
+				.Where(product => !product.IsDeleted)
+				.ToListAsync();
 		}
 
 		[HttpGet]
