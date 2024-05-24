@@ -35,6 +35,7 @@ namespace Store.controllers
 			{
 				od.Product.ProductName,
 				od.Quantity,
+				od.PriceAtOrder,
 				TotalPrice = od.Quantity * od.PriceAtOrder
 			}).ToList();
 

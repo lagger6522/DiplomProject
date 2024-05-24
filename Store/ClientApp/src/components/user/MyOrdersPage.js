@@ -130,7 +130,7 @@ const MyOrdersPage = () => {
                                             <li key={item.productId}>
                                                 <div><strong>Продукт:</strong> {item.productName}</div>
                                                 <div><strong>Количество:</strong> {item.quantity}</div>
-                                                <div><strong>Цена:</strong> {item.price}</div>
+                                                <div><strong>Цена:</strong> {item.priceAtOrder}</div>
                                             </li>
                                         ))}
                                     </ul>

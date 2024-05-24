@@ -105,7 +105,7 @@ namespace Store.controllers
 			{
 				var products = await _context.Products
 					.Include(p => p.ProductAttributes)
-					.Where(p => p.SubcategoryId == subcategoryId)
+					.Where(p => p.SubcategoryId == subcategoryId && !p.IsDeleted)
 					.Select(p => new
 					{
 						p.ProductId,
@@ -126,6 +126,7 @@ namespace Store.controllers
 				return StatusCode(500, new { message = $"Error getting products by subcategory: {ex.Message}" });
 			}
 		}
+
 
 		[HttpGet]
 		public IActionResult GetAttributesForSubcategory(int subcategoryId)
@@ -250,28 +251,23 @@ namespace Store.controllers
 		}
 
 
-		[HttpDelete]
-		public IActionResult RemoveProduct(int productId)
+		[HttpPost]
+		public async Task<IActionResult> HideProduct(int productId)
 		{
-			try
+			var product = await _context.Products.FindAsync(productId);
+
+			if (product == null)
 			{
-				var product = _context.Products.Find(productId);
-
-				if (product == null)
-				{
-					return NotFound(new { message = "Товар не найден." });
-				}
-
-				_context.Products.Remove(product);
-				_context.SaveChanges();
-
-				return Ok(new { message = "Товар успешно удален." });
+				return NotFound(new { Message = "Product not found" });
 			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, new { message = $"Ошибка при удалении товара: {ex.Message}" });
-			}
+
+			product.IsDeleted = true;
+			_context.Products.Update(product);
+			await _context.SaveChangesAsync();
+
+			return Ok(new { Message = "Product hidden successfully" });
 		}
+
 
 		[HttpPut]
 		public async Task<IActionResult> EditProduct(

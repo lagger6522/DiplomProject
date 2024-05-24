@@ -61,19 +61,23 @@ namespace Store.controllers
 					return NotFound(new { message = "Подкатегория не найдена." });
 				}
 
-				_context.Products.RemoveRange(subcategory.Products);
+				foreach (var product in subcategory.Products)
+				{
+					product.IsDeleted = true;
+				}
 
 				_context.Subcategories.Remove(subcategory);
 
 				_context.SaveChanges();
 
-				return Ok(new { message = "Подкатегория и товары успешно удалены." });
+				return Ok(new { message = "Подкатегория успешно удалена. Товары скрыты." });
 			}
 			catch (Exception ex)
 			{
 				return StatusCode(500, new { message = $"Ошибка при удалении подкатегории: {ex.Message}" });
 			}
 		}
+
 
 		[HttpPut]
 		public async Task<IActionResult> EditSubcategory(int subcategoryId, [FromBody] Subcategory SubcategoryName)

@@ -33,22 +33,26 @@ namespace Store.controllers
 
 				foreach (var subcategory in category.Subcategories)
 				{
-					_context.Products.RemoveRange(subcategory.Products);
-				}
+					foreach (var product in subcategory.Products)
+					{
+						product.IsDeleted = true;
+					}
 
-				_context.Subcategories.RemoveRange(category.Subcategories);
+					_context.Subcategories.Remove(subcategory);
+				}
 
 				_context.ProductCategories.Remove(category);
 
 				_context.SaveChanges();
 
-				return Ok(new { message = "Категория, подкатегории и товары успешно удалены." });
+				return Ok(new { message = "Категория и подкатегории успешно удалены. Товары скрыты." });
 			}
 			catch (Exception ex)
 			{
 				return StatusCode(500, new { message = $"Ошибка при удалении категории: {ex.Message}" });
 			}
 		}
+
 
 		[HttpPut]
 		public async Task<IActionResult> EditCategory(int categoryId, [FromBody] ProductCategory CategoryName)

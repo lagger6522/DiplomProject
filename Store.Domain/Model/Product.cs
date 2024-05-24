@@ -13,6 +13,8 @@ public partial class Product
 
     public string? Image { get; set; }
 
+    public bool IsDeleted { get; set; }
+
     public decimal Price { get; set; }
 
     public int SubcategoryId { get; set; }

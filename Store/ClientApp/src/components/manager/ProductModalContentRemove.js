@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import sendRequest from '../SendRequest';
 import './ModalContent.css';
 
-
 const ProductModalContentRemove = ({ onClose }) => {
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
@@ -43,9 +42,9 @@ const ProductModalContentRemove = ({ onClose }) => {
             return;
         }
 
-        sendRequest(`/api/Products/RemoveProduct`, 'DELETE', null, { productId: selectedProductId })
+        sendRequest(`/api/Products/HideProduct`, 'POST', null, { productId: selectedProductId })
             .then(response => {
-                console.log('Товар успешно удален:', response); 
+                console.log('Товар успешно скрыт:', response);
                 sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
                     .then(response => {
                         setProducts(response);
@@ -56,7 +55,7 @@ const ProductModalContentRemove = ({ onClose }) => {
                     });
             })
             .catch(error => {
-                console.error('Ошибка при удалении товара:', error);
+                console.error('Ошибка при скрытии товара:', error);
             });
     };
 
