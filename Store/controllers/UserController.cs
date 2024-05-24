@@ -201,7 +201,7 @@ namespace Store.controllers
 
 			if (user == null)
 			{
-				return Unauthorized(new { message = "Данный E-main не зарегистрирован." });
+				return Unauthorized(new { message = "Данный E-mail не зарегистрирован." });
 			}
 
 			if (user.IsBanned)
