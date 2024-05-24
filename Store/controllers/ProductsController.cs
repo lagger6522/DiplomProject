@@ -23,7 +23,6 @@ namespace Store.controllers
 		{
 			try
 			{
-				// Проверяем, существует ли атрибут с таким же именем
 				var existingAttribute = await _context.Attributes.FirstOrDefaultAsync(a => a.AttributeName == attribute.AttributeName);
 				if (existingAttribute != null)
 				{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import sendRequest from '../SendRequest';
 import './OrderFormPage.css';
@@ -45,7 +45,7 @@ const OrderFormPage = () => {
         }
 
         try {
-            const response = await sendRequest("/api/Cart/CreateOrder", "POST", cleanFormData, { userId: sessionStorage.getItem('userId') })
+            sendRequest("/api/Cart/CreateOrder", "POST", cleanFormData, { userId: sessionStorage.getItem('userId') })
                 .then(response => {
                     console.log(response);
                     if (response !== "An error occurred while saving the entity changes. See the inner exception for details.") {

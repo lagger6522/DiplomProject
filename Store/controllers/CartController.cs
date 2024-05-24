@@ -156,22 +156,27 @@ namespace Store.controllers
 
 				var orderId = order.OrderId;
 
-				foreach (var cartItem in _context.UserCarts.Where(c => c.UserId == order.UserId))
+				var cartItems = await _context.UserCarts
+					.Where(c => c.UserId == userId)
+					.Include(c => c.Product)
+					.ToListAsync();
+
+				foreach (var cartItem in cartItems)
 				{
 					var orderDetail = new OrderDetail
 					{
 						OrderId = order.OrderId,
 						ProductId = cartItem.ProductId,
 						Quantity = cartItem.Quantity,
+						PriceAtOrder = cartItem.Product.Price,
 					};
 
-					Console.WriteLine($"Creating OrderDetail: OrderId = {orderDetail.OrderId}, ProductId = {orderDetail.ProductId}, Quantity = {orderDetail.Quantity}");
+					Console.WriteLine($"Creating OrderDetail: OrderId = {orderDetail.OrderId}, ProductId = {orderDetail.ProductId}, Quantity = {orderDetail.Quantity}, PriceAtOrder = {orderDetail.PriceAtOrder}");
 
 					_context.OrderDetails.Add(orderDetail);
 				}
 
-				_context.UserCarts.RemoveRange(_context.UserCarts.Where(c => c.UserId == order.UserId));
-
+				_context.UserCarts.RemoveRange(cartItems);
 				await _context.SaveChangesAsync();
 
 				return Ok(new { message = "Заказ успешно создан" });
@@ -181,6 +186,7 @@ namespace Store.controllers
 				return StatusCode(500, new { message = ex.Message });
 			}
 		}
+
 
 		private string BuildDeliveryAddress(OrderFormModel orderForm)
 		{

@@ -23,7 +23,7 @@ namespace Store.controllers
 		{
 			var order = await _context.Orders
 				.Include(o => o.OrderDetails)
-				.ThenInclude(od => od.Product)
+					.ThenInclude(od => od.Product)
 				.FirstOrDefaultAsync(o => o.OrderId == orderId);
 
 			if (order == null)
@@ -35,8 +35,7 @@ namespace Store.controllers
 			{
 				od.Product.ProductName,
 				od.Quantity,
-				od.Product.Price,
-				TotalPrice = od.Quantity * od.Product.Price
+				TotalPrice = od.Quantity * od.PriceAtOrder
 			}).ToList();
 
 			var response = new
@@ -51,7 +50,6 @@ namespace Store.controllers
 
 			return Ok(response);
 		}
-
 
 		[HttpPost]
 		public ActionResult DeleteOrder(int orderId)
