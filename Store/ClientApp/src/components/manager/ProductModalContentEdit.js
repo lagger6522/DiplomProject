@@ -69,8 +69,6 @@ const ProductModalContentEdit = ({ onClose }) => {
             const imageURL = URL.createObjectURL(selectedImage);
             setImage(imageURL);
             setSelectedImage(selectedImage);
-
-            // Освобождение памяти при изменении изображения
             return () => URL.revokeObjectURL(imageURL);
         }
     };
