@@ -30,7 +30,7 @@ const CategoryModalContentRemove = ({ onClose }) => {
 
     const handleConfirmRemove = () => {
         if (selectedCategory) {
-            sendRequest(`/api/Categories/RemoveCategory`, 'DELETE', null, { categoryId: selectedCategory.categoryId })
+            sendRequest(`/api/Categories/RemoveCategory`, 'PUT', null, { categoryId: selectedCategory.categoryId })
                 .then(response => {
                     console.log('Категория и связанные элементы успешно удалены:', response);
                     setCategories(prevCategories => prevCategories.filter(category => category.categoryId !== selectedCategory.categoryId));

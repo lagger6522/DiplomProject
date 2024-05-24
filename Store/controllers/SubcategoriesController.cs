@@ -21,8 +21,11 @@ namespace Store.controllers
 		[HttpGet]
 		public async Task<IEnumerable<Subcategory>> GetSubcategories()
 		{
-			return await _context.Subcategories.ToListAsync();
+			return await _context.Subcategories
+				.Where(subcategory => !subcategory.IsDeleted)
+				.ToListAsync();
 		}
+
 
 		[HttpPost]
 		public async Task<IActionResult> CreateSubcategory([FromBody] Subcategory subcategory)
@@ -48,7 +51,7 @@ namespace Store.controllers
 			}
 		}
 
-		[HttpDelete]
+		[HttpPut]
 		public IActionResult RemoveSubcategory(int subcategoryId)
 		{
 			try
@@ -66,8 +69,7 @@ namespace Store.controllers
 					product.IsDeleted = true;
 				}
 
-				_context.Subcategories.Remove(subcategory);
-
+				subcategory.IsDeleted = true;
 				_context.SaveChanges();
 
 				return Ok(new { message = "Подкатегория успешно удалена. Товары скрыты." });

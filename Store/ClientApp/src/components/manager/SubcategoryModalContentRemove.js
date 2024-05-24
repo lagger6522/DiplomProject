@@ -30,7 +30,7 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
 
     const handleConfirmRemove = () => {
         if (selectedSubcategory) {
-            sendRequest(`/api/Subcategories/RemoveSubcategory`, 'DELETE', null, { subcategoryId: selectedSubcategory.subcategoryId })
+            sendRequest(`/api/Subcategories/RemoveSubcategory`, 'Put', null, { subcategoryId: selectedSubcategory.subcategoryId })
                 .then(response => {
                     console.log('Подкатегория и связанные товары успешно удалены:', response);
                     setSubcategories(prevSubcategories => prevSubcategories.filter(subcategory => subcategory.subcategoryId !== selectedSubcategory.subcategoryId));
