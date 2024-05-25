@@ -1,0 +1,29 @@
+.product-selection {
+    margin: 20px 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+    .buttons button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        cursor: pointer;
+        border: none;
+        background-color: #ddd;
+        transition: background-color 0.3s;
+    }
+
+        .buttons button.active, .buttons button:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
