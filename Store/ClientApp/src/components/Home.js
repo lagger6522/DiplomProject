@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SliderComponent from '../components/slider/SliderComponent';
+import ProductSelection from './ProductSelection';
 import BestSellers from './BestSellers';
 import './Home.css'; 
 export class Home extends Component {
@@ -12,7 +13,8 @@ export class Home extends Component {
 
         return (
             <div>
-                <SliderComponent/>
+                <SliderComponent />
+                <ProductSelection />
             {/*    <BestSellers />*/}
             </div>
         );

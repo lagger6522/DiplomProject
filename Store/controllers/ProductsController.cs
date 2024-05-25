@@ -18,6 +18,16 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpGet]
+		public async Task<IEnumerable<Product>> GetTopRatedProducts()
+		{
+			return await _context.Products
+				.Where(p => !p.IsDeleted)
+				.OrderByDescending(p => p.ProductReviews.Average(r => r.Rating))
+				.Take(10)
+				.ToListAsync();
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> CreateAttribute([FromBody] Model.Attribute attribute)
 		{
@@ -52,44 +62,6 @@ namespace Store.controllers
 			{
 				return Problem($"Ошибка при получении атрибутов: {ex.Message}");
 			}
-		}
-
-		[HttpGet]
-		public IActionResult GetBestSellers()
-		{
-			var bestSellers = _context.ProductReviews
-				.Where(review => !review.IsDeleted)
-				.GroupBy(review => review.ProductId)
-				.Select(group => new
-				{
-					ProductId = group.Key,
-					AverageRating = group.Average(review => review.Rating),
-					TotalReviews = group.Count()
-				})
-				.OrderByDescending(product => product.AverageRating)
-				.Take(6)
-				.ToList();
-
-			var bestSellersData = bestSellers.Select(product => new
-			{
-				Id = product.ProductId,
-				Name = _context.Products
-					.Where(p => p.ProductId == product.ProductId)
-					.Select(p => p.ProductName)
-					.FirstOrDefault(),
-				Image = _context.Products
-					.Where(p => p.ProductId == product.ProductId)
-					.Select(p => p.Image)
-					.FirstOrDefault(),
-				Rating = product.AverageRating,
-				Reviews = product.TotalReviews,
-				Price = _context.Products
-					.Where(p => p.ProductId == product.ProductId)
-					.Select(p => p.Price)
-					.FirstOrDefault(),
-			}).ToList();
-
-			return Ok(bestSellersData);
 		}
 
 		[HttpGet]
