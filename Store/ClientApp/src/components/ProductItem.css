@@ -1,0 +1,120 @@
+.product-item {
+    color: black;
+    width: calc(33.33% - 20px);
+    margin: 0 10px 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    padding: 10px;
+}
+
+    .product-item img {
+        width: 120px;
+        height: 96%;
+        border-radius: 8px;
+    }
+
+    .product-item:hover {
+        border-color: #ff9519;
+    }
+
+
+.cost {
+    margin-left: 10px;
+}
+
+.product-details {
+    flex: 1;
+    margin-right: 10px;
+}
+
+    .product-details h5 {
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .product-details span {
+        margin-left: 10px;
+    }
+
+.product-item:hover {
+    border-color: #ff9519;
+}
+
+.counter-button {
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+}
+
+    .counter-button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }
+
+.cart-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 1vw;
+}
+
+.cart-controls button {
+    background-color: #ffad4d;
+    border: 1px solid #ffad4d;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .cart-controls button:hover {
+        background-color: #ff9519;
+        color: #fff;
+    }
+
+.cart-controls .cart-button {
+    margin-left: 10px;
+    background-color: #fff;
+    border: 1px solid #ffad4d;
+    color: #ffad4d;
+    width: 125px;
+}
+
+    .cart-controls .cart-button:hover {
+        background-color: #ffad4d;
+        color: #fff;
+    }
+
+input[type="number"] {
+    margin: 5px;
+    padding: 8px;
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import sendRequest from './SendRequest';
+import ProductItem from './ProductItem';
 import './ProductPage.css';
 
 const SearchResultPage = () => {
@@ -60,7 +61,7 @@ const SearchResultPage = () => {
 
     const handleAddToCart = (productId) => {
         const quantity = quantities[productId];
-        var userId = sessionStorage.getItem("userId");
+        const userId = sessionStorage.getItem("userId");
 
         if (!userId) {
             setError('Для добавления товара в корзину необходимо войти в систему.');
@@ -98,6 +99,7 @@ const SearchResultPage = () => {
 
     return (
         <div className="product-page">
+            {error && <div className="error-message">{error}</div>}
             <div>
                 <label>Сортировка по:</label>
                 <select value={sortOption} onChange={handleSortChange}>
@@ -114,27 +116,13 @@ const SearchResultPage = () => {
             <h2>Результаты поиска</h2>
             <div className="product-list">
                 {searchResults.map((result) => (
-                    <div key={result.productId} className="product-item">
-                        <Link className="no-line" to={`/product-details/${result.productId}`}>
-                            <img src={result.image} className="product-image" alt={result.productName} />
-                        </Link>
-                        <div className="product-details">
-                            <Link className="no-line" to={`/product-details/${result.productId}`}>
-                                <h5>{result.productName}</h5>
-                            </Link>
-                            <div>
-                                <span>Оценка: {result.averageRating !== undefined ? result.averageRating.toFixed(1) : 'Нет оценки'}</span>
-                                <span>({result.reviewCount !== undefined ? result.reviewCount : 0} отзыва(ов))</span>
-                            </div>
-                            <div className="cost">Цена: {result.price} руб.</div>
-                            <div className="cart-controls">
-                                <button className="counter-button" onClick={() => handleQuantityChange(result.productId, -1)}>-</button>
-                                <input type="number" value={quantities[result.productId]} readOnly />
-                                <button className="counter-button" onClick={() => handleQuantityChange(result.productId, 1)}>+</button>
-                                <button className="cart-button" onClick={() => handleAddToCart(result.productId)}>В корзину</button>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductItem
+                        key={result.productId}
+                        product={result}
+                        quantity={quantities[result.productId]}
+                        onQuantityChange={handleQuantityChange}
+                        onAddToCart={handleAddToCart}
+                    />
                 ))}
             </div>
         </div>

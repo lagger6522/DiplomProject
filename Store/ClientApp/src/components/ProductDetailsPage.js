@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import sendRequest from './SendRequest';
+import ProductItem from './ProductItem';
 import './ProductDetailsPage.css';
 
 const ProductDetailsPage = () => {
@@ -12,7 +13,6 @@ const ProductDetailsPage = () => {
     const [error, setError] = useState('');
     const [reviews, setReviews] = useState([]);
     const [attributes, setAttributes] = useState([]);
-
 
     useEffect(() => {
         sendRequest(`/api/Products/GetProductDetails`, 'GET', null, { productId })
@@ -75,8 +75,6 @@ const ProductDetailsPage = () => {
                 .catch((error) => {
                     console.error('Ошибка при загрузке отзывов о товаре:', error);
                 });
-
-            
         })
             .catch(error => {
                 console.error('Ошибка при отправке отзыва:', error);
@@ -116,32 +114,12 @@ const ProductDetailsPage = () => {
 
     return (
         <div className="product-details-page">
-            <div className="product-item">
-                <Link className="no-line" to={`/product-details/${product.productId}`}>
-                    <img src={product.image} className="product-image" alt={product.productName} />
-                </Link>
-                <div className="product-details">
-                    <h3>{product.productName}</h3>
-                    <div>
-                        <span>Оценка: {product.averageRating.toFixed(1)}</span>
-                        <span>({product.reviewCount} отзывов)</span>
-                    </div>
-                    <div className="cost">Цена: {product.price} руб.</div>
-                    <div className="cart-controls">
-                        <button className="counter-button" onClick={() => handleQuantityChange(-1)}>
-                            -
-                        </button>
-                        <input type="number" min="1" value={quantity} readOnly />
-                        <button className="counter-button" onClick={() => handleQuantityChange(1)}>
-                            +
-                        </button>
-                        <button className="cart-button" onClick={handleAddToCart}>
-                            В корзину
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+            <ProductItem
+                product={product}
+                quantity={quantity}
+                onQuantityChange={handleQuantityChange}
+                onAddToCart={handleAddToCart}
+            />
             <div className="product-description">
                 <h3>Описание товара</h3>
                 <p>{product?.description}</p>
@@ -157,10 +135,6 @@ const ProductDetailsPage = () => {
                     ))}
                 </ul>
             </div>
-
-            
-
-            
 
             <div className="product-reviews">
                 <h4>Написать отзыв</h4>
@@ -181,7 +155,7 @@ const ProductDetailsPage = () => {
                     className="review-textarea"
                     placeholder="Введите ваш отзыв"
                     value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)} 
+                    onChange={(e) => setReviewText(e.target.value)}
                 ></textarea>
                 <button className="submit-review-button" onClick={handleReviewSubmit}>
                     Отправить
@@ -207,8 +181,6 @@ const ProductDetailsPage = () => {
                     <p>Отзывов пока нет</p>
                 )}
             </div>
-
-
         </div>
     );
 };

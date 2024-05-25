@@ -10,7 +10,7 @@ const MenuSection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      sendRequest('/api/Products/GetProducts', 'GET')
+      sendRequest('/api/Products/GetVisibleProducts', 'GET')
       .then((data) => {
         setAllProducts(data);
       })

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import sendRequest from './SendRequest';
+import ProductItem from './ProductItem';
 import './ProductPage.css';
 
 const ProductPage = () => {
@@ -140,7 +141,7 @@ const ProductPage = () => {
                 </select>
             </div>
             <div>
-                    <div className="filter-row">
+                <div className="filter-row">
                     {attributes.map(attribute => (
                         <div key={attribute.attributeId} className="filter-item">
                             <label>{attribute.attributeName}:</label>
@@ -156,31 +157,16 @@ const ProductPage = () => {
             </div>
             <div className="product-list">
                 {filteredProducts.map((product) => (
-                    <div key={product.productId} className="product-item">
-                        <Link className="no-line" to={`/product-details/${product.productId}`}>
-                            <img src={product.image} className="product-image" alt={product.productName} />
-                        </Link>
-                        <div className="product-details">
-                            <Link className="no-line" to={`/product-details/${product.productId}`}>
-                                <h5>{product.productName}</h5>
-                            </Link>
-                            <div>
-                                <span>Оценка: {product.averageRating !== undefined ? product.averageRating.toFixed(2) : 'Нет оценки'}</span>
-                                <span>({product.reviewCount !== undefined ? product.reviewCount : 0} отзыва(ов))</span>
-                            </div>
-                            <div className="cost">Цена: {product.price} руб.</div>
-                            <div className="cart-controls">
-                                <button className="counter-button" onClick={() => handleQuantityChange(product.productId, -1)}>-</button>
-                                <input type="number" value={quantities[product.productId]} readOnly />
-                                <button className="counter-button" onClick={() => handleQuantityChange(product.productId, 1)}>+</button>
-                                <button className="cart-button" onClick={() => handleAddToCart(product.productId)}>В корзину</button>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductItem
+                        key={product.productId}
+                        product={product}
+                        quantity={quantities[product.productId]}
+                        onQuantityChange={handleQuantityChange}
+                        onAddToCart={handleAddToCart}
+                    />
                 ))}
             </div>
         </div>
-
     );
 };
 
