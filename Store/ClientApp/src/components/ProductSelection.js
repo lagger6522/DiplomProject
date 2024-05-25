@@ -20,9 +20,8 @@ const ProductSelection = () => {
                 endpoint = '/api/Products/GetTopRatedProducts';
                 break;
             case 'bestSellers':
-                endpoint = '/api/Products/GetTopRatedProducts';
+                endpoint = '/api/Products/GetBestSellers';
                 break;
-            // Добавьте другие категории, если нужно
             default:
                 endpoint = '/api/Products/GetTopRatedProducts';
         }
@@ -30,15 +29,19 @@ const ProductSelection = () => {
         sendRequest(endpoint, 'GET', null, null)
             .then((response) => {
                 setProducts(response);
-                const initialQuantities = {};
-                response.forEach(product => {
-                    initialQuantities[product.productId] = 1; // Default quantity is 1
-                });
-                setQuantities(initialQuantities);
+                initializeQuantities(response);
             })
             .catch((error) => {
                 console.error('Ошибка при загрузке товаров:', error);
             });
+    };
+
+    const initializeQuantities = (products) => {
+        const initialQuantities = {};
+        products.forEach(product => {
+            initialQuantities[product.productId] = 1;
+        });
+        setQuantities(initialQuantities);
     };
 
     const handleQuantityChange = (productId, amount) => {
@@ -50,8 +53,23 @@ const ProductSelection = () => {
 
     const handleAddToCart = (productId) => {
         const quantity = quantities[productId] || 1;
-        console.log(`Добавление продукта ID: ${productId}, количество: ${quantity} в корзину.`);
-        // Добавьте логику добавления товара в корзину
+        var userId = sessionStorage.getItem("userId");
+
+        if (!userId) {
+            console.log('Для добавления товара в корзину необходимо войти в систему.');
+            return;
+        }
+        sendRequest('/api/Cart/AddToCart', 'POST', {
+            productId,
+            userId,
+            quantity,
+        })
+            .then(response => {
+                console.log('Товар успешно добавлен в корзину:', response);
+            })
+            .catch(error => {
+                console.error('Ошибка при добавлении товара в корзину:', error);
+            });
     };
 
     return (
@@ -69,7 +87,6 @@ const ProductSelection = () => {
                 >
                     Лидеры продаж
                 </button>
-                {/* Добавьте другие кнопки, если нужно */}
             </div>
             <div className="products">
                 {products.map((product) => (
