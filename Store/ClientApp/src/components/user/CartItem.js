@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './CartItem.css';
 
 const CartItem = ({ product, quantity, handleQuantityChange, handleRemoveFromCart }) => {
-    const total = product.price * quantity;
+    const total = (product.price * quantity).toFixed(2);
 
     return (
         <div className="cart-item">
@@ -18,7 +18,7 @@ const CartItem = ({ product, quantity, handleQuantityChange, handleRemoveFromCar
                 </Link>
             </div>
             <div className="item-column3">
-                <p>{product.price} руб.</p>
+                <p>{product.price.toFixed(2)} руб.</p>
             </div>
             <div className="item-column4">
                 <button className="counter-button" onClick={() => handleQuantityChange(product.productId, quantity - 1)}>
