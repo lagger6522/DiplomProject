@@ -1,6 +1,7 @@
 .product-item {
     color: black;
     width: calc(33.33% - 20px);
+    height: 10vw;
     margin: 0 10px 20px 0;
     box-sizing: border-box;
     border: 1px solid #ddd;
@@ -28,6 +29,7 @@
 .product-details {
     flex: 1;
     margin-right: 10px;
+    margin-top: 10px;
 }
 
     .product-details h5 {
@@ -37,6 +39,7 @@
 
     .product-details span {
         margin-left: 10px;
+        margin-right: 10px;
     }
 
 .product-item:hover {
