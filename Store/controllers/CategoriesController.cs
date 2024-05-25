@@ -18,6 +18,15 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpGet]
+		public async Task<IEnumerable<ProductCategory>> GetVisibleCategories()
+		{
+			return await _context.ProductCategories
+				.Where(category => category.Subcategories.Any(subcategory => subcategory.Products.Any(product => !product.IsDeleted)))
+				.ToListAsync();
+		}
+
+
 		[HttpPut]
 		public IActionResult RemoveCategory(int categoryId)
 		{

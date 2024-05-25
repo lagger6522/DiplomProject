@@ -19,6 +19,14 @@ namespace Store.controllers
 		}
 
 		[HttpGet]
+		public async Task<IEnumerable<Subcategory>> GetVisibleSubcategories()
+		{
+			return await _context.Subcategories
+				.Where(subcategory => subcategory.Products.Any(product => !product.IsDeleted))
+				.ToListAsync();
+		}
+
+		[HttpGet]
 		public async Task<IEnumerable<Subcategory>> GetSubcategories()
 		{
 			return await _context.Subcategories
