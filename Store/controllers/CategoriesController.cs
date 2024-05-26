@@ -92,18 +92,32 @@ namespace Store.controllers
 		{
 			try
 			{
-				var existingCategory = await _context.ProductCategories
-					.FirstOrDefaultAsync(c => c.CategoryName == category.CategoryName);
+				var hiddenCategory = await _context.ProductCategories
+					.FirstOrDefaultAsync(c => c.CategoryName == category.CategoryName && c.IsDeleted);
 
-				if (existingCategory != null)
+				var visibleCategory = await _context.ProductCategories
+					.FirstOrDefaultAsync(c => c.CategoryName == category.CategoryName && !c.IsDeleted);
+
+				if (visibleCategory != null)
 				{
 					return BadRequest(new { message = "Категория с таким названием уже существует." });
 				}
 
-				_context.ProductCategories.Add(category);
-				await _context.SaveChangesAsync();
+				if (hiddenCategory != null && visibleCategory == null)
+				{
+					_context.ProductCategories.Add(category);
+					await _context.SaveChangesAsync();
+					return Ok(new { message = "Категория успешно создана." });
+				}
 
-				return Ok(new { message = "Категория успешно создана." });
+				if (hiddenCategory == null && visibleCategory == null)
+				{
+					_context.ProductCategories.Add(category);
+					await _context.SaveChangesAsync();
+					return Ok(new { message = "Категория успешно создана." });
+				}
+
+				return BadRequest(new { message = "Категория с таким названием уже существует." });
 			}
 			catch (Exception ex)
 			{
