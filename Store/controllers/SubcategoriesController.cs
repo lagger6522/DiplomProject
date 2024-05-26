@@ -41,11 +41,11 @@ namespace Store.controllers
 			try
 			{
 				var existingSubcategory = await _context.Subcategories
-					.FirstOrDefaultAsync(s => s.SubcategoryName == subcategory.SubcategoryName && s.ParentCategoryId == subcategory.ParentCategoryId);
+					.FirstOrDefaultAsync(s => s.SubcategoryName == subcategory.SubcategoryName && !s.IsDeleted);
 
 				if (existingSubcategory != null)
 				{
-					return BadRequest(new { message = "Подкатегория с таким названием уже существует для данной категории." });
+					return BadRequest(new { message = "Подкатегория с таким названием уже существует." });
 				}
 
 				_context.Subcategories.Add(subcategory);
@@ -58,6 +58,8 @@ namespace Store.controllers
 				return StatusCode(500, new { message = "Внутренняя ошибка сервера." });
 			}
 		}
+
+
 
 		[HttpPut]
 		public IActionResult RemoveSubcategory(int subcategoryId)
@@ -90,7 +92,7 @@ namespace Store.controllers
 
 
 		[HttpPut]
-		public async Task<IActionResult> EditSubcategory(int subcategoryId, [FromBody] Subcategory SubcategoryName)
+		public async Task<IActionResult> EditSubcategory(int subcategoryId, [FromBody] Subcategory subcategory)
 		{
 			try
 			{
@@ -102,7 +104,17 @@ namespace Store.controllers
 					return NotFound(new { message = "Подкатегория не найдена." });
 				}
 
-				existingSubcategory.SubcategoryName = SubcategoryName.SubcategoryName;
+				var duplicateSubcategory = await _context.Subcategories
+					.FirstOrDefaultAsync(c => c.SubcategoryName == subcategory.SubcategoryName &&
+											  c.ParentCategoryId == existingSubcategory.ParentCategoryId &&
+											  c.SubcategoryId != subcategoryId && !c.IsDeleted);
+
+				if (duplicateSubcategory != null)
+				{
+					return BadRequest(new { message = "Подкатегория с таким названием уже существует для данной категории." });
+				}
+
+				existingSubcategory.SubcategoryName = subcategory.SubcategoryName;
 
 				await _context.SaveChangesAsync();
 

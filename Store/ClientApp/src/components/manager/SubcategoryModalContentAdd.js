@@ -6,6 +6,7 @@ const SubcategoryModalContentAdd = () => {
     const [subcategoryName, setSubcategoryName] = useState('');
     const [parentCategoryId, setParentCategoryId] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Categories/GetCategories', 'GET')
@@ -19,7 +20,14 @@ const SubcategoryModalContentAdd = () => {
 
     const handleSave = () => {
         if (!parentCategoryId) {
-            console.error('Не выбрана родительская категория.');
+            setNotification({ show: true, message: 'Выберите родительскую категорию!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return;
+        }
+
+        if (subcategoryName.trim() === '') {
+            setNotification({ show: true, message: 'Название подкатегории не может быть пустым!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
 
@@ -29,8 +37,13 @@ const SubcategoryModalContentAdd = () => {
         })
             .then(response => {
                 console.log('Подкатегория успешно создана:', response);
+                setNotification({ show: true, message: 'Подкатегория успешно создана!', type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
+                const errorMessage = error?.response?.data?.message || 'Такая подкатегория уже существует!';
+                setNotification({ show: true, message: errorMessage, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 console.error('Ошибка при создании подкатегории:', error);
             });
     };
@@ -58,8 +71,13 @@ const SubcategoryModalContentAdd = () => {
                 value={subcategoryName}
                 onChange={(e) => setSubcategoryName(e.target.value)}
             />
-            
             <button onClick={handleSave}>Сохранить</button>
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
         </div>
     );
 };

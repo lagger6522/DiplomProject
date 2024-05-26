@@ -7,6 +7,7 @@ const SubcategoryModalContentEdit = ({ onClose }) => {
     const [subcategoryName, setSubcategoryName] = useState('');
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [subcategories, setSubcategories] = useState([]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
@@ -25,23 +26,51 @@ const SubcategoryModalContentEdit = ({ onClose }) => {
     };
 
     const handleSave = () => {
-        if (selectedSubcategory) {
-            sendRequest(`/api/Subcategories/EditSubcategory`, 'PUT', { subcategoryName }, { subcategoryId: selectedSubcategory.subcategoryId } )
-                .then(response => {
-                    console.log('Подкатегория успешно обновлена:', response);
-
-                    sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
-                        .then(updatedSubcategories => {
-                            setSubcategories(updatedSubcategories);
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при загрузке подкатегорий после обновления:', error);
-                        });
-                })
-                .catch(error => {
-                    console.error('Ошибка при обновлении подкатегории:', error);
-                });
+        if (!selectedSubcategory) {
+            setNotification({ show: true, message: 'Выберите подкатегорию!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return;
         }
+
+        if (subcategoryName.trim() === '') {
+            setNotification({ show: true, message: 'Название подкатегории не может быть пустым!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return;
+        }
+
+        const duplicateSubcategory = subcategories.find(
+            (subcategory) => subcategory.subcategoryName === subcategoryName &&
+                subcategory.parentCategoryId === selectedSubcategory.parentCategoryId &&
+                subcategory.subcategoryId !== selectedSubcategory.subcategoryId &&
+                !subcategory.isDeleted
+        );
+
+        if (duplicateSubcategory) {
+            setNotification({ show: true, message: 'Подкатегория с таким названием уже существует для данной категории!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return;
+        }
+
+        sendRequest(`/api/Subcategories/EditSubcategory`, 'PUT', { subcategoryName }, { subcategoryId: selectedSubcategory.subcategoryId })
+            .then(response => {
+                console.log('Подкатегория успешно обновлена:', response);
+                setNotification({ show: true, message: 'Подкатегория успешно обновлена!', type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+
+                sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
+                    .then(updatedSubcategories => {
+                        setSubcategories(updatedSubcategories);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке подкатегорий после обновления:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Ошибка при обновлении подкатегории:', error);
+                const errorMessage = error?.response?.data?.message || 'Ошибка при обновлении подкатегории.';
+                setNotification({ show: true, message: errorMessage, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            });
     };
 
     return (
@@ -66,6 +95,12 @@ const SubcategoryModalContentEdit = ({ onClose }) => {
                 onChange={(e) => setSubcategoryName(e.target.value)}
             />
             <button onClick={handleSave}>Сохранить</button>
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
         </div>
     );
 };
