@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import sendRequest from '../SendRequest';
 import './style.css';
 
-const CategoryModalContentAdd = ({ onClose }) => {
+const CategoryModalContentAdd = () => {
     const [categoryName, setCategoryName] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 

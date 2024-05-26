@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
 import './ModalContent.css';
 
-const ProductModalContentEdit = ({ onClose }) => {
+const ProductModalContentEdit = () => {
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
     const [products, setProducts] = useState([]);
@@ -15,7 +15,7 @@ const ProductModalContentEdit = ({ onClose }) => {
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [newAttributeName, setNewAttributeName] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,34 +89,66 @@ const ProductModalContentEdit = ({ onClose }) => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 409) {
-                        setErrorMessage(error.response.data);
+                        setNotification({ show: true, message: error.response.data, type: 'error' });
                     } else {
-                        setErrorMessage(error.message);
+                        setNotification({ show: true, message: 'Ошибка при создании атрибута: ' + error.message, type: 'error' });
                     }
+                    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 });
         }
     };
 
+    const validateForm = () => {
+        if (!productName.trim()) {
+            setNotification({ show: true, message: 'Название товара не может быть пустым!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!description.trim()) {
+            setNotification({ show: true, message: 'Описание не может быть пустым!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!price.trim() || isNaN(price)) {
+            setNotification({ show: true, message: 'Цена должна быть числовым значением!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!selectedSubcategoryId) {
+            setNotification({ show: true, message: 'Подкатегория должна быть выбрана!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!Object.values(selectedAttributes).some(value => value.trim())) {
+            setNotification({ show: true, message: 'Необходимо ввести хотя бы один атрибут!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!image) {
+            setNotification({ show: true, message: 'Изображение должно быть выбрано!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        return true;
+    };
+
     const handleSave = async () => {
-        if (!selectedSubcategoryId || !selectedProductId) {
-            console.error('Не выбрана подкатегория или товар.');
+        if (!validateForm()) {
             return;
         }
 
         let form = new FormData();
-        if (productName) form.append("productName", productName);
-        if (description) form.append("description", description);
-        if (price) form.append("price", price);
-        if (selectedSubcategoryId) form.append("subcategoryId", selectedSubcategoryId);
-
+        form.append("productName", productName);
+        form.append("description", description);
         if (selectedImage) {
             form.append("image", selectedImage);
         }
+        form.append("price", price);
+        form.append("subcategoryId", selectedSubcategoryId);
 
         Object.keys(selectedAttributes).forEach(attributeId => {
-            const value = selectedAttributes[attributeId];
-            if (value !== undefined && value !== null) {
-                form.append(`attributes[${attributeId}]`, value);
+            if (selectedAttributes[attributeId]) {
+                form.append(`attributes[${attributeId}]`, selectedAttributes[attributeId]);
             }
         });
 
@@ -126,7 +158,12 @@ const ProductModalContentEdit = ({ onClose }) => {
 
             const updatedProducts = await sendRequest(`/api/Products/GetProductsBySubcategory?subcategoryId=${selectedSubcategoryId}`, 'GET');
             setProducts(updatedProducts);
+
+            setNotification({ show: true, message: 'Товар успешно обновлен!', type: 'success' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
         } catch (error) {
+            setNotification({ show: true, message: 'Ошибка при обновлении товара: ' + error.message, type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             console.error('Ошибка при обновлении товара:', error);
         }
     };
@@ -241,10 +278,14 @@ const ProductModalContentEdit = ({ onClose }) => {
                             <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
                         </div>
                     </div>
-                    {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
-                    </button>                    
+                    </button>      
+                    {notification.show && (
+                        <div className={`notification ${notification.type}`}>
+                            {notification.message}
+                        </div>
+                    )}
                 </div>
             )}
         </div>

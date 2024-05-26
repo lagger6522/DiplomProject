@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import sendRequest from '../SendRequest';
 import './style.css';
 
-const SubcategoryModalContentRemove = ({ onClose }) => {
+const SubcategoryModalContentRemove = () => {
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [subcategories, setSubcategories] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
@@ -25,6 +25,11 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
     };
 
     const handleRemove = () => {
+        if (!selectedSubcategory) {
+            setNotification({ show: true, message: 'Выберите подкатегорию для удаления!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return;
+        }
         setShowConfirmation(true);
     };
 
@@ -36,10 +41,12 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
                     setSubcategories(prevSubcategories => prevSubcategories.filter(subcategory => subcategory.subcategoryId !== selectedSubcategory.subcategoryId));
                     setShowConfirmation(false);
                     setSelectedSubcategory(null);
-                    onClose();
                 })
                 .catch(error => {
                     console.error('Ошибка при удалении подкатегории и связанных товаров:', error);
+                    const errorMessage = error?.response?.data?.message || 'Ошибка при удалении подкатегории и связанных товаров.';
+                    setNotification({ show: true, message: errorMessage, type: 'error' });
+                    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                     setShowConfirmation(false);
                 });
         }
@@ -71,12 +78,13 @@ const SubcategoryModalContentRemove = ({ onClose }) => {
                     <button onClick={handleCancelRemove}>Отмена</button>
                 </div>
             )}
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
         </div>
     );
-};
-
-SubcategoryModalContentRemove.propTypes = {
-    onClose: PropTypes.func.isRequired,
 };
 
 export default SubcategoryModalContentRemove;

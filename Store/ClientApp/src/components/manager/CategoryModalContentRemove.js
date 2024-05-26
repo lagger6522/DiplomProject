@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import sendRequest from '../SendRequest';
 import './style.css';
 
-const CategoryModalContentRemove = ({ onClose }) => {
+const CategoryModalContentRemove = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -92,10 +91,6 @@ const CategoryModalContentRemove = ({ onClose }) => {
             )}
         </div>
     );
-};
-
-CategoryModalContentRemove.propTypes = {
-    onClose: PropTypes.func.isRequired,
 };
 
 export default CategoryModalContentRemove;

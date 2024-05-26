@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import sendRequest from '../SendRequest';
 import './ModalContent.css';
 
-const ProductModalContentRemove = ({ onClose }) => {
+const ProductModalContentRemove = () => {
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
     const [products, setProducts] = useState([]);
@@ -94,10 +93,6 @@ const ProductModalContentRemove = ({ onClose }) => {
             <button onClick={handleRemove}>Удалить</button>
         </div>
     );
-};
-
-ProductModalContentRemove.propTypes = {
-    onClose: PropTypes.func.isRequired,
 };
 
 export default ProductModalContentRemove;

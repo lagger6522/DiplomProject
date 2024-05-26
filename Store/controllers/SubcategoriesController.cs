@@ -59,8 +59,6 @@ namespace Store.controllers
 			}
 		}
 
-
-
 		[HttpPut]
 		public IActionResult RemoveSubcategory(int subcategoryId)
 		{

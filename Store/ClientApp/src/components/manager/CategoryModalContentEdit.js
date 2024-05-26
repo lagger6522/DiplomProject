@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import sendRequest from '../SendRequest';
 import './style.css';
 
-const CategoryModalContentEdit = ({ onClose }) => {
+const CategoryModalContentEdit = () => {
     const [categoryName, setCategoryName] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -101,10 +100,6 @@ const CategoryModalContentEdit = ({ onClose }) => {
             )}
         </div>
     );
-};
-
-CategoryModalContentEdit.propTypes = {
-    onClose: PropTypes.func.isRequired,
 };
 
 export default CategoryModalContentEdit;
