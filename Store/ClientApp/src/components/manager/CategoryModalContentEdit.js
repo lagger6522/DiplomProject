@@ -7,6 +7,7 @@ const CategoryModalContentEdit = ({ onClose }) => {
     const [categoryName, setCategoryName] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Categories/GetCategories', 'GET', null, null)
@@ -25,23 +26,50 @@ const CategoryModalContentEdit = ({ onClose }) => {
     };
 
     const handleSave = () => {
-        if (selectedCategory) {
-            sendRequest(`/api/Categories/EditCategory`, 'PUT', { categoryName }, { categoryId: selectedCategory.categoryId })
-                .then(response => {
-                    console.log('Категория успешно обновлена:', response);
-
-                    sendRequest('/api/Categories/GetCategories', 'GET', null, null)
-                        .then(updatedCategories => {
-                            setCategories(updatedCategories);   
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при загрузке категорий после обновления:', error);
-                        });
-                })
-                .catch(error => {
-                    console.error('Ошибка при обновлении категории:', error);
-                });
+        if (!selectedCategory) {
+            setNotification({ show: true, message: 'Выберите категорию!', type: 'error' });
+            setTimeout(() => {
+                setNotification({ show: false, message: '', type: '' });
+            }, 3000);
+            return;
         }
+
+        if (categoryName.trim() === '') {
+            setNotification({ show: true, message: 'Новое название категории не может быть пустым!', type: 'error' });
+            setTimeout(() => {
+                setNotification({ show: false, message: '', type: '' });
+            }, 3000);
+            return;
+        }
+
+        const existingCategory = categories.find(category => category.categoryName === categoryName && !category.isDeleted);
+        if (existingCategory) {
+            setNotification({ show: true, message: 'Категория с таким названием уже существует!', type: 'error' });
+            setTimeout(() => {
+                setNotification({ show: false, message: '', type: '' });
+            }, 3000);
+            return;
+        }
+
+        sendRequest(`/api/Categories/EditCategory`, 'PUT', { categoryName }, { categoryId: selectedCategory.categoryId })
+            .then(response => {
+                console.log('Категория успешно обновлена:', response);
+                setNotification({ show: true, message: 'Категория успешно обновлена!', type: 'success' });
+                setTimeout(() => {
+                    setNotification({ show: false, message: '', type: '' });
+                }, 3000);
+
+                sendRequest('/api/Categories/GetCategories', 'GET', null, null)
+                    .then(updatedCategories => {
+                        setCategories(updatedCategories);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке категорий после обновления:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Ошибка при обновлении категории:', error);
+            });
     };
 
     return (
@@ -66,6 +94,11 @@ const CategoryModalContentEdit = ({ onClose }) => {
                 onChange={(e) => setCategoryName(e.target.value)}
             />
             <button onClick={handleSave}>Сохранить</button>
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
         </div>
     );
 };

@@ -7,6 +7,14 @@ const CategoryModalContentAdd = ({ onClose }) => {
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     const handleSave = () => {
+        if (categoryName.trim() === '') {
+            setNotification({ show: true, message: 'Поле название категории не может быть пустым!', type: 'error' });
+            setTimeout(() => {
+                setNotification({ show: false, message: '', type: '' });
+            }, 3000);
+            return;
+        }
+
         sendRequest('/api/Categories/CreateCategory', 'POST', { categoryName })
             .then(response => {
                 console.log('Категория успешно создана:', response);

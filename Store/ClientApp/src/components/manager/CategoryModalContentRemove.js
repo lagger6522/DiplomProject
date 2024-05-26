@@ -7,6 +7,7 @@ const CategoryModalContentRemove = ({ onClose }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categories, setCategories] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Categories/GetCategories', 'GET', null, null)
@@ -25,6 +26,14 @@ const CategoryModalContentRemove = ({ onClose }) => {
     };
 
     const handleRemove = () => {
+        if (!selectedCategory) {
+            setNotification({ show: true, message: 'Выберите категорию!', type: 'error' });
+            setTimeout(() => {
+                setNotification({ show: false, message: '', type: '' });
+            }, 3000);
+            return;
+        }
+
         setShowConfirmation(true);
     };
 
@@ -36,7 +45,10 @@ const CategoryModalContentRemove = ({ onClose }) => {
                     setCategories(prevCategories => prevCategories.filter(category => category.categoryId !== selectedCategory.categoryId));
                     setShowConfirmation(false);
                     setSelectedCategory(null);
-                    onClose();
+                    setNotification({ show: true, message: 'Категория и связанные элементы успешно удалены!', type: 'success' });
+                    setTimeout(() => {
+                        setNotification({ show: false, message: '', type: '' });
+                    }, 3000);
                 })
                 .catch(error => {
                     console.error('Ошибка при удалении категории и связанных элементов:', error);
@@ -70,6 +82,12 @@ const CategoryModalContentRemove = ({ onClose }) => {
                     <p>Вы уверены, что хотите удалить категорию и связанные элементы?</p>
                     <button onClick={handleConfirmRemove}>Да</button>
                     <button onClick={handleCancelRemove}>Отмена</button>
+                </div>
+            )}
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
                 </div>
             )}
         </div>

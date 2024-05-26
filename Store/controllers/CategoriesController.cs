@@ -63,19 +63,25 @@ namespace Store.controllers
 
 
 		[HttpPut]
-		public async Task<IActionResult> EditCategory(int categoryId, [FromBody] ProductCategory CategoryName)
+		public async Task<IActionResult> EditCategory(int categoryId, [FromBody] ProductCategory updatedCategory)
 		{
 			try
 			{
-				var existingCategory = await _context.ProductCategories
-					.FirstOrDefaultAsync(c => c.CategoryId == categoryId);
+				var existingCategory = await _context.ProductCategories.FirstOrDefaultAsync(c => c.CategoryId == categoryId);
 
 				if (existingCategory == null)
 				{
 					return NotFound(new { message = "Категория не найдена." });
 				}
 
-				existingCategory.CategoryName = CategoryName.CategoryName;
+				var visibleCategory = await _context.ProductCategories.FirstOrDefaultAsync(c => c.CategoryName == updatedCategory.CategoryName && !c.IsDeleted && c.CategoryId != categoryId);
+
+				if (visibleCategory != null)
+				{
+					return BadRequest(new { message = "Категория с таким названием уже существует." });
+				}
+
+				existingCategory.CategoryName = updatedCategory.CategoryName;
 
 				await _context.SaveChangesAsync();
 
@@ -86,6 +92,7 @@ namespace Store.controllers
 				return StatusCode(500, new { message = $"Ошибка при обновлении категории: {ex.Message}" });
 			}
 		}
+
 
 		[HttpPost]
 		public async Task<IActionResult> CreateCategory([FromBody] ProductCategory category)
