@@ -13,20 +13,7 @@ const ProductSelection = () => {
     }, [selectedCategory]);
 
     const fetchProducts = (category) => {
-        let endpoint = '';
-
-        switch (category) {
-            case 'topRated':
-                endpoint = '/api/Products/GetTopRatedProducts';
-                break;
-            case 'bestSellers':
-                endpoint = '/api/Products/GetBestSellers';
-                break;
-            default:
-                endpoint = '/api/Products/GetTopRatedProducts';
-        }
-
-        sendRequest(endpoint, 'GET', null, null)
+        sendRequest('/api/Products/GetTopRatedProducts', 'GET', null, null)
             .then((response) => {
                 setProducts(response);
                 initializeQuantities(response);
@@ -75,18 +62,7 @@ const ProductSelection = () => {
     return (
         <div className="product-selection">
             <div className="buttons">
-                <button
-                    className={selectedCategory === 'topRated' ? 'active' : ''}
-                    onClick={() => setSelectedCategory('topRated')}
-                >
-                    Выбор покупателей
-                </button>
-                <button
-                    className={selectedCategory === 'bestSellers' ? 'active' : ''}
-                    onClick={() => setSelectedCategory('bestSellers')}
-                >
-                    Лидеры продаж
-                </button>
+                <h2>Выбор покупателей</h2>
             </div>
             <div className="products">
                 {products.map((product) => (
