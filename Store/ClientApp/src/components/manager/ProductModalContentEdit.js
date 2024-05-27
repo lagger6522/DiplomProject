@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './ModalContent.css';
+import './ProductModalContentEdit.css';
 
 const ProductModalContentEdit = () => {
     const [subcategories, setSubcategories] = useState([]);
@@ -119,13 +119,8 @@ const ProductModalContentEdit = () => {
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
-        if (!Object.values(selectedAttributes).some(value => value.trim())) {
-            setNotification({ show: true, message: 'Необходимо ввести хотя бы один атрибут!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
-            return false;
-        }
-        if (!image) {
-            setNotification({ show: true, message: 'Изображение должно быть выбрано!', type: 'error' });
+        if (!selectedProductId) {
+            setNotification({ show: true, message: 'Товар должен быть выбран!', type: 'error' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
@@ -133,32 +128,24 @@ const ProductModalContentEdit = () => {
     };
 
     const handleSave = async () => {
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
-        let form = new FormData();
-        form.append("productName", productName);
-        form.append("description", description);
+        const formData = new FormData();
+        formData.append('ProductId', selectedProductId);
+        formData.append('ProductName', productName);
+        formData.append('Description', description);
+        formData.append('Price', price);
+
         if (selectedImage) {
-            form.append("image", selectedImage);
+            formData.append('Image', selectedImage);
         }
-        form.append("price", price);
-        form.append("subcategoryId", selectedSubcategoryId);
 
         Object.keys(selectedAttributes).forEach(attributeId => {
-            if (selectedAttributes[attributeId]) {
-                form.append(`attributes[${attributeId}]`, selectedAttributes[attributeId]);
-            }
+            formData.append(`Attributes[${attributeId}]`, selectedAttributes[attributeId]);
         });
 
         try {
-            const response = await sendRequest(`/api/Products/EditProduct?productId=${selectedProductId}`, 'PUT', form);
-            console.log('Товар успешно обновлен:', response);
-
-            const updatedProducts = await sendRequest(`/api/Products/GetProductsBySubcategory?subcategoryId=${selectedSubcategoryId}`, 'GET');
-            setProducts(updatedProducts);
-
+            await sendRequest('/api/Products/UpdateProduct', 'POST', formData);
             setNotification({ show: true, message: 'Товар успешно обновлен!', type: 'success' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
         } catch (error) {
@@ -176,7 +163,7 @@ const ProductModalContentEdit = () => {
                 id="subcategory"
                 value={selectedSubcategoryId}
                 onChange={(e) => handleSubcategoryChange(e.target.value)}
-                className="form-control"
+                className={`form-control ${!selectedSubcategoryId ? 'is-invalid' : ''}`}
             >
                 <option value="">Выберите подкатегорию</option>
                 {subcategories.map(subcategory => (
@@ -193,7 +180,7 @@ const ProductModalContentEdit = () => {
                         id="product"
                         value={selectedProductId}
                         onChange={(e) => handleProductChange(e.target.value)}
-                        className="form-control"
+                        className={`form-control ${!selectedProductId ? 'is-invalid' : ''}`}
                     >
                         <option value="">Выберите товар</option>
                         {products.map(product => (
@@ -214,7 +201,7 @@ const ProductModalContentEdit = () => {
                             id="productName"
                             value={productName}
                             onChange={(e) => setProductName(e.target.value)}
-                            className="form-control"
+                            className={`form-control ${!productName.trim() ? 'is-invalid' : ''}`}
                         />
                     </div>
                     <div className="form-group">
@@ -223,7 +210,7 @@ const ProductModalContentEdit = () => {
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="form-control"
+                            className={`form-control ${!description.trim() ? 'is-invalid' : ''}`}
                         />
                     </div>
                     <div className="form-group">
@@ -249,7 +236,7 @@ const ProductModalContentEdit = () => {
                             id="price"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            className="form-control"
+                            className={`form-control ${!price.trim() || isNaN(price) ? 'is-invalid' : ''}`}
                         />
                     </div>
                     <div className="form-group">
@@ -280,7 +267,7 @@ const ProductModalContentEdit = () => {
                     </div>
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
-                    </button>      
+                    </button>
                     {notification.show && (
                         <div className={`notification ${notification.type}`}>
                             {notification.message}
