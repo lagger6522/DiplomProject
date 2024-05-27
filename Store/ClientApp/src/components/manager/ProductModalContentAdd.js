@@ -81,7 +81,7 @@ const ProductModalContentAdd = () => {
             return false;
         }
         if (!selectedImage) {
-            setNotification({ show: true, message: 'Изображение не может быть пустым!', type: 'error' });
+            setNotification({ show: true, message: 'Необходимо изображение!', type: 'error' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
@@ -113,7 +113,6 @@ const ProductModalContentAdd = () => {
             form.append("productName", productName);
             form.append("description", description);
             form.append("image", selectedImage);
-            form.append("price", price);
             form.append("subcategoryId", selectedSubcategoryId);
 
             Object.keys(selectedAttributes).forEach(attributeId => {
@@ -122,7 +121,12 @@ const ProductModalContentAdd = () => {
                 }
             });
 
-            sendRequest("/api/Products/CreateProduct", "POST", form, null)
+            const formDataPreview = {};
+            form.forEach((value, key) => {
+                formDataPreview[key] = value;
+            });
+            alert(parseFloat(price));
+            sendRequest("/api/Products/CreateProduct", "POST", form, { price })
                 .then(response => {
                     console.log('Товар успешно создан:', response);
                     setNotification({ show: true, message: 'Товар успешно создан!', type: 'success' });
@@ -174,7 +178,9 @@ const ProductModalContentAdd = () => {
             <div className="form-group">
                 <label htmlFor="price">Цена:</label>
                 <input
-                    type="text"
+                    type="number"
+                    step="0.01"
+                    min="0"
                     id="price"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}

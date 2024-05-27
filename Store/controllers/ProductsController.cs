@@ -135,7 +135,12 @@ namespace Store.controllers
 
 		[HttpPost]
 		public async Task<IActionResult> CreateProduct(
-	[FromForm] string productName, [FromForm] string description, [FromForm] decimal price, [FromForm] int subcategoryId, [FromForm] IFormFile? image, [FromForm] Dictionary<int, string> attributes)
+	[FromForm] string productName,
+	[FromForm] string description,
+	decimal price,
+	[FromForm] int subcategoryId,
+	[FromForm] IFormFile? image,
+	[FromForm] Dictionary<int, string> attributes)
 		{
 			try
 			{
@@ -182,9 +187,6 @@ namespace Store.controllers
 				return Problem($"Ошибка при создании товара: {ex.Message}");
 			}
 		}
-
-
-
 
 		[HttpGet]
 		public async Task<IActionResult> GetProductDetails(int productId)
@@ -248,7 +250,7 @@ namespace Store.controllers
 	int productId,
 	[FromForm] string productName,
 	[FromForm] string description,
-	[FromForm] decimal price,
+	decimal price,
 	[FromForm] IFormFile? image,
 	[FromForm] Dictionary<int, string> attributes)
 		{

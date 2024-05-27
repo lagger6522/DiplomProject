@@ -143,7 +143,6 @@ const ProductModalContentEdit = () => {
         if (selectedImage) {
             form.append("image", selectedImage);
         }
-        form.append("price", price);
         form.append("subcategoryId", selectedSubcategoryId);
 
         Object.keys(selectedAttributes).forEach(attributeId => {
@@ -153,7 +152,7 @@ const ProductModalContentEdit = () => {
         });
 
         try {
-            const response = await sendRequest(`/api/Products/EditProduct?productId=${selectedProductId}`, 'PUT', form);
+            const response = await sendRequest(`/api/Products/EditProduct`, 'PUT', form, { productId: selectedProductId, price });
             console.log('Товар успешно обновлен:', response);
 
             const updatedProducts = await sendRequest(`/api/Products/GetProductsBySubcategory?subcategoryId=${selectedSubcategoryId}`, 'GET');

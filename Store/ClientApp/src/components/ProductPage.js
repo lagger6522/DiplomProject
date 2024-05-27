@@ -11,7 +11,7 @@ const ProductPage = () => {
     const [quantities, setQuantities] = useState({});
     const [error, setError] = useState('');
     const [sortOption, setSortOption] = useState('price');
-    const [sortDirection, setSortDirection] = useState('desc');
+    const [sortDirection, setSortDirection] = useState('asc');
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -60,7 +60,7 @@ const ProductPage = () => {
                 break;
         }
 
-        if (sortDirection === 'asc') {
+        if (sortDirection === 'desc') {
             sortedResults.reverse();
         }
 
