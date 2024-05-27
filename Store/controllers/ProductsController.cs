@@ -19,14 +19,27 @@ namespace Store.controllers
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<Product>> GetTopRatedProducts()
+		public async Task<IEnumerable<ProductDTO>> GetTopRatedProducts()
 		{
 			return await _context.Products
-				.Where(p => !p.IsDeleted)
-				.OrderByDescending(p => p.ProductReviews.Average(r => r.Rating))
-				.Take(10)
+				.Where(p => !p.IsDeleted && p.ProductReviews.Any(r => r.Rating >= 4))
+				.Select(p => new ProductDTO
+				{
+					ProductId = p.ProductId,
+					ProductName = p.ProductName,
+					Description = p.Description,
+					Image = p.Image,
+					Price = p.Price,
+					SubcategoryId = p.SubcategoryId,
+					AverageRating = p.ProductReviews.Where(r => r.Rating >= 4).Average(r => r.Rating),
+					ReviewCount = p.ProductReviews.Count(r => r.Rating >= 4)
+				})
+				.OrderByDescending(p => p.AverageRating)
+				.Take(9)
 				.ToListAsync();
 		}
+
+
 
 		[HttpPost]
 		public async Task<IActionResult> CreateAttribute([FromBody] Model.Attribute attribute)

@@ -9,7 +9,7 @@
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    padding: 20px;
+    padding: 16px;
     margin-bottom: 20px;
 }
 
@@ -38,7 +38,7 @@
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    padding: 20px;
+    padding: 16px;
     margin-bottom: 20px;
     margin-left: 20px;
 }
@@ -48,7 +48,6 @@
     }
 
     .product-description p {
-        margin-bottom: 20px;
         overflow-wrap: break-word;
     }
 
@@ -96,7 +95,7 @@
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    padding: 20px;
+    padding: 16px;
     margin-bottom: 20px;
 }
 

@@ -39,7 +39,7 @@ const ProductSelection = () => {
     const initializeQuantities = (products) => {
         const initialQuantities = {};
         products.forEach(product => {
-            initialQuantities[product.productId] = 1;
+            initialQuantities[product.productID] = 1;
         });
         setQuantities(initialQuantities);
     };
@@ -91,9 +91,9 @@ const ProductSelection = () => {
             <div className="products">
                 {products.map((product) => (
                     <ProductItem
-                        key={product.productId}
+                        key={product.productID}
                         product={product}
-                        quantity={quantities[product.productId] || 1}
+                        quantity={quantities[product.productID] || 1}
                         onQuantityChange={handleQuantityChange}
                         onAddToCart={handleAddToCart}
                     />
