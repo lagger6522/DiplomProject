@@ -191,35 +191,35 @@ const ProductModalContentAdd = () => {
                 >
                     <option value="">Выберите подкатегорию</option>
                     {subcategories.map(subcategory => (
-                        <option key={subcategory.id} value={subcategory.id}>{subcategory.subcategoryName}</option>
+                        <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>{subcategory.subcategoryName}</option>
                     ))}
                 </select>
             </div>
             <div className="form-group">
                 <label>Характеристики:</label>
                 {attributes.map(attribute => (
-                    <div key={attribute.id} className="attribute-group">
-                        <label htmlFor={`attribute-${attribute.id}`}>{attribute.attributeName}:</label>
+                    <div key={attribute.attributeId} className="attribute-group">
+                        <label htmlFor={`attribute-${attribute.attributeId}`}>{attribute.attributeName}:</label>
                         <input
                             type="text"
-                            id={`attribute-${attribute.id}`}
-                            value={selectedAttributes[attribute.id] || ''}
-                            onChange={(e) => handleAttributeChange(attribute.id, e.target.value)}
+                            id={`attribute-${attribute.attributeId}`}
+                            value={selectedAttributes[attribute.attributeId] || ''}
+                            onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}
                             className="form-control"
                         />
                     </div>
                 ))}
-            </div>
-            <div className="form-group">
-                <label htmlFor="newAttribute">Создать новую характеристику:</label>
-                <input
-                    type="text"
-                    id="newAttribute"
-                    value={newAttributeName}
-                    onChange={(e) => setNewAttributeName(e.target.value)}
-                    className="form-control"
-                />
-                <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать</button>
+                <div className="form-group">
+                    <label htmlFor="newAttributeName">Новый атрибут:</label>
+                    <input
+                        type="text"
+                        id="newAttributeName"
+                        value={newAttributeName}
+                        onChange={(e) => setNewAttributeName(e.target.value)}
+                        className="form-control"
+                    />
+                    <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
+                </div>
             </div>
             <div className="form-group">
                 <button onClick={uploadImage} className="btn btn-primary">Добавить товар</button>

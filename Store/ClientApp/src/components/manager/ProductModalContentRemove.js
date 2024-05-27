@@ -8,6 +8,7 @@ const ProductModalContentRemove = () => {
     const [products, setProducts] = useState([]);
     const [selectedProductId, setSelectedProductId] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
@@ -54,7 +55,10 @@ const ProductModalContentRemove = () => {
         if (!validateForm()) {
             return;
         }
+        setShowConfirmation(true);
+    };
 
+    const handleConfirmRemove = () => {
         sendRequest(`/api/Products/HideProduct`, 'POST', null, { productId: selectedProductId })
             .then(response => {
                 console.log('Товар успешно скрыт:', response);
@@ -75,6 +79,12 @@ const ProductModalContentRemove = () => {
                 setNotification({ show: true, message: 'Ошибка при скрытии товара!', type: 'error' });
                 setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
+
+        setShowConfirmation(false);
+    };
+
+    const handleCancelRemove = () => {
+        setShowConfirmation(false);
     };
 
     return (
@@ -118,6 +128,13 @@ const ProductModalContentRemove = () => {
             </select>
 
             <button onClick={handleRemove}>Удалить</button>
+            {showConfirmation && (
+                <div className="confirmation-modal">
+                    <p>Вы уверены, что хотите удалить товар?</p>
+                    <button onClick={handleConfirmRemove}>Да</button>
+                    <button onClick={handleCancelRemove}>Отмена</button>
+                </div>
+            )}
         </div>
     );
 };

@@ -119,8 +119,13 @@ const ProductModalContentEdit = () => {
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
-        if (!selectedProductId) {
-            setNotification({ show: true, message: 'Товар должен быть выбран!', type: 'error' });
+        if (!Object.values(selectedAttributes).some(value => value.trim())) {
+            setNotification({ show: true, message: 'Необходимо ввести хотя бы один атрибут!', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            return false;
+        }
+        if (!image) {
+            setNotification({ show: true, message: 'Изображение должно быть выбрано!', type: 'error' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
@@ -128,24 +133,32 @@ const ProductModalContentEdit = () => {
     };
 
     const handleSave = async () => {
-        if (!validateForm()) return;
-
-        const formData = new FormData();
-        formData.append('ProductId', selectedProductId);
-        formData.append('ProductName', productName);
-        formData.append('Description', description);
-        formData.append('Price', price);
-
-        if (selectedImage) {
-            formData.append('Image', selectedImage);
+        if (!validateForm()) {
+            return;
         }
 
+        let form = new FormData();
+        form.append("productName", productName);
+        form.append("description", description);
+        if (selectedImage) {
+            form.append("image", selectedImage);
+        }
+        form.append("price", price);
+        form.append("subcategoryId", selectedSubcategoryId);
+
         Object.keys(selectedAttributes).forEach(attributeId => {
-            formData.append(`Attributes[${attributeId}]`, selectedAttributes[attributeId]);
+            if (selectedAttributes[attributeId]) {
+                form.append(`attributes[${attributeId}]`, selectedAttributes[attributeId]);
+            }
         });
 
         try {
-            await sendRequest('/api/Products/UpdateProduct', 'POST', formData);
+            const response = await sendRequest(`/api/Products/EditProduct?productId=${selectedProductId}`, 'PUT', form);
+            console.log('Товар успешно обновлен:', response);
+
+            const updatedProducts = await sendRequest(`/api/Products/GetProductsBySubcategory?subcategoryId=${selectedSubcategoryId}`, 'GET');
+            setProducts(updatedProducts);
+
             setNotification({ show: true, message: 'Товар успешно обновлен!', type: 'success' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
         } catch (error) {
@@ -163,7 +176,7 @@ const ProductModalContentEdit = () => {
                 id="subcategory"
                 value={selectedSubcategoryId}
                 onChange={(e) => handleSubcategoryChange(e.target.value)}
-                className={`form-control ${!selectedSubcategoryId ? 'is-invalid' : ''}`}
+                className="form-control"
             >
                 <option value="">Выберите подкатегорию</option>
                 {subcategories.map(subcategory => (
@@ -180,7 +193,7 @@ const ProductModalContentEdit = () => {
                         id="product"
                         value={selectedProductId}
                         onChange={(e) => handleProductChange(e.target.value)}
-                        className={`form-control ${!selectedProductId ? 'is-invalid' : ''}`}
+                        className="form-control"
                     >
                         <option value="">Выберите товар</option>
                         {products.map(product => (
@@ -201,7 +214,7 @@ const ProductModalContentEdit = () => {
                             id="productName"
                             value={productName}
                             onChange={(e) => setProductName(e.target.value)}
-                            className={`form-control ${!productName.trim() ? 'is-invalid' : ''}`}
+                            className="form-control"
                         />
                     </div>
                     <div className="form-group">
@@ -210,7 +223,7 @@ const ProductModalContentEdit = () => {
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className={`form-control ${!description.trim() ? 'is-invalid' : ''}`}
+                            className="form-control"
                         />
                     </div>
                     <div className="form-group">
@@ -236,9 +249,10 @@ const ProductModalContentEdit = () => {
                             id="price"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            className={`form-control ${!price.trim() || isNaN(price) ? 'is-invalid' : ''}`}
+                            className={`form-control ${(!price || isNaN(parseFloat(price))) ? 'is-invalid' : ''}`}
                         />
                     </div>
+
                     <div className="form-group">
                         <label>Характеристики:</label>
                         {attributes.map(attribute => (
