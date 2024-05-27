@@ -37,7 +37,7 @@ const ProductDetailsPage = () => {
         return <div>Loading...</div>;
     }
 
-    const handleQuantityChange = (amount) => {
+    const handleQuantityChange = (productId, amount) => {
         setQuantity(prevQuantity => Math.max(prevQuantity + amount, 1));
     };
 

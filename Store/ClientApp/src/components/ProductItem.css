@@ -9,6 +9,7 @@
     border-radius: 8px;
     display: flex;
     padding: 10px;
+    position: relative;
 }
 
     .product-item img {
@@ -29,11 +30,14 @@
 .product-details {
     flex: 1;
     margin-right: 10px;
-    margin-top: 10px;
+
+    position: relative;
 }
 
     .product-details h5 {
-            margin-left: 10px;
+        margin-left: 10px;
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
     }
 
     .product-details span {
@@ -68,27 +72,30 @@
     align-items: center;
     margin-top: 0.2vw;
     margin-left: 0.5vw;
+    position: absolute;
+    bottom: 1px;
+    right: 2px;
 }
 
-.cart-controls button {
-    background-color: #ffad4d;
-    border: 1px solid #ffad4d;
-    color: #fff;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 8px;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-    .cart-controls button:hover {
-        background-color: #ff9519;
+    .cart-controls button {
+        background-color: #ffad4d;
+        border: 1px solid #ffad4d;
         color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
+        .cart-controls button:hover {
+            background-color: #ff9519;
+            color: #fff;
+        }
 
     .cart-controls .cart-button {
         margin-left: 1vw;
@@ -99,10 +106,10 @@
         width: 125px;
     }
 
-    .cart-controls .cart-button:hover {
-        background-color: #ffad4d;
-        color: #fff;
-    }
+        .cart-controls .cart-button:hover {
+            background-color: #ffad4d;
+            color: #fff;
+        }
 
 input[type="number"] {
     margin: 5px;
