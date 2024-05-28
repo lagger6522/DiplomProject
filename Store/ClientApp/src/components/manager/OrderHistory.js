@@ -45,7 +45,7 @@ const OrderHistory = () => {
 
     return (
         <div>
-            <h1>Order History</h1>
+            <h1>История заказов</h1>
             <ul>
                 {orders.map(order => (
                     <li key={order.orderId}>
@@ -61,7 +61,7 @@ const OrderHistory = () => {
                             >
                                 <option value="Заказ обрабатывается">Заказ обрабатывается</option>
                                 <option value="Заказ готов к отправке">Заказ готов к отправке</option>
-                                <option value="Заказ доставлен">Заказ доставлен</option>
+                                <option value="Заказ выполнен">Заказ выполнен</option>
                             </select>
                         </label>
                     </li>

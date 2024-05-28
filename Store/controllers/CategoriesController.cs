@@ -139,31 +139,5 @@ namespace Store.controllers
 				.Where(category => !category.IsDeleted)
 				.ToListAsync();
 		}
-
-		[HttpGet]
-		public async Task<IEnumerable<Order>> GetAllOrders()
-		{
-			return await _context.Orders.ToListAsync();
-		}
-
-		[HttpPost]
-		public IActionResult UpdateOrderStatus([FromBody] OrderStatusUpdateRequest request)
-		{
-			if (request == null || string.IsNullOrWhiteSpace(request.Status))
-			{
-				return BadRequest("Invalid request.");
-			}
-
-			var order = _context.Orders.FirstOrDefault(o => o.OrderId == request.OrderId);
-
-			if (order != null)
-			{
-				order.Status = request.Status;
-				_context.SaveChanges();
-				return Ok();
-			}
-
-			return NotFound("Order not found");
-		}
 	}
 }

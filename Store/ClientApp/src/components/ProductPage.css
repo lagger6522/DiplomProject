@@ -52,7 +52,7 @@ select {
 }
 
 .filter-item {
-    flex: 0 1 200px; /* фиксированная ширина элемента */
+    flex: 0 1 200px;
 }
 
     .filter-item label {
@@ -90,7 +90,7 @@ select {
 
 @media (max-width: 768px) {
     .filter-item {
-        flex: 1 1 calc(50% - 10px); /* адаптация для меньших экранов */
+        flex: 1 1 calc(50% - 10px);
     }
 }
 

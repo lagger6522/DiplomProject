@@ -125,7 +125,6 @@ const ProductModalContentAdd = () => {
             form.forEach((value, key) => {
                 formDataPreview[key] = value;
             });
-            alert(parseFloat(price));
             sendRequest("/api/Products/CreateProduct", "POST", form, { price })
                 .then(response => {
                     console.log('Товар успешно создан:', response);
