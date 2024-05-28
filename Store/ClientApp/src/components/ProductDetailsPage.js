@@ -10,7 +10,7 @@ const ProductDetailsPage = () => {
     const [quantity, setQuantity] = useState(1);
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
-    const [error, setError] = useState('');
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
     const [reviews, setReviews] = useState([]);
     const [attributes, setAttributes] = useState([]);
 
@@ -21,7 +21,8 @@ const ProductDetailsPage = () => {
                 setAttributes(response.attributes);
             })
             .catch((error) => {
-                console.error('Ошибка при загрузке деталей товара:', error);
+                setNotification({ show: true, message: 'Ошибка при загрузке деталей товара: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
 
         sendRequest(`/api/Comments/GetProductReviews`, 'GET', null, { productId })
@@ -29,7 +30,8 @@ const ProductDetailsPage = () => {
                 setReviews(response?.reviews);
             })
             .catch((error) => {
-                console.error('Ошибка при загрузке отзывов о товаре:', error);
+                setNotification({ show: true, message: 'Ошибка при загрузке отзывов о товаре: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     }, [productId]);
 
@@ -49,11 +51,13 @@ const ProductDetailsPage = () => {
         var userName = sessionStorage.getItem("userName");
         var userId = sessionStorage.getItem("userId");
         if (!userName) {
-            setError('Чтобы отправить отзыв нужно авторизоваться.');
+            setNotification({ show: true, message: 'Чтобы отправить отзыв нужно авторизоваться.', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
         if (!rating || !reviewText.trim()) {
-            setError('Чтобы отправить отзыв нужно выбрать оценку и написать отзыв');
+            setNotification({ show: true, message: 'Чтобы отправить отзыв нужно выбрать оценку и написать отзыв.', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
 
@@ -66,17 +70,21 @@ const ProductDetailsPage = () => {
             console.log('Отправка отзыва:', response);
             setRating(0);
             setReviewText('');
-            setError('');
+            setNotification({ show: true, message: 'Отзыв успешно отправлен!', type: 'success' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
 
             sendRequest(`/api/Comments/GetProductReviews`, 'GET', null, { productId })
                 .then((response) => {
                     setReviews(response?.reviews);
                 })
                 .catch((error) => {
-                    console.error('Ошибка при загрузке отзывов о товаре:', error);
+                    setNotification({ show: true, message: 'Ошибка при загрузке отзывов о товаре: ' + error.message, type: 'error' });
+                    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 });
         })
             .catch(error => {
+                setNotification({ show: true, message: 'Ошибка при отправке отзыва: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 console.error('Ошибка при отправке отзыва:', error);
             });
     };
@@ -84,7 +92,8 @@ const ProductDetailsPage = () => {
     const handleAddToCart = () => {
         var userId = sessionStorage.getItem("userId");
         if (!userId) {
-            setError('Для добавления товара в корзину необходимо войти в систему.');
+            setNotification({ show: true, message: 'Для добавления товара в корзину необходимо войти в систему.', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
 
@@ -95,8 +104,12 @@ const ProductDetailsPage = () => {
         })
             .then(response => {
                 console.log('Товар добавлен в корзину:', response);
+                setNotification({ show: true, message: 'Товар успешно добавлен в корзину!', type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
+                setNotification({ show: true, message: 'Ошибка при добавлении товара в корзину: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 console.error('Ошибка при добавлении товара в корзину:', error);
             });
     };
@@ -160,7 +173,7 @@ const ProductDetailsPage = () => {
                 <button className="submit-review-button" onClick={handleReviewSubmit}>
                     Отправить
                 </button>
-                {error && <div className="error-message">{error}</div>}
+                {notification.show && <div className={`notification ${notification.type}`}>{notification.message}</div>}
             </div>
             <div className="product-reviews">
                 <h4>Отзывы о товаре</h4>

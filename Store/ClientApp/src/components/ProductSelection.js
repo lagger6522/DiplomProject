@@ -4,29 +4,24 @@ import ProductItem from './ProductItem';
 import './ProductSelection.css';
 
 const ProductSelection = () => {
-    const [selectedCategory, setSelectedCategory] = useState('topRated');
     const [products, setProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-    useEffect(() => {
-        fetchProducts(selectedCategory);
-    }, [selectedCategory]);
-
-    const fetchProducts = (category) => {
-        sendRequest('/api/Products/GetTopRatedProducts', 'GET', null, null)
-            .then((response) => {
-                setProducts(response);
-                initializeQuantities(response);
-            })
-            .catch((error) => {
-                console.error('Ошибка при загрузке товаров:', error);
-            });
-    };
+    sendRequest('/api/Products/GetTopRatedProducts', 'GET', null, null)
+        .then((response) => {
+            setProducts(response);
+            initializeQuantities(response);
+        })
+        .catch((error) => {
+            setNotification({ show: true, message: 'Ошибка при загрузке товаров: ' + error.message, type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+        });
 
     const initializeQuantities = (products) => {
         const initialQuantities = {};
         products.forEach(product => {
-            initialQuantities[product.productID] = 1;
+            initialQuantities[product.productId] = 1;
         });
         setQuantities(initialQuantities);
     };
@@ -43,9 +38,12 @@ const ProductSelection = () => {
         var userId = sessionStorage.getItem("userId");
 
         if (!userId) {
-            console.log('Для добавления товара в корзину необходимо войти в систему.');
+            setNotification({ show: true, message: 'Для добавления товара в корзину необходимо войти в систему.', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
+
+        setNotification('');
         sendRequest('/api/Cart/AddToCart', 'POST', {
             productId,
             userId,
@@ -55,7 +53,8 @@ const ProductSelection = () => {
                 console.log('Товар успешно добавлен в корзину:', response);
             })
             .catch(error => {
-                console.error('Ошибка при добавлении товара в корзину:', error);
+                setNotification({ show: true, message: 'Ошибка при добавлении товара в корзину: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     };
 
@@ -75,6 +74,11 @@ const ProductSelection = () => {
                     />
                 ))}
             </div>
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
         </div>
     );
 };

@@ -8,7 +8,7 @@ const SearchResultPage = () => {
     const location = useLocation();
     const [searchResults, setSearchResults] = useState([]);
     const [quantities, setQuantities] = useState({});
-    const [error, setError] = useState('');
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
     const [sortOption, setSortOption] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
 
@@ -64,7 +64,8 @@ const SearchResultPage = () => {
         const userId = sessionStorage.getItem("userId");
 
         if (!userId) {
-            setError('Для добавления товара в корзину необходимо войти в систему.');
+            setNotification({ show: true, message: 'Для добавления товара в корзину необходимо войти в систему.', type: 'error' });
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return;
         }
         sendRequest('/api/Cart/AddToCart', 'POST', {
@@ -74,9 +75,13 @@ const SearchResultPage = () => {
         })
             .then(response => {
                 console.log('Товар успешно добавлен в корзину:', response);
+                setNotification({ show: true, message: 'Товар успешно добавлен в корзину!', type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
                 console.error('Ошибка при добавлении товара в корзину:', error);
+                setNotification({ show: true, message: 'Ошибка при добавлении товара в корзину: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     };
 
@@ -99,7 +104,7 @@ const SearchResultPage = () => {
 
     return (
         <div className="product-page">
-            {error && <div className="error-message">{error}</div>}
+            {notification.show && <div className={`notification ${notification.type}`}>{notification.message}</div>}
             <div>
                 <label>Сортировка по:</label>
                 <select value={sortOption} onChange={handleSortChange}>
