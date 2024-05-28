@@ -15,6 +15,7 @@ const ProductPage = () => {
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [showAllAttributes, setShowAllAttributes] = useState(false);
 
     useEffect(() => {
         if (location.state && location.state.subcategory) {
@@ -124,6 +125,50 @@ const ProductPage = () => {
         }));
     };
 
+    const toggleShowAllAttributes = () => {
+        setShowAllAttributes(prevState => !prevState);
+    };
+
+    const renderAttributes = () => {
+        const attributeChunks = [];
+        const attributesPerRow = 6;
+        for (let i = 0; i < attributes.length; i += attributesPerRow) {
+            attributeChunks.push(attributes.slice(i, i + attributesPerRow));
+        }
+
+        return (
+            <div className="filter">
+                {attributeChunks.map((chunk, index) => {
+                    if (!showAllAttributes && index > 0) {
+                        return null;
+                    }
+                    return (
+                        <div key={index} className="filter-row">
+                            {chunk.map(attribute => (
+                                <div key={attribute.attributeId} className="filter-item">
+                                    <label>{attribute.attributeName}:</label>
+                                    <select onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}>
+                                        <option value="">Все</option>
+                                        {attribute.values.map(value => (
+                                            <option key={value} value={value}>{value}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                })}
+                {attributes.length > attributesPerRow && (
+                    <div className="show-more-button">
+                        <button onClick={toggleShowAllAttributes}>
+                            {showAllAttributes ? 'Скрыть характеристики' : 'Показать все характеристики'}
+                        </button>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="product-page">
             {error && <div className="error-message">{error}</div>}
@@ -141,19 +186,7 @@ const ProductPage = () => {
                 </select>
             </div>
             <div>
-                <div className="filter-row">
-                    {attributes.map(attribute => (
-                        <div key={attribute.attributeId} className="filter-item">
-                            <label>{attribute.attributeName}:</label>
-                            <select onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}>
-                                <option value="">Все</option>
-                                {attribute.values.map(value => (
-                                    <option key={value} value={value}>{value}</option>
-                                ))}
-                            </select>
-                        </div>
-                    ))}
-                </div>
+                {renderAttributes()}
             </div>
             <div className="product-list">
                 {filteredProducts.map((product) => (

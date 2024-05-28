@@ -22,11 +22,80 @@ select {
     margin-bottom: 16px;
 }
 
+.sort-options {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .sort-options label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .sort-options select {
+        margin-right: 20px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+.filter {
+    width: 100%;
+}
+
 .filter-row {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 10px;
+    gap: 10px;
 }
 
 .filter-item {
-    margin-right: 10px;
+    flex: 0 1 200px; /* фиксированная ширина элемента */
+}
+
+    .filter-item label {
+        margin-bottom: 5px;
+        display: block;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .filter-item select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+.show-more-button {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+    .show-more-button button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .show-more-button button:hover {
+            background-color: #0056b3;
+        }
+
+@media (max-width: 768px) {
+    .filter-item {
+        flex: 1 1 calc(50% - 10px); /* адаптация для меньших экранов */
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-item {
+        flex: 1 1 100%;
+    }
 }
