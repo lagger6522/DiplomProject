@@ -67,9 +67,9 @@ const ProductSelection = () => {
             <div className="products">
                 {products.map((product) => (
                     <ProductItem
-                        key={product.productID}
+                        key={product.productId}
                         product={product}
-                        quantity={quantities[product.productID] || 1}
+                        quantity={quantities[product.productId] || 1}
                         onQuantityChange={handleQuantityChange}
                         onAddToCart={handleAddToCart}
                     />

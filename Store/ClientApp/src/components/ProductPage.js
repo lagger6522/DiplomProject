@@ -47,6 +47,13 @@ const ProductPage = () => {
         setQuantities(initialQuantities);
     };
 
+    const handleQuantityChange = (productId, amount) => {
+        setQuantities(prevQuantities => ({
+            ...prevQuantities,
+            [productId]: Math.max(prevQuantities[productId] + amount, 1),
+        }));
+    };
+
     const applySorting = (results) => {
         let sortedResults = [...results];
 
@@ -80,14 +87,7 @@ const ProductPage = () => {
 
         filteredProducts = applySorting(filteredProducts);
         setFilteredProducts(filteredProducts);
-    };
-
-    const handleQuantityChange = (productId, amount) => {
-        setQuantities(prevQuantities => ({
-            ...prevQuantities,
-            [productId]: Math.max(prevQuantities[productId] + amount, 1),
-        }));
-    };
+    };    
 
     const handleAddToCart = (productId) => {
         const quantity = quantities[productId];
