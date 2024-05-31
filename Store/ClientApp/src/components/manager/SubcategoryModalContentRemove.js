@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './style.css';
+import './ProductModalContentAdd.css';
 
 const SubcategoryModalContentRemove = () => {
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -9,14 +9,14 @@ const SubcategoryModalContentRemove = () => {
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
-        sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
             .catch(error => {
                 console.error('Ошибка при загрузке подкатегорий:', error);
             });
-    }, [setSubcategories]);
+    }, []);
 
     const handleSubcategoryChange = (selectedSubcategoryId) => {
         const subcategory = subcategories.find(subcategory => subcategory.subcategoryId === parseInt(selectedSubcategoryId, 10));
@@ -35,7 +35,7 @@ const SubcategoryModalContentRemove = () => {
 
     const handleConfirmRemove = () => {
         if (selectedSubcategory) {
-            sendRequest(`/api/Subcategories/RemoveSubcategory`, 'Put', null, { subcategoryId: selectedSubcategory.subcategoryId })
+            sendRequest(`/api/Subcategories/RemoveSubcategory`, 'PUT', null, { subcategoryId: selectedSubcategory.subcategoryId })
                 .then(response => {
                     console.log('Подкатегория и связанные товары успешно удалены:', response);
                     setSubcategories(prevSubcategories => prevSubcategories.filter(subcategory => subcategory.subcategoryId !== selectedSubcategory.subcategoryId));
@@ -57,25 +57,30 @@ const SubcategoryModalContentRemove = () => {
     };
 
     return (
-        <div>
+        <div className="product-modal-content">
             <h3>Удалить подкатегорию и связанные товары</h3>
-            <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
-            <select
-                id="selectedSubcategory"
-                value={selectedSubcategory ? selectedSubcategory.subcategoryId : ''}
-                onChange={(e) => handleSubcategoryChange(e.target.value)}
-            >
-                <option value="" disabled>Выберите подкатегорию</option>
-                {subcategories.map(subcategory => (
-                    <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>{subcategory.subcategoryName}</option>
-                ))}
-            </select>
-            <button onClick={handleRemove}>Удалить</button>
+            <div className="form-group">
+                <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
+                <select
+                    id="selectedSubcategory"
+                    value={selectedSubcategory ? selectedSubcategory.subcategoryId : ''}
+                    onChange={(e) => handleSubcategoryChange(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="" disabled>Выберите подкатегорию</option>
+                    {subcategories.map(subcategory => (
+                        <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>{subcategory.subcategoryName}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <button onClick={handleRemove} className="btn btn-primary">Удалить</button>
+            </div>
             {showConfirmation && (
                 <div className="confirmation-modal">
                     <p>Вы уверены, что хотите удалить подкатегорию и связанные товары?</p>
-                    <button onClick={handleConfirmRemove}>Да</button>
-                    <button onClick={handleCancelRemove}>Отмена</button>
+                    <button onClick={handleConfirmRemove} className="btn btn-primary">Да</button>
+                    <button onClick={handleCancelRemove} className="btn btn-secondary">Отмена</button>
                 </div>
             )}
             {notification.show && (

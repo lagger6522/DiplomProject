@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './style.css';
+import './ProductModalContentAdd.css';
 
 const SubcategoryModalContentEdit = () => {
     const [subcategoryName, setSubcategoryName] = useState('');
@@ -9,7 +9,7 @@ const SubcategoryModalContentEdit = () => {
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
-        sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
+        sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
@@ -56,7 +56,7 @@ const SubcategoryModalContentEdit = () => {
                 setNotification({ show: true, message: 'Подкатегория успешно обновлена!', type: 'success' });
                 setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
 
-                sendRequest('/api/Subcategories/GetSubcategories', 'GET', null, null)
+                sendRequest('/api/Subcategories/GetSubcategories', 'GET')
                     .then(updatedSubcategories => {
                         setSubcategories(updatedSubcategories);
                     })
@@ -73,27 +73,35 @@ const SubcategoryModalContentEdit = () => {
     };
 
     return (
-        <div className="align-column">
+        <div className="product-modal-content">
             <h3>Редактировать подкатегорию</h3>
-            <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
-            <select
-                id="selectedSubcategory"
-                value={selectedSubcategory ? selectedSubcategory.subcategoryId : ''}
-                onChange={(e) => handleSubcategoryChange(e.target.value)}
-            >
-                <option value="" disabled>Выберите подкатегорию</option>
-                {subcategories.map(subcategory => (
-                    <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>{subcategory.subcategoryName}</option>
-                ))}
-            </select>
-            <label htmlFor="subcategoryName">Новое название подкатегории:</label>
-            <input
-                type="text"
-                id="subcategoryName"
-                value={subcategoryName}
-                onChange={(e) => setSubcategoryName(e.target.value)}
-            />
-            <button onClick={handleSave}>Сохранить</button>
+            <div className="form-group">
+                <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
+                <select
+                    id="selectedSubcategory"
+                    value={selectedSubcategory ? selectedSubcategory.subcategoryId : ''}
+                    onChange={(e) => handleSubcategoryChange(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="" disabled>Выберите подкатегорию</option>
+                    {subcategories.map(subcategory => (
+                        <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>{subcategory.subcategoryName}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <label htmlFor="subcategoryName">Новое название подкатегории:</label>
+                <input
+                    type="text"
+                    id="subcategoryName"
+                    value={subcategoryName}
+                    onChange={(e) => setSubcategoryName(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
+            </div>
 
             {notification.show && (
                 <div className={`notification ${notification.type}`}>

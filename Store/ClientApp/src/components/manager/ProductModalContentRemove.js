@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './ProductModalContentRemove.css';
+import './ProductModalContentAdd.css';
 
 const ProductModalContentRemove = () => {
     const [subcategories, setSubcategories] = useState([]);
@@ -88,8 +88,45 @@ const ProductModalContentRemove = () => {
     };
 
     return (
-        <div className="product-modal-content-remove">
-            <h3>Удалить товар</h3>
+        <div className="product-modal-content">
+            <h3>Удалить товар</h3>            
+            <div className="form-group">
+                <label htmlFor="subcategory">Выберите подкатегорию:</label>
+                <select
+                    id="subcategory"
+                    value={selectedSubcategoryId}
+                    onChange={(e) => handleSubcategoryChange(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="">Выберите подкатегорию</option>
+                    {subcategories.map(subcategory => (
+                        <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>
+                            {subcategory.subcategoryName}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="product">Выберите товар:</label>
+                <select
+                    id="product"
+                    value={selectedProductId}
+                    onChange={(e) => handleProductChange(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="">Выберите товар</option>
+                    {products.map(product => (
+                        <option key={product.productId} value={product.productId}>
+                            {product.productName}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="form-group">
+                <button onClick={handleRemove} className="btn btn-primary">Удалить</button>
+            </div>
 
             {notification.show && (
                 <div className={`notification ${notification.type}`}>
@@ -97,42 +134,11 @@ const ProductModalContentRemove = () => {
                 </div>
             )}
 
-            <label htmlFor="subcategory">Выберите подкатегорию:</label>
-            <select
-                id="subcategory"
-                value={selectedSubcategoryId}
-                onChange={(e) => handleSubcategoryChange(e.target.value)}
-                className="form-control"
-            >
-                <option value="">Выберите подкатегорию</option>
-                {subcategories.map(subcategory => (
-                    <option key={subcategory.subcategoryId} value={subcategory.subcategoryId}>
-                        {subcategory.subcategoryName}
-                    </option>
-                ))}
-            </select>
-
-            <label htmlFor="product">Выберите товар:</label>
-            <select
-                id="product"
-                value={selectedProductId}
-                onChange={(e) => handleProductChange(e.target.value)}
-                className="form-control"
-            >
-                <option value="">Выберите товар</option>
-                {products.map(product => (
-                    <option key={product.productId} value={product.productId}>
-                        {product.productName}
-                    </option>
-                ))}
-            </select>
-
-            <button onClick={handleRemove}>Удалить</button>
             {showConfirmation && (
                 <div className="confirmation-modal">
                     <p>Вы уверены, что хотите удалить товар?</p>
-                    <button onClick={handleConfirmRemove}>Да</button>
-                    <button onClick={handleCancelRemove}>Отмена</button>
+                    <button onClick={handleConfirmRemove} className="btn btn-primary">Да</button>
+                    <button onClick={handleCancelRemove} className="btn btn-secondary">Отмена</button>
                 </div>
             )}
         </div>

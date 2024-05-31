@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './SubcategoryModalContent.css';
+import './ProductModalContentAdd.css';
 
 const SubcategoryModalContentAdd = () => {
     const [subcategoryName, setSubcategoryName] = useState('');
@@ -49,29 +49,37 @@ const SubcategoryModalContentAdd = () => {
     };
 
     return (
-        <div className="select-sub">
+        <div className="product-modal-content">
             <h3>Добавить подкатегорию</h3>
-            <label htmlFor="parentCategory">Родительская категория:</label>
-            <select
-                id="parentCategory"
-                value={parentCategoryId}
-                onChange={(e) => setParentCategoryId(Number(e.target.value))}
-            >
-                <option value="">Выберите категорию</option>
-                {categories.map(category => (
-                    <option key={category.categoryId} value={category.categoryId}>
-                        {category.categoryName}
-                    </option>
-                ))}
-            </select>
-            <label htmlFor="subcategoryName">Название подкатегории:</label>
-            <input
-                type="text"
-                id="subcategoryName"
-                value={subcategoryName}
-                onChange={(e) => setSubcategoryName(e.target.value)}
-            />
-            <button onClick={handleSave}>Сохранить</button>
+            <div className="form-group">
+                <label htmlFor="parentCategory">Родительская категория:</label>
+                <select
+                    id="parentCategory"
+                    value={parentCategoryId}
+                    onChange={(e) => setParentCategoryId(Number(e.target.value))}
+                    className="form-control"
+                >
+                    <option value="">Выберите категорию</option>
+                    {categories.map(category => (
+                        <option key={category.categoryId} value={category.categoryId}>
+                            {category.categoryName}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <label htmlFor="subcategoryName">Название подкатегории:</label>
+                <input
+                    type="text"
+                    id="subcategoryName"
+                    value={subcategoryName}
+                    onChange={(e) => setSubcategoryName(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
+            </div>
 
             {notification.show && (
                 <div className={`notification ${notification.type}`}>
