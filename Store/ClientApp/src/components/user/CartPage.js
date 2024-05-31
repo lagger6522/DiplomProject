@@ -22,15 +22,10 @@ const CartPage = () => {
                     console.error('Ошибка при загрузке товаров в корзине:', error);
                 });
         }
-    }, [userId]); 
+    }, [userId]);
 
     const handleQuantityChange = async (productId, newQuantity) => {
         try {
-            if (newQuantity < 1) {
-                console.warn('Количество товара не может быть меньше 0');
-                return;
-            }
-
             await sendRequest(`/api/Cart/UpdateCartItemQuantity`, 'POST', {
                 userId: userId,
                 productId: productId,
@@ -77,11 +72,6 @@ const CartPage = () => {
     return (
         <div className="cart-page">
             <h2>Корзина</h2>
-            {!userId && (
-                <div className="notification">
-                    <p>Для просмотра корзины необходимо войти в систему.</p>
-                </div>
-            )}
             {userId && !hasItems && (
                 <div className="notification">
                     <p>Ваша корзина пуста.</p>
@@ -114,3 +104,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+ 
