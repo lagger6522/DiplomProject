@@ -4,6 +4,7 @@ import './OrderHistory.css';
 
 const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         fetchOrders();
@@ -23,7 +24,7 @@ const OrderHistory = () => {
         const statusOrder = {
             'Заказ обрабатывается': 1,
             'Заказ готов к отправке': 2,
-            'Заказ доставлен': 3,
+            'Заказ выполнен': 3,
         };
 
         return orders.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
@@ -37,27 +38,38 @@ const OrderHistory = () => {
                     order.orderId === orderId ? { ...order, status: newStatus } : order
                 ))
             );
-            console.log(`Changed status of order ${orderId} to ${newStatus}`);
+            setNotification({ show: true, message: `Статус заказа ${orderId} изменен на "${newStatus}"`, type: 'success' });
         } catch (error) {
             console.error('Error updating order status:', error);
+            setNotification({ show: true, message: 'Ошибка при обновлении статуса заказа.', type: 'error' });
+        } finally {
+            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
         }
     };
 
     return (
-        <div>
+        <div className="order-history">
             <h1>История заказов</h1>
-            <ul>
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
+
+            <ul className="order-list">
                 {orders.map(order => (
-                    <li key={order.orderId}>
-                        <p>Order ID: {order.orderId}</p>
-                        <p>Order Date: {order.orderDate}</p>
-                        <p>Delivery Address: {order.deliveryAddress}</p>
-                        <p>Status: {order.status}</p>
-                        <label>
-                            Change Status:
+                    <li key={order.orderId} className="order-item">
+                        <p>Идентификатор заказа: {order.orderId}</p>
+                        <p>Дата заказа: {new Date(order.orderDate).toLocaleDateString()}</p>
+                        <p>Адрес доставки: {order.deliveryAddress}</p>
+                        <p>Статус: {order.status}</p>
+                        <label className="status-change">
+                            Изменить статус:
                             <select
                                 value={order.status}
                                 onChange={(e) => handleStatusChange(order.orderId, e.target.value)}
+                                className="form-control"
                             >
                                 <option value="Заказ обрабатывается">Заказ обрабатывается</option>
                                 <option value="Заказ готов к отправке">Заказ готов к отправке</option>
