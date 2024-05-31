@@ -36,6 +36,11 @@ const CategoryModalContentAdd = () => {
         <div className="product-modal-content">
             <div className="form-group">
                 <h3>Добавить категорию</h3>
+                {notification.show && (
+                    <div className={`notification ${notification.type}`}>
+                        {notification.message}
+                    </div>
+                )}
                 <label htmlFor="categoryName">Название категории:</label>
                 <input
                     type="text"
@@ -48,11 +53,7 @@ const CategoryModalContentAdd = () => {
             <div className="form-group">
                 <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
             </div>
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
         </div>
     );
 };

@@ -59,6 +59,11 @@ const SubcategoryModalContentRemove = () => {
     return (
         <div className="product-modal-content">
             <h3>Удалить подкатегорию и связанные товары</h3>
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             <div className="form-group">
                 <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
                 <select
@@ -83,11 +88,7 @@ const SubcategoryModalContentRemove = () => {
                     <button onClick={handleCancelRemove} className="btn btn-secondary">Отмена</button>
                 </div>
             )}
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
         </div>
     );
 };

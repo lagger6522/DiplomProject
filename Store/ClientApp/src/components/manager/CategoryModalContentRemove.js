@@ -63,6 +63,11 @@ const CategoryModalContentRemove = () => {
     return (
         <div className="product-modal-content">
             <div className="form-group">
+                {notification.show && (
+                    <div className={`notification ${notification.type}`}>
+                        {notification.message}
+                    </div>
+                )}
                 <h3>Удалить категорию и связанные элементы</h3>
                 <label htmlFor="selectedCategory">Выберите категорию:</label>
                 <select
@@ -89,11 +94,7 @@ const CategoryModalContentRemove = () => {
                 </div>
             )}
 
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
         </div>
     );
 };

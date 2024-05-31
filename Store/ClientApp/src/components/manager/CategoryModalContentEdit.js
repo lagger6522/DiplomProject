@@ -75,6 +75,11 @@ const CategoryModalContentEdit = () => {
         <div className="product-modal-content">
             <div className="form-group">
                 <h3>Редактировать категорию</h3>
+                {notification.show && (
+                    <div className={`notification ${notification.type}`}>
+                        {notification.message}
+                    </div>
+                )}
                 <label htmlFor="selectedCategory">Выберите категорию:</label>
                 <select
                     id="selectedCategory"
@@ -101,11 +106,7 @@ const CategoryModalContentEdit = () => {
             <div className="form-group">
                 <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
             </div>
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
         </div>
     );
 };

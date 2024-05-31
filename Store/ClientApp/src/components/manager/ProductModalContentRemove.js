@@ -89,7 +89,12 @@ const ProductModalContentRemove = () => {
 
     return (
         <div className="product-modal-content">
-            <h3>Удалить товар</h3>            
+            <h3>Удалить товар</h3>      
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             <div className="form-group">
                 <label htmlFor="subcategory">Выберите подкатегорию:</label>
                 <select
@@ -128,11 +133,7 @@ const ProductModalContentRemove = () => {
                 <button onClick={handleRemove} className="btn btn-primary">Удалить</button>
             </div>
 
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
 
             {showConfirmation && (
                 <div className="confirmation-modal">

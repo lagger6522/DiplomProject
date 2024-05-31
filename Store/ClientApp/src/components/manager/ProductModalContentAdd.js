@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import sendRequest from '../SendRequest';
 import './ProductModalContentAdd.css';
 
@@ -15,14 +15,15 @@ const ProductModalContentAdd = () => {
     const [newAttributeName, setNewAttributeName] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
+    const notificationRef = useRef(null);
+
     useEffect(() => {
         sendRequest('/api/Subcategories/GetSubcategories', 'GET')
             .then(response => {
                 setSubcategories(response);
             })
             .catch(error => {
-                setNotification({ show: true, message: 'Ошибка при загрузке подкатегорий: ' + error.message, type: 'error' });
-                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+                showErrorNotification('Ошибка при загрузке подкатегорий: ' + error.message);
             });
 
         sendRequest('/api/Products/GetAttributes', 'GET')
@@ -30,10 +31,15 @@ const ProductModalContentAdd = () => {
                 setAttributes(response);
             })
             .catch(error => {
-                setNotification({ show: true, message: 'Ошибка при загрузке характеристик: ' + error.message, type: 'error' });
-                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+                showErrorNotification('Ошибка при загрузке характеристик: ' + error.message);
             });
     }, []);
+
+    const showErrorNotification = (message) => {
+        setNotification({ show: true, message, type: 'error' });
+        setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+        setTimeout(() => notificationRef.current.scrollIntoView({ behavior: 'smooth' }), 100);
+    };
 
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
@@ -60,44 +66,37 @@ const ProductModalContentAdd = () => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 409) {
-                        setNotification({ show: true, message: error.response.data, type: 'error' });
+                        showErrorNotification(error.response.data);
                     } else {
-                        setNotification({ show: true, message: 'Ошибка при создании атрибута: ' + error.message, type: 'error' });
+                        showErrorNotification('Ошибка при создании атрибута: ' + error.message);
                     }
-                    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 });
         }
     };
 
     const validateForm = () => {
         if (!productName.trim()) {
-            setNotification({ show: true, message: 'Название товара не может быть пустым!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Название товара не может быть пустым!');
             return false;
         }
         if (!description.trim()) {
-            setNotification({ show: true, message: 'Описание не может быть пустым!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Описание не может быть пустым!');
             return false;
         }
         if (!selectedImage) {
-            setNotification({ show: true, message: 'Необходимо изображение!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Необходимо изображение!');
             return false;
         }
         if (!price.trim() || isNaN(price)) {
-            setNotification({ show: true, message: 'Цена должна быть числовым значением!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Цена введена не корректно!');
             return false;
         }
         if (!selectedSubcategoryId) {
-            setNotification({ show: true, message: 'Подкатегория должна быть выбрана!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Подкатегория должна быть выбрана!');
             return false;
         }
         if (!Object.values(selectedAttributes).some(value => value.trim())) {
-            setNotification({ show: true, message: 'Необходимо ввести хотя бы один атрибут!', type: 'error' });
-            setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+            showErrorNotification('Необходимо ввести хотя бы один атрибут!');
             return false;
         }
         return true;
@@ -132,8 +131,7 @@ const ProductModalContentAdd = () => {
                     setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
                 })
                 .catch(error => {
-                    setNotification({ show: true, message: 'Ошибка при создании товара: ' + error.message, type: 'error' });
-                    setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+                    showErrorNotification('Ошибка при создании товара: ' + error.message);
                     console.log('Ошибка при создании товара:', error);
                 });
         }
@@ -143,6 +141,11 @@ const ProductModalContentAdd = () => {
         <div className="product-modal-content">
             <div className="form-group">
                 <h3>Добавить товар</h3>
+                {notification.show && (
+                    <div ref={notificationRef} className={`notification ${notification.type}`}>
+                        {notification.message}
+                    </div>
+                )}
                 <label htmlFor="productName">Название товара:</label>
                 <input
                     type="text"
@@ -229,11 +232,7 @@ const ProductModalContentAdd = () => {
             <div className="form-group">
                 <button onClick={uploadImage} className="btn btn-primary">Добавить товар</button>
             </div>
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+
         </div>
     );
 };

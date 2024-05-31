@@ -75,6 +75,12 @@ const SubcategoryModalContentEdit = () => {
     return (
         <div className="product-modal-content">
             <h3>Редактировать подкатегорию</h3>
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             <div className="form-group">
                 <label htmlFor="selectedSubcategory">Выберите подкатегорию:</label>
                 <select
@@ -103,11 +109,6 @@ const SubcategoryModalContentEdit = () => {
                 <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
             </div>
 
-            {notification.show && (
-                <div className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
         </div>
     );
 };

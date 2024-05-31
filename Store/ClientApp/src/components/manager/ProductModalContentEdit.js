@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import sendRequest from '../SendRequest';
 import './ProductModalContentEdit.css';
 
@@ -17,6 +17,8 @@ const ProductModalContentEdit = () => {
     const [newAttributeName, setNewAttributeName] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
+    const notificationRef = useRef(null);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,6 +34,12 @@ const ProductModalContentEdit = () => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (notification.show) {
+            notificationRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [notification]);
 
     const handleSubcategoryChange = async (selectedSubcategoryId) => {
         setSelectedSubcategoryId(selectedSubcategoryId);
@@ -170,6 +178,11 @@ const ProductModalContentEdit = () => {
     return (
         <div className="product-modal-content">
             <h3>Редактировать товар</h3>
+            {notification.show && (
+                <div ref={notificationRef} className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             <label htmlFor="subcategory">Выберите подкатегорию:</label>
             <select
                 id="subcategory"
@@ -248,7 +261,7 @@ const ProductModalContentEdit = () => {
                             id="price"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            className={`form-control ${(!price || isNaN(parseFloat(price))) ? 'is-invalid' : ''}`}
+                            className="form-control"
                         />
                     </div>
 
@@ -281,11 +294,7 @@ const ProductModalContentEdit = () => {
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
                     </button>
-                    {notification.show && (
-                        <div className={`notification ${notification.type}`}>
-                            {notification.message}
-                        </div>
-                    )}
+
                 </div>
             )}
         </div>
