@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import sendRequest from '../SendRequest';
-import './style.css';
+import './ProductModalContentAdd.css';
 
 const CategoryModalContentAdd = () => {
     const [categoryName, setCategoryName] = useState('');
@@ -33,16 +33,21 @@ const CategoryModalContentAdd = () => {
     };
 
     return (
-        <div>
-            <h3>Добавить категорию</h3>
-            <label htmlFor="categoryName">Название категории:</label>
-            <input
-                type="text"
-                id="categoryName"
-                value={categoryName}
-                onChange={(e) => setCategoryName(e.target.value)}
-            />
-            <button onClick={handleSave}>Сохранить</button>
+        <div className="product-modal-content">
+            <div className="form-group">
+                <h3>Добавить категорию</h3>
+                <label htmlFor="categoryName">Название категории:</label>
+                <input
+                    type="text"
+                    id="categoryName"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <button onClick={handleSave} className="btn btn-primary">Сохранить</button>
+            </div>
             {notification.show && (
                 <div className={`notification ${notification.type}`}>
                     {notification.message}

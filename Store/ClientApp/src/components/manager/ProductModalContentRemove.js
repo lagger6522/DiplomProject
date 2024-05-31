@@ -62,7 +62,7 @@ const ProductModalContentRemove = () => {
         sendRequest(`/api/Products/HideProduct`, 'POST', null, { productId: selectedProductId })
             .then(response => {
                 console.log('Товар успешно скрыт:', response);
-                setNotification({ show: true, message: 'Товар успешно скрыт!', type: 'success' });
+                setNotification({ show: true, message: 'Товар успешно удален!', type: 'success' });
                 setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
 
                 sendRequest(`/api/Products/GetProductsBySubcategory`, 'GET', null, { subcategoryId: selectedSubcategoryId })
@@ -75,8 +75,8 @@ const ProductModalContentRemove = () => {
                     });
             })
             .catch(error => {
-                console.error('Ошибка при скрытии товара:', error);
-                setNotification({ show: true, message: 'Ошибка при скрытии товара!', type: 'error' });
+                console.error('Ошибка при удалении товара:', error);
+                setNotification({ show: true, message: 'Ошибка при удалении товара!', type: 'error' });
                 setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
 
@@ -102,7 +102,7 @@ const ProductModalContentRemove = () => {
                 id="subcategory"
                 value={selectedSubcategoryId}
                 onChange={(e) => handleSubcategoryChange(e.target.value)}
-                className={`form-control ${!selectedSubcategoryId ? 'is-invalid' : ''}`}
+                className="form-control"
             >
                 <option value="">Выберите подкатегорию</option>
                 {subcategories.map(subcategory => (
@@ -117,7 +117,7 @@ const ProductModalContentRemove = () => {
                 id="product"
                 value={selectedProductId}
                 onChange={(e) => handleProductChange(e.target.value)}
-                className={`form-control ${!selectedProductId ? 'is-invalid' : ''}`}
+                className="form-control"
             >
                 <option value="">Выберите товар</option>
                 {products.map(product => (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
-import './style.css';
+import './ProductModalContentAdd.css';
 
 const CategoryModalContentRemove = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -16,7 +16,7 @@ const CategoryModalContentRemove = () => {
             .catch(error => {
                 console.error('Ошибка при загрузке категорий:', error);
             });
-    }, [setCategories]);
+    }, []);
 
     const handleCategoryChange = (selectedCategoryId) => {
         const category = categories.find(category => category.categoryId === parseInt(selectedCategoryId, 10));
@@ -61,26 +61,31 @@ const CategoryModalContentRemove = () => {
     };
 
     return (
-        <div>
-            <h3>Удалить категорию и связанные элементы</h3>
-            <label htmlFor="selectedCategory">Выберите категорию:</label>
-            <select
-                id="selectedCategory"
-                value={selectedCategory ? selectedCategory.categoryId : ''}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-            >
-                <option value="" disabled>Выберите категорию</option>
-                {categories.map(category => (
-                    <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
-                ))}
-            </select>
-            <button onClick={handleRemove}>Удалить</button>
+        <div className="product-modal-content">
+            <div className="form-group">
+                <h3>Удалить категорию и связанные элементы</h3>
+                <label htmlFor="selectedCategory">Выберите категорию:</label>
+                <select
+                    id="selectedCategory"
+                    value={selectedCategory ? selectedCategory.categoryId : ''}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
+                    className="form-control"
+                >
+                    <option value="" disabled>Выберите категорию</option>
+                    {categories.map(category => (
+                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="form-group">
+                <button onClick={handleRemove} className="btn btn-primary">Удалить</button>
+            </div>
 
             {showConfirmation && (
                 <div className="confirmation-modal">
                     <p>Вы уверены, что хотите удалить категорию и связанные элементы?</p>
-                    <button onClick={handleConfirmRemove}>Да</button>
-                    <button onClick={handleCancelRemove}>Отмена</button>
+                    <button onClick={handleConfirmRemove} className="btn btn-primary">Да</button>
+                    <button onClick={handleCancelRemove} className="btn btn-secondary">Отмена</button>
                 </div>
             )}
 
