@@ -26,6 +26,39 @@ namespace Store.controllers
 		}
 
 		[HttpPost]
+		public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			var user = await _context.Users.FindAsync(model.UserId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			if (user.Email != model.Email)
+			{
+				var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+				if (existingUser != null)
+				{
+					return BadRequest(new { message = "Этот email уже используется другим пользователем." });
+				}
+			}
+
+			user.Username = model.UserName;
+			user.Email = model.Email;
+			user.Number = model.Number;
+
+			_context.Users.Update(user);
+			await _context.SaveChangesAsync();
+
+			return Ok();
+		}
+
+		[HttpPost]
 		public IActionResult MakeManager(int userId)
 		{
 			try
@@ -273,6 +306,34 @@ namespace Store.controllers
 			await _context.SaveChangesAsync();
 
 			return Json(new { message = "Регистрация успешна." });
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			var user = await _context.Users.FindAsync(model.UserID);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			var oldPasswordHash = HashPassword(model.OldPassword);
+			if (user.Password != oldPasswordHash)
+			{
+				return BadRequest(new { message = "Неверный старый пароль." });
+			}
+
+			user.Password = HashPassword(model.NewPassword);
+
+			_context.Users.Update(user);
+			await _context.SaveChangesAsync();
+
+			return Ok();
 		}
 
 		public string HashPassword(string password)
