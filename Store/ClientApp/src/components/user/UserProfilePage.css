@@ -1,19 +1,18 @@
 ﻿.user-profile-page {
-    padding-top: 100px;
+    padding-top: 9vw;
+    padding-left: 18vw;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
 .user-profile {
-    width: 22vw;
+    width: 28vw;
     padding: 20px;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 8px;
-    margin-bottom: 20px;
 }
 
     .user-profile h2 {
@@ -87,4 +86,45 @@
         background-color: #f8d7da;
         color: #721c24;
         border: 1px solid #f5c6cb;
+    }
+
+.button-group .btn {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.button-group .btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+    .button-group .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    .button-group .btn-success:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.4);
+    }
+
+.button-group .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+    .button-group .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: scale(1.05);
+    }
+
+    .button-group .btn-secondary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.4);
     }
