@@ -14,6 +14,7 @@ const ProductModalContentAdd = () => {
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [newAttributeName, setNewAttributeName] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+    const [lastSelectedAttribute, setLastSelectedAttribute] = useState(null);
 
     const notificationRef = useRef(null);
 
@@ -74,6 +75,24 @@ const ProductModalContentAdd = () => {
         }
     };
 
+    const handleSelectAttribute = (e) => {
+        const attributeId = e.target.value;
+
+        if (lastSelectedAttribute && selectedAttributes[lastSelectedAttribute] !== undefined && !selectedAttributes[lastSelectedAttribute].trim()) {
+            const updatedSelectedAttributes = { ...selectedAttributes };
+            delete updatedSelectedAttributes[lastSelectedAttribute];
+            setSelectedAttributes(updatedSelectedAttributes);
+        }
+
+        if (attributeId && !selectedAttributes[attributeId]) {
+            setSelectedAttributes({ ...selectedAttributes, [attributeId]: '' });
+            setLastSelectedAttribute(attributeId);
+        } else {
+            setLastSelectedAttribute(null);
+        }
+    };
+
+
     const validateForm = () => {
         if (!productName.trim()) {
             showErrorNotification('Название товара не может быть пустым!');
@@ -120,10 +139,6 @@ const ProductModalContentAdd = () => {
                 }
             });
 
-            const formDataPreview = {};
-            form.forEach((value, key) => {
-                formDataPreview[key] = value;
-            });
             sendRequest("/api/Products/CreateProduct", "POST", form, { price })
                 .then(response => {
                     console.log('Товар успешно создан:', response);
@@ -136,6 +151,12 @@ const ProductModalContentAdd = () => {
                 });
         }
     };
+
+    // Create a mapping object for attributes
+    const attributeMapping = {};
+    attributes.forEach(attribute => {
+        attributeMapping[attribute.attributeId] = attribute.attributeName;
+    });
 
     return (
         <div className="product-modal-content">
@@ -204,35 +225,54 @@ const ProductModalContentAdd = () => {
                 </select>
             </div>
             <div className="form-group">
-                <label>Характеристики:</label>
-                {attributes.map(attribute => (
-                    <div key={attribute.attributeId} className="attribute-group">
-                        <label htmlFor={`attribute-${attribute.attributeId}`}>{attribute.attributeName}:</label>
+                <label htmlFor="attributes">Добавить характеристику:</label>
+                <select id="attributes" onChange={handleSelectAttribute} className="form-control">
+                    <option value="">Выберите характеристику</option>
+                    {attributes.map(attribute => (
+                        <option key={attribute.attributeId} value={attribute.attributeId}>
+                            {attribute.attributeName}
+                        </option>
+                    ))}
+                </select>
+                {lastSelectedAttribute && (
+                    <div className="attribute-group">
+                        <label htmlFor={`attribute-${lastSelectedAttribute}`}>{attributeMapping[lastSelectedAttribute]}:</label>
                         <input
                             type="text"
-                            id={`attribute-${attribute.attributeId}`}
-                            value={selectedAttributes[attribute.attributeId] || ''}
-                            onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}
+                            id={`attribute-${lastSelectedAttribute}`}
+                            value={selectedAttributes[lastSelectedAttribute]}
+                            onChange={(e) => handleAttributeChange(lastSelectedAttribute, e.target.value)}
+                            className="form-control"
+                        />
+                    </div>
+                )}
+                {Object.keys(selectedAttributes).filter(attributeId => attributeId !== lastSelectedAttribute && selectedAttributes[attributeId].trim()).map(attributeId => (
+                    <div key={attributeId} className="attribute-group">
+                        <label htmlFor={`attribute-${attributeId}`}>{attributeMapping[attributeId]}:</label>
+                        <input
+                            type="text"
+                            id={`attribute-${attributeId}`}
+                            value={selectedAttributes[attributeId]}
+                            onChange={(e) => handleAttributeChange(attributeId, e.target.value)}
                             className="form-control"
                         />
                     </div>
                 ))}
-                <div className="form-group">
-                    <label htmlFor="newAttributeName">Новый атрибут:</label>
-                    <input
-                        type="text"
-                        id="newAttributeName"
-                        value={newAttributeName}
-                        onChange={(e) => setNewAttributeName(e.target.value)}
-                        className="form-control"
-                    />
-                    <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
-                </div>
+            </div>
+            <div className="form-group">
+                <label htmlFor="newAttributeName">Новый атрибут:</label>
+                <input
+                    type="text"
+                    id="newAttributeName"
+                    value={newAttributeName}
+                    onChange={(e) => setNewAttributeName(e.target.value)}
+                    className="form-control"
+                />
+                <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
             </div>
             <div className="form-group">
                 <button onClick={uploadImage} className="btn btn-primary">Добавить товар</button>
             </div>
-
         </div>
     );
 };

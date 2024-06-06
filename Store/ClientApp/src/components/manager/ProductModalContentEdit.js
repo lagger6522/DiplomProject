@@ -16,6 +16,7 @@ const ProductModalContentEdit = () => {
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [newAttributeName, setNewAttributeName] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+    const [lastSelectedAttribute, setLastSelectedAttribute] = useState(null);
 
     const notificationRef = useRef(null);
 
@@ -106,6 +107,21 @@ const ProductModalContentEdit = () => {
         }
     };
 
+    const handleSelectAttribute = (e) => {
+        const attributeId = e.target.value;
+
+        if (lastSelectedAttribute && !selectedAttributes[lastSelectedAttribute]?.trim()) {
+            const updatedSelectedAttributes = { ...selectedAttributes };
+            delete updatedSelectedAttributes[lastSelectedAttribute];
+            setSelectedAttributes(updatedSelectedAttributes);
+        }
+
+        if (attributeId && !selectedAttributes[attributeId]) {
+            setSelectedAttributes({ ...selectedAttributes, [attributeId]: '' });
+            setLastSelectedAttribute(attributeId);
+        }
+    };
+
     const validateForm = () => {
         if (!productName.trim()) {
             setNotification({ show: true, message: 'Название товара не может быть пустым!', type: 'error' });
@@ -174,6 +190,12 @@ const ProductModalContentEdit = () => {
             console.error('Ошибка при обновлении товара:', error);
         }
     };
+
+    // Create a mapping object for attributes
+    const attributeMapping = {};
+    attributes.forEach(attribute => {
+        attributeMapping[attribute.attributeId] = attribute.attributeName;
+    });
 
     return (
         <div className="product-modal-content">
@@ -264,17 +286,29 @@ const ProductModalContentEdit = () => {
                             className="form-control"
                         />
                     </div>
-
+                    <div className="form-group">
+                        <label htmlFor="selectAttribute">Добавить атрибут:</label>
+                        <select id="selectAttribute" onChange={handleSelectAttribute} className="form-control">
+                            <option value="">Выберите атрибут</option>
+                            {attributes.map(attribute => (
+                                <option key={attribute.attributeId} value={attribute.attributeId}>
+                                    {attribute.attributeName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     <div className="form-group">
                         <label>Характеристики:</label>
-                        {attributes.map(attribute => (
-                            <div key={attribute.attributeId} className="attribute-group">
-                                <label htmlFor={`attribute-${attribute.attributeId}`}>{attribute.attributeName}:</label>
+                        {Object.entries(selectedAttributes).map(([attributeId, value]) => (
+                            <div key={attributeId} className="attribute-group">
+                                <label htmlFor={`attribute-${attributeId}`}>
+                                    {attributeMapping[attributeId]}:
+                                </label>
                                 <input
                                     type="text"
-                                    id={`attribute-${attribute.attributeId}`}
-                                    value={selectedAttributes[attribute.attributeId] || ''}
-                                    onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}
+                                    id={`attribute-${attributeId}`}
+                                    value={value || ''}
+                                    onChange={(e) => handleAttributeChange(attributeId, e.target.value)}
                                     className="form-control"
                                 />
                             </div>
@@ -289,7 +323,7 @@ const ProductModalContentEdit = () => {
                                 className="form-control"
                             />
                             <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
-                        </div>
+                        </div>                        
                     </div>
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
