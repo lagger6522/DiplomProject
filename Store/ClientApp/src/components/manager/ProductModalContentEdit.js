@@ -135,7 +135,8 @@ const ProductModalContentEdit = () => {
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
         }
-        if (!price.trim() || isNaN(price)) {
+        const priceStr = String(price).trim();
+        if (!priceStr || isNaN(priceStr)) {
             setNotification({ show: true, message: 'Цена должна быть числовым значением!', type: 'error' });
             setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             return false;
@@ -157,6 +158,7 @@ const ProductModalContentEdit = () => {
         }
         return true;
     };
+
 
     const handleSave = async () => {
         if (!validateForm()) {
