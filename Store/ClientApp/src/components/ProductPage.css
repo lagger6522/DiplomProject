@@ -47,7 +47,6 @@ select {
 .filter-row {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 10px;
     gap: 10px;
 }
 
@@ -60,6 +59,10 @@ select {
         display: block;
         font-weight: bold;
         color: #343a40;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 180px;
     }
 
     .filter-item select {

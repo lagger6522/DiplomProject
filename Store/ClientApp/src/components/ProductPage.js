@@ -138,7 +138,7 @@ const ProductPage = () => {
 
     const renderAttributes = () => {
         const attributeChunks = [];
-        const attributesPerRow = 6;
+        const attributesPerRow = 7;
         for (let i = 0; i < attributes.length; i += attributesPerRow) {
             attributeChunks.push(attributes.slice(i, i + attributesPerRow));
         }
@@ -153,7 +153,7 @@ const ProductPage = () => {
                         <div key={index} className="filter-row">
                             {chunk.map(attribute => (
                                 <div key={attribute.attributeId} className="filter-item">
-                                    <label>{attribute.attributeName}:</label>
+                                    <label title={attribute.attributeName}>{attribute.attributeName}:</label>
                                     <select onChange={(e) => handleAttributeChange(attribute.attributeId, e.target.value)}>
                                         <option value="">Все</option>
                                         {attribute.values.map(value => (
@@ -175,6 +175,7 @@ const ProductPage = () => {
             </div>
         );
     };
+
 
     return (
         <div className="product-page">
