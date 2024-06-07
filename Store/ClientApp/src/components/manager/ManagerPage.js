@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import './AdminPage.css';
-import Modal from './Modal';
 import CategoryModalContentAdd from './CategoryModalContentAdd';
 import CategoryModalContentRemove from './CategoryModalContentRemove';
 import CategoryModalContentEdit from './CategoryModalContentEdit';
@@ -12,6 +10,8 @@ import ProductModalContentEdit from './ProductModalContentEdit';
 import ProductModalContentRemove from './ProductModalContentRemove';
 import OrderHistory from './OrderHistory';
 import CloseModal from './CloseModal';
+import './ManagerPage.css';
+import Modal from './Modal';
 
 const ManagerPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
