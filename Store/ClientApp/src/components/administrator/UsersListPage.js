@@ -118,19 +118,14 @@ const UsersListPage = () => {
                             <div><strong>Заблокирован:</strong> {user.isBanned ? 'Да' : 'Нет'}</div>
                         </div>
                         <div className="user-actions">
+                            <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
+                                {user.role === 'User' ? 'Сделать менеджером' : 'Убрать роль'}
+                            </button>
                             <button onClick={() => handleToggleUserStatus(user.userId, user.isBanned)}>
                                 {user.isBanned ? 'Разблокировать' : 'Заблокировать'}
                             </button>
-                            {user.role === 'User' ? (
-                                <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
-                                    Сделать менеджером
-                                </button>
-                            ) : (
-                                <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
-                                    Убрать роль
-                                </button>
-                            )}
                         </div>
+
                     </li>
                 ))}
             </ul>
