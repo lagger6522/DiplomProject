@@ -1,41 +1,80 @@
-.comments-modal-content-remove {
-    max-width: 600px;
+.comments-modal-content {
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-    .comments-modal-content-remove h2 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
+    .comments-modal-content h2 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
     }
 
-    .comments-modal-content-remove ul {
+    .comments-modal-content ul {
         list-style-type: none;
         padding: 0;
     }
 
-    .comments-modal-content-remove li {
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        padding: 10px;
-    }
+.comment-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-    .comments-modal-content-remove strong {
+    .comment-card strong {
         font-weight: bold;
+        color: #333;
     }
 
-    .comments-modal-content-remove div {
-        margin-bottom: 8px;
+    .comment-card div {
+        margin-bottom: 10px;
     }
 
-    .comments-modal-content-remove button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        cursor: pointer;
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.comments-modal-content .button-show,
+.comments-modal-content .button-hide,
+.comments-modal-content .button-ban,
+.comments-modal-content .button-unban {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+    .comments-modal-content .button-show:hover,
+    .comments-modal-content .button-hide:hover,
+    .comments-modal-content .button-ban:hover,
+    .comments-modal-content .button-unban:hover {
+        background-color: #0056b3;
     }
 
-        .comments-modal-content-remove button:hover {
-            background-color: #0056b3;
-        }
+.notification {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+    .notification.success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .notification.error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }

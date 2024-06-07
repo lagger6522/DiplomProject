@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sendRequest from '../SendRequest';
+import './UsersListPage.css';
 
 const UsersListPage = () => {
     const [users, setUsers] = useState([]);
@@ -75,54 +76,61 @@ const UsersListPage = () => {
     };
 
     return (
-        <div>
+        <div className="users-list-page">
             <h2>Список пользователей</h2>
             <input
                 type="text"
                 placeholder="Поиск по имени, почте или номеру телефона"
                 value={searchTerm}
                 onChange={handleSearch}
+                className="search-input"
             />
-            <div>
-                <label>
-                    Роль:
-                    <select value={filterRole} onChange={handleRoleFilterChange}>
-                        <option value="">Все</option>
-                        <option value="User">Пользователь</option>
-                        <option value="Manager">Менеджер</option>
-                    </select>
-                </label>
+            <div className="filters">
+                <div className="filter-item">
+                    <label>
+                        Роль:
+                        <select value={filterRole} onChange={handleRoleFilterChange}>
+                            <option value="">Все</option>
+                            <option value="User">Пользователь</option>
+                            <option value="Manager">Менеджер</option>
+                        </select>
+                    </label>
+                </div>
+                <div className="filter-item">
+                    <label>
+                        Заблокирован:
+                        <input
+                            type="checkbox"
+                            checked={filterIsBanned}
+                            onChange={handleIsBannedFilterChange}
+                        />
+                    </label>
+                </div>
             </div>
-            <div>
-                <label>
-                    Заблокирован:
-                    <input
-                        type="checkbox"
-                        checked={filterIsBanned}
-                        onChange={handleIsBannedFilterChange}
-                    />
-                </label>
-            </div>
-            <ul>
+            <ul className="users-list">
                 {searchResults.map(user => (
-                    <li key={user.userId}>
-                        <div>Имя: {user.username}</div>
-                        <div>Email: {user.email}</div>
-                        <div>Номер телефона: {user.number}</div>
-                        <div>Роль: {user.role}</div>
-                        <div>Заблокирован: {user.isBanned ? 'Да' : 'Нет'}</div>
-                        <button onClick={() => handleToggleUserStatus(user.userId, user.isBanned)}>
-                            {user.isBanned ? 'Разблокировать' : 'Заблокировать'}
-                        </button>
-                        {user.role === 'User' ? (
-                            <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
-                                Сделать менеджером
+                    <li key={user.userId} className="user-item">
+                        <div className="user-details">
+                            <div><strong>Имя:</strong> {user.username}</div>
+                            <div><strong>Email:</strong> {user.email}</div>
+                            <div><strong>Номер:</strong> {user.number}</div>
+                            <div><strong>Роль:</strong> {user.role}</div>
+                            <div><strong>Заблокирован:</strong> {user.isBanned ? 'Да' : 'Нет'}</div>
+                        </div>
+                        <div className="user-actions">
+                            <button onClick={() => handleToggleUserStatus(user.userId, user.isBanned)}>
+                                {user.isBanned ? 'Разблокировать' : 'Заблокировать'}
                             </button>
-                        ) : (
-                            <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
-                                Убрать роль
-                            </button>
-                        )}
+                            {user.role === 'User' ? (
+                                <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
+                                    Сделать менеджером
+                                </button>
+                            ) : (
+                                <button onClick={() => handleToggleUserRole(user.userId, user.role)}>
+                                    Убрать роль
+                                </button>
+                            )}
+                        </div>
                     </li>
                 ))}
             </ul>

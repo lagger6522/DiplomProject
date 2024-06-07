@@ -4,6 +4,7 @@ import './CommentsModalContent.css';
 
 const CommentsModalContent = () => {
     const [comments, setComments] = useState([]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     useEffect(() => {
         sendRequest('/api/Comments/GetAllComments', 'GET')
@@ -12,6 +13,8 @@ const CommentsModalContent = () => {
             })
             .catch(error => {
                 console.error('Ошибка при загрузке комментариев:', error);
+                setNotification({ show: true, message: 'Ошибка при загрузке комментариев: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     }, []);
 
@@ -27,9 +30,13 @@ const CommentsModalContent = () => {
                         comment.reviewId === reviewId ? { ...comment, isDeleted: isVisible } : comment
                     )
                 );
+                setNotification({ show: true, message: response.message, type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
                 console.error('Ошибка при изменении видимости комментария:', error);
+                setNotification({ show: true, message: 'Ошибка при изменении видимости комментария: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     };
 
@@ -42,9 +49,13 @@ const CommentsModalContent = () => {
                         comment.userId === userId ? { ...comment, isBanned: true } : comment
                     )
                 );
+                setNotification({ show: true, message: response.message, type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
                 console.error('Ошибка при блокировке пользователя:', error);
+                setNotification({ show: true, message: 'Ошибка при блокировке пользователя: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     };
 
@@ -57,19 +68,23 @@ const CommentsModalContent = () => {
                         comment.userId === userId ? { ...comment, isBanned: false } : comment
                     )
                 );
+                setNotification({ show: true, message: response.message, type: 'success' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             })
             .catch(error => {
                 console.error('Ошибка при разблокировке пользователя:', error);
+                setNotification({ show: true, message: 'Ошибка при разблокировке пользователя: ' + error.message, type: 'error' });
+                setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
             });
     };
 
-
     return (
-        <div className="comments-modal-content-remove">
+        <div className="comments-modal-content">
+            {notification.show && <div className={`notification ${notification.type}`}>{notification.message}</div>}
             <h2>Все комментарии</h2>
             <ul>
                 {comments.map(comment => (
-                    <li key={comment.reviewId}>
+                    <li key={comment.reviewId} className="comment-card">
                         <div>
                             <strong>Пользователь ID:</strong> {comment.userId}
                         </div>
@@ -88,27 +103,30 @@ const CommentsModalContent = () => {
                         <div>
                             <strong>Дата:</strong> {comment.reviewDate}
                         </div>
-                        {comment.isDeleted ? (
-                            <button onClick={() => handleToggleVisibility(comment.reviewId, false)}>
-                                Сделать видимым
-                            </button>
-                        ) : (
-                            <button onClick={() => handleToggleVisibility(comment.reviewId, true)}>
-                                Скрыть комментарий
-                            </button>
-                        )}
-                        <div>
-                            {comment.isBanned ? (
-                                <button onClick={() => handleUnbanUser(comment.userId)}>Разблокировать пользователя</button>
+                        <div className="actions">
+                            {comment.isDeleted ? (
+                                <button onClick={() => handleToggleVisibility(comment.reviewId, false)} className="button-show">
+                                    Сделать видимым
+                                </button>
                             ) : (
-                                <button onClick={() => handleBanUser(comment.userId)}>Заблокировать пользователя</button>
+                                <button onClick={() => handleToggleVisibility(comment.reviewId, true)} className="button-hide">
+                                    Скрыть комментарий
+                                </button>
+                            )}
+                            {comment.isBanned ? (
+                                <button onClick={() => handleUnbanUser(comment.userId)} className="button-unban">
+                                    Разблокировать пользователя
+                                </button>
+                            ) : (
+                                <button onClick={() => handleBanUser(comment.userId)} className="button-ban">
+                                    Заблокировать пользователя
+                                </button>
                             )}
                         </div>
                     </li>
                 ))}
             </ul>
         </div>
-
     );
 };
 
