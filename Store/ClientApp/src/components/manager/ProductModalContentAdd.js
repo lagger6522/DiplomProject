@@ -152,7 +152,6 @@ const ProductModalContentAdd = () => {
         }
     };
 
-    // Create a mapping object for attributes
     const attributeMapping = {};
     attributes.forEach(attribute => {
         attributeMapping[attribute.attributeId] = attribute.attributeName;
