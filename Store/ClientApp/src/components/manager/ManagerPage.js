@@ -38,6 +38,7 @@ const ManagerPage = () => {
                         <button onClick={() => openModal(<CategoryModalContentAdd />, 'add')}>Добавить</button>
                         <button onClick={() => openModal(<CategoryModalContentEdit />, 'edit')}>Редактировать</button>
                         <button onClick={() => openModal(<CategoryModalContentRemove />, 'delete')}>Удалить</button>
+                        <button onClick={closeModal} className="close-button">Закрыть</button>
                     </>
                 );
             case 'subcategory':
@@ -46,6 +47,7 @@ const ManagerPage = () => {
                         <button onClick={() => openModal(<SubcategoryModalContentAdd />, 'add')}>Добавить</button>
                         <button onClick={() => openModal(<SubcategoryModalContentEdit />, 'edit')}>Редактировать</button>
                         <button onClick={() => openModal(<SubcategoryModalContentRemove />, 'delete')}>Удалить</button>
+                        <button onClick={closeModal} className="close-button">Закрыть</button>
                     </>
                 );
             case 'products':
@@ -54,6 +56,7 @@ const ManagerPage = () => {
                         <button onClick={() => openModal(<ProductModalContentAdd />, 'add')}>Добавить</button>
                         <button onClick={() => openModal(<ProductModalContentEdit />, 'edit')}>Редактировать</button>
                         <button onClick={() => openModal(<ProductModalContentRemove />, 'delete')}>Удалить</button>
+                        <button onClick={closeModal} className="close-button">Закрыть</button>
                     </>
                 );
             default:
