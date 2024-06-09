@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import sendRequest from '../SendRequest';
+import './AttributesEditor.css';
 
 const AttributesEditor = () => {
     const [attributes, setAttributes] = useState([]);
     const [newAttributeName, setNewAttributeName] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
     const [editingAttribute, setEditingAttribute] = useState(null);
 
@@ -101,9 +103,28 @@ const AttributesEditor = () => {
         setEditingAttribute(attributeId);
     };
 
+    const filteredAttributes = attributes.filter(attribute =>
+        attribute.attributeName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="attributes-editor">
             <h2>Редактирование характеристик</h2>
+            {notification.show && (
+                <div ref={notificationRef} className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
+
+            <div className="form-group">
+                <label>Поиск атрибутов:</label>
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Поиск..."
+                />
+            </div>
 
             <div className="form-group">
                 <label>Добавить атрибут:</label>
@@ -117,7 +138,7 @@ const AttributesEditor = () => {
             </div>
 
             <div className="attributes-list">
-                {attributes.map(attribute => (
+                {filteredAttributes.map(attribute => (
                     <div key={attribute.attributeId} className={`attribute-item ${attribute.isDeleted ? 'deleted' : ''}`}>
                         {editingAttribute === attribute.attributeId ? (
                             <>
@@ -141,23 +162,19 @@ const AttributesEditor = () => {
                         ) : (
                             <>
                                 <span>{attribute.attributeName}</span>
-                                <button onClick={() => handleEditButtonClick(attribute.attributeId)}>Редактировать</button>
-                                {attribute.isDeleted ? (
-                                    <button onClick={() => handleRestoreAttribute(attribute.attributeId)}>Восстановить</button>
-                                ) : (
-                                    <button onClick={() => handleDeleteAttribute(attribute.attributeId)}>Удалить</button>
-                                )}
+                                <div className="button-group">
+                                    <button onClick={() => handleEditButtonClick(attribute.attributeId)} className="btn-edit">Редактировать</button>
+                                    {attribute.isDeleted ? (
+                                        <button onClick={() => handleRestoreAttribute(attribute.attributeId)} className="btn-restore">Восстановить</button>
+                                    ) : (
+                                        <button onClick={() => handleDeleteAttribute(attribute.attributeId)} className="btn-delete">Удалить</button>
+                                    )}
+                                </div>
                             </>
                         )}
                     </div>
                 ))}
             </div>
-
-            {notification.show && (
-                <div ref={notificationRef} className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
         </div>
     );
 };

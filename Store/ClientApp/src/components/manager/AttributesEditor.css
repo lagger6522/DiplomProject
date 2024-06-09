@@ -14,81 +14,112 @@
         color: #333;
     }
 
-    .attributes-editor label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .attributes-editor .form-control {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+    .attributes-editor .form-group {
         margin-bottom: 15px;
     }
 
-    .attributes-editor .attribute-item {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-        .attributes-editor .attribute-item.deleted {
-            opacity: 0.6;
+        .attributes-editor .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
-        .attributes-editor .attribute-item input[type="text"] {
-            flex: 1;
+        .attributes-editor .form-group input {
+            width: 100%;
             padding: 8px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
+        }
+
+        .attributes-editor .form-group button {
+            display: inline-block;
+            width: 100%;
+            padding: 10px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+            .attributes-editor .form-group button:hover {
+                background-color: #218838;
+            }
+
+    .attributes-editor .attributes-list .attribute-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+        .attributes-editor .attributes-list .attribute-item input {
+            width: calc(100% - 120px);
             margin-right: 10px;
         }
 
-        .attributes-editor .attribute-item span {
-            flex: 1;
+        .attributes-editor .attributes-list .attribute-item .button-group {
+            display: flex;
+            gap: 5px;
         }
 
-    .attributes-editor .btn {
+        .attributes-editor .attributes-list .attribute-item button {
+            padding: 5px 10px;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .attributes-editor .attributes-list .attribute-item .btn-edit {
+            background-color: #007bff;
+        }
+
+            .attributes-editor .attributes-list .attribute-item .btn-edit:hover {
+                background-color: #0069d9;
+            }
+
+        .attributes-editor .attributes-list .attribute-item .btn-delete {
+            background-color: #dc3545;
+        }
+
+            .attributes-editor .attributes-list .attribute-item .btn-delete:hover {
+                background-color: #c82333;
+            }
+
+        .attributes-editor .attributes-list .attribute-item .btn-restore {
+            background-color: #17a2b8;
+        }
+
+            .attributes-editor .attributes-list .attribute-item .btn-restore:hover {
+                background-color: #138496;
+            }
+
+        .attributes-editor .attributes-list .attribute-item.deleted {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+    .attributes-editor .notification {
+        margin-bottom: 15px;
         padding: 10px;
-        color: #fff;
-        background-color: #28a745;
-        border: none;
         border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
+        font-size: 14px;
+        text-align: center;
     }
 
-        .attributes-editor .btn:hover {
-            background-color: #218838;
+        .attributes-editor .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
         }
 
-    .attributes-editor .btn-secondary {
-        background-color: #6c757d;
-        margin-top: 10px;
-    }
-
-        .attributes-editor .btn-secondary:hover {
-            background-color: #5a6268;
+        .attributes-editor .notification.success {
+            background-color: #d4edda;
+            color: #155724;
         }
-
-.notification {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: center;
-}
-
-    .notification.error {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-
-    .notification.success {
-        background-color: #d4edda;
-        color: #155724;
-    }
