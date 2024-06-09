@@ -327,14 +327,16 @@ const ProductModalContentEdit = () => {
                         )}
                         {Object.keys(selectedAttributes).filter(attributeId => attributeId !== lastSelectedAttribute && selectedAttributes[attributeId].trim()).map(attributeId => (
                             <div key={attributeId} className="attribute-group">
-                                <label htmlFor={`attribute-${attributeId}`}>{attributeMapping[attributeId]}:</label>
-                                <input
-                                    type="text"
-                                    id={`attribute-${attributeId}`}
-                                    value={selectedAttributes[attributeId]}
-                                    onChange={(e) => handleAttributeChange(attributeId, e.target.value)}
-                                    className="form-control"
-                                />
+                                <div className="input-group">
+                                    <label htmlFor={`attribute-${attributeId}`}>{attributeMapping[attributeId]}:</label>
+                                    <input
+                                        type="text"
+                                        id={`attribute-${attributeId}`}
+                                        value={selectedAttributes[attributeId]}
+                                        onChange={(e) => handleAttributeChange(attributeId, e.target.value)}
+                                        className="form-control"
+                                    />
+                                </div>
                                 <button onClick={() => handleDeleteAttribute(attributeId)} className="btn btn-danger">Удалить</button>
                             </div>
                         ))}
