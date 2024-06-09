@@ -124,6 +124,22 @@ const ProductModalContentEdit = () => {
         }
     };
 
+    const handleDeleteAttribute = async (attributeId) => {
+        const updatedSelectedAttributes = { ...selectedAttributes };
+        delete updatedSelectedAttributes[attributeId];
+        setSelectedAttributes(updatedSelectedAttributes);
+
+        try {
+            await sendRequest(`/api/Products/DeleteProductAttribute`, 'PUT', { productId: selectedProductId, attributeId });
+            setNotification({ show: true, message: 'Атрибут успешно удален!', type: 'success' });
+        } catch (error) {
+            setNotification({ show: true, message: 'Ошибка при удалении атрибута: ' + error.message, type: 'error' });
+            console.error('Ошибка при удалении атрибута:', error);
+        }
+
+        setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+    };
+
     const validateForm = () => {
         if (!productName.trim()) {
             setNotification({ show: true, message: 'Название товара не может быть пустым!', type: 'error' });
@@ -158,7 +174,6 @@ const ProductModalContentEdit = () => {
         }
         return true;
     };
-
 
     const handleSave = async () => {
         if (!validateForm()) {
@@ -201,13 +216,14 @@ const ProductModalContentEdit = () => {
     });
 
     return (
-        <div className="product-modal-content">
-            <h3>Редактировать товар</h3>
-            {notification.show && (
-                <div ref={notificationRef} className={`notification ${notification.type}`}>
-                    {notification.message}
-                </div>
-            )}
+        <div className="product-modal-content-edit">
+            <div ref={notificationRef}>
+                {notification.show && (
+                    <div className={`alert ${notification.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
+                        {notification.message}
+                    </div>
+                )}
+            </div>
             <label htmlFor="subcategory">Выберите подкатегорию:</label>
             <select
                 id="subcategory"
@@ -321,6 +337,7 @@ const ProductModalContentEdit = () => {
                                     onChange={(e) => handleAttributeChange(attributeId, e.target.value)}
                                     className="form-control"
                                 />
+                                <button onClick={() => handleDeleteAttribute(attributeId)} className="btn btn-danger">Удалить</button>
                             </div>
                         ))}
                     </div>
@@ -338,7 +355,6 @@ const ProductModalContentEdit = () => {
                     <button type="button" onClick={handleSave} className="btn btn-success">
                         Сохранить
                     </button>
-
                 </div>
             )}
         </div>

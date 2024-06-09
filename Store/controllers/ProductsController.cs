@@ -18,6 +18,75 @@ namespace Store.controllers
 			_context = context;
 		}
 
+		[HttpPut]
+		public IActionResult DeleteProductAttribute(int productId, int attributeId)
+		{
+			try
+			{
+				var productAttribute = _context.ProductAttributes
+					.FirstOrDefault(pa => pa.ProductId == productId && pa.AttributeId == attributeId);
+
+				if (productAttribute == null)
+				{
+					return NotFound("Атрибут продукта не найден.");
+				}
+
+				productAttribute.IsDeleted = true;
+				_context.SaveChanges();
+
+				return Ok("Атрибут продукта успешно удален.");
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Произошла ошибка: {ex.Message}");
+			}
+		}
+
+		[HttpPut]
+		public async Task<IActionResult> DeleteAttribute(int attributeId)
+		{
+			var attribute = await _context.Attributes.FindAsync(attributeId);
+			if (attribute == null)
+			{
+				return NotFound("Attribute not found");
+			}
+
+			attribute.IsDeleted = true;
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpPut]
+		public async Task<IActionResult> RestoreAttribute(int attributeId)
+		{
+			var attribute = await _context.Attributes.FindAsync(attributeId);
+			if (attribute == null)
+			{
+				return NotFound("Attribute not found");
+			}
+
+			attribute.IsDeleted = false;
+			await _context.SaveChangesAsync();
+
+			return Ok(attribute);
+		}
+
+		[HttpPut]
+		public async Task<IActionResult> EditAttribute([FromBody] Model.Attribute request)
+		{
+			var attribute = await _context.Attributes.FindAsync(request.AttributeId);
+			if (attribute == null)
+			{
+				return NotFound("Attribute not found");
+			}
+
+			attribute.AttributeName = request.AttributeName;
+			await _context.SaveChangesAsync();
+
+			return Ok(attribute);
+		}
+
 		[HttpGet]
 		public async Task<IEnumerable<ProductDTO>> GetTopRatedProducts()
 		{
@@ -122,7 +191,7 @@ namespace Store.controllers
 			{
 				var attributes = _context.ProductAttributes
 					.Include(pa => pa.Attribute)
-					.Where(pa => pa.Product.SubcategoryId == subcategoryId)
+					.Where(pa => pa.Product.SubcategoryId == subcategoryId && !pa.IsDeleted && !pa.Attribute.IsDeleted)
 					.Select(pa => pa.Attribute)
 					.Distinct()
 					.ToList();
@@ -132,7 +201,7 @@ namespace Store.controllers
 					attributeId = attribute.AttributeId,
 					attributeName = attribute.AttributeName,
 					values = _context.ProductAttributes
-						.Where(pa => pa.AttributeId == attribute.AttributeId && pa.Product.SubcategoryId == subcategoryId)
+						.Where(pa => pa.AttributeId == attribute.AttributeId && pa.Product.SubcategoryId == subcategoryId && !pa.IsDeleted)
 						.Select(pa => pa.Value)
 						.Distinct()
 						.ToList()
@@ -145,6 +214,7 @@ namespace Store.controllers
 				return StatusCode(500, $"Произошла ошибка: {ex.Message}");
 			}
 		}
+
 
 		[HttpPost]
 		public async Task<IActionResult> CreateProduct(
@@ -217,12 +287,14 @@ namespace Store.controllers
 						AverageRating = p.ProductReviews.Where(pr => !pr.IsDeleted).Average(pr => (double?)pr.Rating) ?? 0,
 						ReviewCount = p.ProductReviews.Count(pr => !pr.IsDeleted),
 						p.Image,
-						Attributes = p.ProductAttributes.Select(pa => new
-						{
-							pa.AttributeId,
-							pa.Attribute.AttributeName,
-							pa.Value
-						}).ToList()
+						Attributes = p.ProductAttributes
+									  .Where(pa => !pa.IsDeleted && !pa.Attribute.IsDeleted)
+									  .Select(pa => new
+									  {
+										  pa.AttributeId,
+										  pa.Attribute.AttributeName,
+										  pa.Value
+									  }).ToList()
 					})
 					.FirstOrDefaultAsync();
 
@@ -238,7 +310,6 @@ namespace Store.controllers
 				return StatusCode(500, new { message = $"Error getting product details: {ex.Message}" });
 			}
 		}
-
 
 		[HttpPost]
 		public async Task<IActionResult> HideProduct(int productId)

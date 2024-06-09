@@ -8,6 +8,7 @@ import SubcategoryModalContentRemove from './SubcategoryModalContentRemove';
 import ProductModalContentAdd from './ProductModalContentAdd';
 import ProductModalContentEdit from './ProductModalContentEdit';
 import ProductModalContentRemove from './ProductModalContentRemove';
+import AttributesEditor from './AttributesEditor';
 import OrderHistory from './OrderHistory';
 import CloseModal from './CloseModal';
 import './ManagerPage.css';
@@ -60,6 +61,12 @@ const ManagerPage = () => {
                     <>
                         <button onClick={() => openModal(<OrderHistory />, 'add')}>Список заказов</button>
                     </>
+                );
+            case 'attribytes':
+                return (
+                    <>
+                        <button onClick={() => openModal(<AttributesEditor />, 'add')}>Характеристики</button>
+                    </>
                 );       
             default:
                 return null;
@@ -75,6 +82,7 @@ const ManagerPage = () => {
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'subcategory')}>Подкатегории</button>}
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'products')}>Товары</button>}
                     {!mode && <button onClick={() => openModal(<CloseModal />, 'orders')}>Заказы</button>}
+                    {!mode && <button onClick={() => openModal(<CloseModal />, 'attribytes')}>Характеристики</button>}
                     {renderAdminButtons()}
                 </div>
             </div>

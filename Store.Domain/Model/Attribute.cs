@@ -9,5 +9,7 @@ public partial class Attribute
 
     public string AttributeName { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
 }
