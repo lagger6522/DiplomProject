@@ -21,8 +21,8 @@ const ManagerPage = () => {
 
     const openModal = (content, selectedMode) => {
         setModalContent(content);
-        setMode(selectedMode);
         setIsModalOpen(true);
+        setMode(selectedMode);
     };
 
     const closeModal = () => {
@@ -31,7 +31,7 @@ const ManagerPage = () => {
     };
 
     const renderAdminButtons = () => {
-        switch (mode) {     
+        switch (mode) {
             case 'category':
                 return (
                     <>
@@ -47,7 +47,7 @@ const ManagerPage = () => {
                         <button onClick={() => openModal(<SubcategoryModalContentEdit />, 'edit')}>Редактировать</button>
                         <button onClick={() => openModal(<SubcategoryModalContentRemove />, 'delete')}>Удалить</button>
                     </>
-                );   
+                );
             case 'products':
                 return (
                     <>
@@ -55,19 +55,7 @@ const ManagerPage = () => {
                         <button onClick={() => openModal(<ProductModalContentEdit />, 'edit')}>Редактировать</button>
                         <button onClick={() => openModal(<ProductModalContentRemove />, 'delete')}>Удалить</button>
                     </>
-                );  
-            case 'orders':
-                return (
-                    <>
-                        <button onClick={() => openModal(<OrderHistory />, 'add')}>Список заказов</button>
-                    </>
                 );
-            case 'attribytes':
-                return (
-                    <>
-                        <button onClick={() => openModal(<AttributesEditor />, 'add')}>Характеристики</button>
-                    </>
-                );       
             default:
                 return null;
         }
@@ -78,12 +66,12 @@ const ManagerPage = () => {
             <div className="admin-menu">
                 <h2>Панель менеджера</h2>
                 <div className="admin-menu-button">
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'category')}>Категории</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'subcategory')}>Подкатегории</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'products')}>Товары</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'orders')}>Заказы</button>}
-                    {!mode && <button onClick={() => openModal(<CloseModal />, 'attribytes')}>Характеристики</button>}
-                    {renderAdminButtons()}
+                    {!mode && <button onClick={() => setMode('category')}>Категории</button>}
+                    {!mode && <button onClick={() => setMode('subcategory')}>Подкатегории</button>}
+                    {!mode && <button onClick={() => setMode('products')}>Товары</button>}
+                    {!mode && <button onClick={() => openModal(<OrderHistory />, 'orders')}>Заказы</button>}
+                    {!mode && <button onClick={() => openModal(<AttributesEditor />, 'attribytes')}>Характеристики</button>}
+                    {mode && renderAdminButtons()}
                 </div>
             </div>
 
