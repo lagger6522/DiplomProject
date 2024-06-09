@@ -286,6 +286,7 @@ namespace Store.controllers
 						p.Price,
 						AverageRating = p.ProductReviews.Where(pr => !pr.IsDeleted).Average(pr => (double?)pr.Rating) ?? 0,
 						ReviewCount = p.ProductReviews.Count(pr => !pr.IsDeleted),
+						p,
 						p.Image,
 						Attributes = p.ProductAttributes
 									  .Where(pa => !pa.IsDeleted && !pa.Attribute.IsDeleted)
@@ -293,7 +294,8 @@ namespace Store.controllers
 									  {
 										  pa.AttributeId,
 										  pa.Attribute.AttributeName,
-										  pa.Value
+										  pa.Value,
+										  pa.ProductAttributeId
 									  }).ToList()
 					})
 					.FirstOrDefaultAsync();

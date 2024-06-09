@@ -123,15 +123,13 @@ const ProductModalContentEdit = () => {
             setLastSelectedAttribute(null);
         }
     };
-
+    
     const handleDeleteAttribute = async (attributeId) => {
-        const updatedSelectedAttributes = { ...selectedAttributes };
-        delete updatedSelectedAttributes[attributeId];
-        setSelectedAttributes(updatedSelectedAttributes);
-
         try {
-            await sendRequest(`/api/Products/DeleteProductAttribute`, 'PUT', { productId: selectedProductId, attributeId });
+            await sendRequest(`/api/Products/DeleteProductAttribute`, 'PUT', null, { productId: +selectedProductId, attributeId: +attributeId });
             setNotification({ show: true, message: 'Атрибут успешно удален!', type: 'success' });
+            handleProductChange(selectedProductId);
+
         } catch (error) {
             setNotification({ show: true, message: 'Ошибка при удалении атрибута: ' + error.message, type: 'error' });
             console.error('Ошибка при удалении атрибута:', error);
@@ -216,7 +214,7 @@ const ProductModalContentEdit = () => {
     });
 
     return (
-        <div className="product-modal-content-edit">
+        <div className="product-modal-content">
             <div ref={notificationRef}>
                 {notification.show && (
                     <div className={`alert ${notification.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
