@@ -23,6 +23,7 @@ export class RegisterPage extends Component {
         const { name, value } = event.target;
         this.setState({ [name]: value });
     };
+
     handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -70,11 +71,12 @@ export class RegisterPage extends Component {
                     this.setState({ errorMessage: 'Что-то пошло не так, возможно эта почта уже зарегистрированна.' });
                 }
             });
-            
-    };  
+    };
+
     GetAllUsers() {
-        sendRequest('/api/User/GetUsers', 'GET', null, null).then(n => { console.log(n); this.setState({ Users: n }) });        
+        sendRequest('/api/User/GetUsers', 'GET', null, null).then(n => { console.log(n); this.setState({ Users: n }) });
     }
+
     render() {
         const { name, email, phone, password, confirmPassword, errorMessage, Users } = this.state;
 
