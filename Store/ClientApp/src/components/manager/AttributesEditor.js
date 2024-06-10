@@ -117,7 +117,7 @@ const AttributesEditor = () => {
             )}
 
             <div className="form-group">
-                <label>Поиск атрибутов:</label>
+                <label>Поиск характеристик:</label>
                 <input
                     type="text"
                     value={searchQuery}
@@ -127,7 +127,7 @@ const AttributesEditor = () => {
             </div>
 
             <div className="form-group">
-                <label>Добавить атрибут:</label>
+                <label>Добавить характеристику:</label>
                 <input
                     type="text"
                     value={newAttributeName}
