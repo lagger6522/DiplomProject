@@ -9,7 +9,7 @@ const SearchResultPage = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [notification, setNotification] = useState({ show: false, message: '', type: '' });
-    const [sortOption, setSortOption] = useState('name');
+    const [sortOption, setSortOption] = useState('price');
     const [sortDirection, setSortDirection] = useState('asc');
 
     useEffect(() => {
@@ -32,9 +32,6 @@ const SearchResultPage = () => {
         let sortedResults = [...results];
 
         switch (sortOption) {
-            case 'name':
-                sortedResults.sort((a, b) => a.productName.localeCompare(b.productName));
-                break;
             case 'price':
                 sortedResults.sort((a, b) => a.price - b.price);
                 break;
@@ -108,7 +105,6 @@ const SearchResultPage = () => {
             <div>
                 <label>Сортировка по:</label>
                 <select value={sortOption} onChange={handleSortChange}>
-                    <option value="name">Имени</option>
                     <option value="price">Цене</option>
                     <option value="rating">Рейтингу</option>
                 </select>

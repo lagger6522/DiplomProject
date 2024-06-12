@@ -259,7 +259,7 @@ const ProductModalContentAdd = () => {
                 ))}
             </div>
             <div className="form-group">
-                <label htmlFor="newAttributeName">Новый атрибут:</label>
+                <label htmlFor="newAttributeName">Новая характеристика:</label>
                 <input
                     type="text"
                     id="newAttributeName"
@@ -267,7 +267,7 @@ const ProductModalContentAdd = () => {
                     onChange={(e) => setNewAttributeName(e.target.value)}
                     className="form-control"
                 />
-                <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать атрибут</button>
+                <button onClick={handleCreateAttribute} className="btn btn-secondary">Создать характеристику</button>
             </div>
             <div className="form-group">
                 <button onClick={uploadImage} className="btn btn-primary">Добавить товар</button>

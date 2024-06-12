@@ -138,7 +138,7 @@ const ProductPage = () => {
 
     const renderAttributes = () => {
         const attributeChunks = [];
-        const attributesPerRow = 7;
+        const attributesPerRow = 6;
         for (let i = 0; i < attributes.length; i += attributesPerRow) {
             attributeChunks.push(attributes.slice(i, i + attributesPerRow));
         }
